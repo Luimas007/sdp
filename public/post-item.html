@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Lost & Found Item | Campus Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .file-upload {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .file-upload:hover {
+        border-color: #4f46e5;
+        background-color: #f8fafc;
+      }
+      .file-upload.active {
+        border-color: #4f46e5;
+        background-color: #e0e7ff;
+      }
+      #imagePreview {
+        max-height: 200px;
+        object-fit: contain;
+        margin-top: 10px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white shadow-md">
+      <div
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <h1 class="text-2xl font-bold">Campus Connect</h1>
+        <nav>
+          <ul class="flex space-x-6">
+            <li><a href="home.html" class="hover:underline">Home</a></li>
+            <li><a href="profile.html" class="hover:underline">Profile</a></li>
+            <li>
+              <a href="post-item.html" class="font-semibold underline"
+                >Post Item</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <div
+        class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden"
+      >
+        <!-- Form Header -->
+        <div class="bg-indigo-600 px-6 py-4">
+          <h2 class="text-xl font-semibold text-white">
+            Post a Lost or Found Item
+          </h2>
+          <p class="text-indigo-100">
+            Help reunite lost items with their owners or report found items
+          </p>
+        </div>
+
+        <!-- Form Content -->
+        <div class="p-6">
+          <form id="postItemForm" class="space-y-6">
+            <!-- Item Type Selection -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Item Type</label
+              >
+              <div class="flex space-x-4">
+                <label class="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="type"
+                    value="lost"
+                    class="h-4 w-4 text-indigo-600"
+                    checked
+                  />
+                  <span class="ml-2 text-gray-700">Lost Item</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="type"
+                    value="found"
+                    class="h-4 w-4 text-indigo-600"
+                  />
+                  <span class="ml-2 text-gray-700">Found Item</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <div>
+              <label for="title" class="block text-sm font-medium text-gray-700"
+                >Title*</label
+              >
+              <input
+                type="text"
+                id="title"
+                name="title"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                placeholder="e.g., Black Wallet, iPhone 13, etc."
+              />
+            </div>
+
+            <!-- Description -->
+            <div>
+              <label
+                for="description"
+                class="block text-sm font-medium text-gray-700"
+                >Description*</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                rows="3"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                placeholder="Provide detailed description including brand, color, distinguishing features, etc."
+              ></textarea>
+            </div>
+
+            <!-- Location -->
+            <div>
+              <label
+                for="location"
+                class="block text-sm font-medium text-gray-700"
+                >Location*</label
+              >
+              <input
+                type="text"
+                id="location"
+                name="location"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                placeholder="Where did you lose/find it? e.g., Library, Cafeteria, etc."
+              />
+            </div>
+
+            <!-- Validity Question (for found items) -->
+            <div id="validityQuestionContainer" class="hidden">
+              <label
+                for="validityQuestion"
+                class="block text-sm font-medium text-gray-700"
+                >Ownership Verification Question*</label
+              >
+              <input
+                type="text"
+                id="validityQuestion"
+                name="validityQuestion"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                placeholder="Ask a question only the real owner would know (e.g., What's the brand of the case?)"
+              />
+            </div>
+
+            <!-- Validity Answer (for found items) -->
+            <div id="validityAnswerContainer" class="hidden">
+              <label
+                for="validityAnswer"
+                class="block text-sm font-medium text-gray-700"
+                >Expected Answer*</label
+              >
+              <input
+                type="text"
+                id="validityAnswer"
+                name="validityAnswer"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                placeholder="The correct answer to your question"
+              />
+            </div>
+
+            <!-- Image Upload -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Item Image</label
+              >
+              <div id="fileUpload" class="file-upload">
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept="image/*"
+                  class="hidden"
+                />
+                <i class="fas fa-camera text-4xl text-indigo-500 mb-2"></i>
+                <p class="text-gray-600 text-center">
+                  Click to upload an image <br />
+                  or drag and drop
+                </p>
+                <p class="text-gray-400 text-sm mt-1">PNG, JPG up to 5MB</p>
+                <img id="imagePreview" alt="Preview" class="rounded-md" />
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <i class="fas fa-paper-plane mr-2"></i> Post Item
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 hidden">
+      <div
+        class="bg-green-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center"
+      >
+        <span id="toastMessage"></span>
+        <button onclick="hideToast()" class="ml-4">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Check authentication
+      document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        // Setup file upload
+        setupFileUpload();
+
+        // Handle type change
+        document.querySelectorAll('input[name="type"]').forEach((radio) => {
+          radio.addEventListener("change", handleTypeChange);
+        });
+
+        // Form submission
+        document
+          .getElementById("postItemForm")
+          .addEventListener("submit", handleFormSubmit);
+      });
+
+      function setupFileUpload() {
+        const fileUpload = document.getElementById("fileUpload");
+        const fileInput = document.getElementById("image");
+        const imagePreview = document.getElementById("imagePreview");
+
+        fileUpload.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", function (e) {
+          if (e.target.files.length) {
+            const file = e.target.files[0];
+            if (file.size > 5 * 1024 * 1024) {
+              showToast("File size should be less than 5MB", "error");
+              return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              imagePreview.src = event.target.result;
+              imagePreview.style.display = "block";
+              fileUpload.classList.add("active");
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        // Drag and drop functionality
+        fileUpload.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          fileUpload.classList.add("active");
+        });
+
+        fileUpload.addEventListener("dragleave", () => {
+          fileUpload.classList.remove("active");
+        });
+
+        fileUpload.addEventListener("drop", (e) => {
+          e.preventDefault();
+          fileUpload.classList.remove("active");
+
+          if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            const event = new Event("change");
+            fileInput.dispatchEvent(event);
+          }
+        });
+      }
+
+      function handleTypeChange(e) {
+        const isFoundItem = e.target.value === "found";
+        document
+          .getElementById("validityQuestionContainer")
+          .classList.toggle("hidden", !isFoundItem);
+        document
+          .getElementById("validityAnswerContainer")
+          .classList.toggle("hidden", !isFoundItem);
+
+        if (isFoundItem) {
+          document.getElementById("validityQuestion").required = true;
+          document.getElementById("validityAnswer").required = true;
+        } else {
+          document.getElementById("validityQuestion").required = false;
+          document.getElementById("validityAnswer").required = false;
+        }
+      }
+
+      async function handleFormSubmit(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const fileInput = document.getElementById("image");
+
+        // Validate form
+        if (
+          formData.get("type") === "found" &&
+          (!formData.get("validityQuestion") || !formData.get("validityAnswer"))
+        ) {
+          showToast(
+            "Please provide a validity question and answer for found items",
+            "error"
+          );
+          return;
+        }
+
+        try {
+          // Get JWT token from localStorage
+          const token = localStorage.getItem("token");
+          if (!token) {
+            window.location.href = "login.html";
+            return;
+          }
+
+          // Create FormData for file upload
+          const apiFormData = new FormData();
+          apiFormData.append("title", formData.get("title"));
+          apiFormData.append("description", formData.get("description"));
+          apiFormData.append("location", formData.get("location"));
+          apiFormData.append("type", formData.get("type"));
+
+          if (formData.get("type") === "found") {
+            apiFormData.append(
+              "validityQuestion",
+              formData.get("validityQuestion")
+            );
+            apiFormData.append(
+              "validityAnswer",
+              formData.get("validityAnswer")
+            );
+          }
+
+          if (fileInput.files.length) {
+            apiFormData.append("image", fileInput.files[0]);
+          }
+
+          // Make API call
+          const response = await fetch("/api/items", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: apiFormData,
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to post item");
+          }
+
+          showToast("Item posted successfully!", "success");
+          form.reset();
+          document.getElementById("imagePreview").style.display = "none";
+          document.getElementById("fileUpload").classList.remove("active");
+
+          // Redirect to item page or home after a delay
+          setTimeout(() => {
+            window.location.href = `item-details.html?id=${data.item._id}`;
+          }, 1500);
+        } catch (error) {
+          console.error("Error posting item:", error);
+          showToast(error.message || "Failed to post item", "error");
+        }
+      }
+
+      function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toastMessage");
+
+        toastMessage.textContent = message;
+        toast.className = `fixed bottom-4 right-4 px-4 py-2 rounded-md shadow-lg flex items-center ${
+          type === "success" ? "bg-green-500" : "bg-red-500"
+        } text-white`;
+        toast.classList.remove("hidden");
+
+        setTimeout(hideToast, 5000);
+      }
+
+      function hideToast() {
+        document.getElementById("toast").classList.add("hidden");
+      }
+    </script>
+  </body>
+</html>

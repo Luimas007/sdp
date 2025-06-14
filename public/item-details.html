@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Item Details | Campus Lost & Found</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-blue-800 text-white shadow-md">
+      <div class="container mx-auto px-4 py-6">
+        <h1 class="text-3xl font-bold">Campus Lost & Found</h1>
+        <nav class="mt-4">
+          <a href="/" class="mr-4 hover:text-blue-200">Home</a>
+          <a href="/items.html" class="mr-4 hover:text-blue-200"
+            >Browse Items</a
+          >
+          <a href="/profile.html" class="mr-4 hover:text-blue-200"
+            >My Profile</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Item Details Card -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <!-- Item Image -->
+        <div class="h-64 bg-gray-200 flex items-center justify-center">
+          <img
+            id="itemImage"
+            src=""
+            alt="Item image"
+            class="h-full w-full object-cover hidden"
+          />
+          <div id="noImage" class="text-gray-500">
+            <i class="fas fa-image fa-4x mb-2"></i>
+            <p>No image available</p>
+          </div>
+        </div>
+
+        <!-- Item Details -->
+        <div class="p-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2
+                id="itemTitle"
+                class="text-2xl font-bold text-gray-800 mb-2"
+              ></h2>
+              <span
+                id="itemType"
+                class="inline-block px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2"
+              ></span>
+              <span
+                id="itemStatus"
+                class="inline-block px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2"
+              ></span>
+            </div>
+            <p id="itemDate" class="text-gray-500 text-sm"></p>
+          </div>
+
+          <div class="mb-4">
+            <p id="itemDescription" class="text-gray-700 mb-4"></p>
+            <p class="text-gray-700">
+              <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>
+              <span id="itemLocation"></span>
+            </p>
+          </div>
+
+          <!-- Owner Info -->
+          <div class="border-t border-gray-200 pt-4 mt-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Posted By</h3>
+            <div class="flex items-center">
+              <img
+                id="ownerImage"
+                src=""
+                class="w-12 h-12 rounded-full object-cover mr-3 hidden"
+              />
+              <div
+                class="bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center mr-3"
+                id="noOwnerImage"
+              >
+                <i class="fas fa-user text-gray-500"></i>
+              </div>
+              <div>
+                <p id="ownerName" class="font-medium"></p>
+                <p id="ownerDepartment" class="text-sm text-gray-600"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Validity Question (for found items) -->
+          <div
+            id="validitySection"
+            class="border-t border-gray-200 pt-4 mt-4 hidden"
+          >
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+              Verification Question
+            </h3>
+            <p id="validityQuestion" class="text-gray-700 mb-2"></p>
+            <div id="validityAnswerSection" class="hidden">
+              <p class="text-green-600 font-medium">
+                Correct answer: <span id="validityAnswer"></span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Claim Section -->
+          <div
+            id="claimSection"
+            class="border-t border-gray-200 pt-4 mt-4 hidden"
+          >
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+              Claim This Item
+            </h3>
+            <form id="claimForm" class="space-y-3">
+              <div id="validityInput" class="hidden">
+                <label
+                  for="claimAnswer"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Answer the verification question</label
+                >
+                <input
+                  type="text"
+                  id="claimAnswer"
+                  name="claimAnswer"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <button
+                type="submit"
+                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+              >
+                Submit Claim
+              </button>
+            </form>
+          </div>
+
+          <!-- Claim Management (for owner) -->
+          <div
+            id="claimManagementSection"
+            class="border-t border-gray-200 pt-4 mt-4 hidden"
+          >
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+              Claim Management
+            </h3>
+            <div id="claimInfo" class="mb-4 hidden">
+              <p class="font-medium mb-2">Claimed by:</p>
+              <div class="flex items-center">
+                <img
+                  id="claimerImage"
+                  src=""
+                  class="w-10 h-10 rounded-full object-cover mr-3 hidden"
+                />
+                <div
+                  class="bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center mr-3"
+                  id="noClaimerImage"
+                >
+                  <i class="fas fa-user text-gray-500"></i>
+                </div>
+                <div>
+                  <p id="claimerName" class="font-medium"></p>
+                  <p id="claimerDepartment" class="text-sm text-gray-600"></p>
+                </div>
+              </div>
+            </div>
+            <div id="claimActions" class="space-x-2 hidden">
+              <button
+                id="acceptClaimBtn"
+                class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
+              >
+                Accept Claim
+              </button>
+              <button
+                id="rejectClaimBtn"
+                class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-200"
+              >
+                Reject Claim
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">Comments</h2>
+
+          <!-- Comment Form -->
+          <form id="commentForm" class="mb-6">
+            <div class="flex space-x-3">
+              <div class="flex-shrink-0">
+                <img
+                  id="currentUserImage"
+                  src=""
+                  class="w-10 h-10 rounded-full object-cover hidden"
+                />
+                <div
+                  class="bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center"
+                  id="noCurrentUserImage"
+                >
+                  <i class="fas fa-user text-gray-500"></i>
+                </div>
+              </div>
+              <div class="flex-grow">
+                <textarea
+                  id="commentContent"
+                  name="commentContent"
+                  rows="2"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Add a comment..."
+                ></textarea>
+                <button
+                  type="submit"
+                  class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+                >
+                  Post Comment
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Comments List -->
+          <div id="commentsList" class="space-y-4">
+            <!-- Comments will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+      <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2023 Campus Lost & Found System. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get item ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get("id");
+
+        if (!itemId) {
+          alert("No item ID specified");
+          window.location.href = "/items.html";
+          return;
+        }
+
+        // Get authentication token from localStorage
+        const token = localStorage.getItem("token");
+        let currentUserId = null;
+
+        // Fetch item details
+        async function fetchItemDetails() {
+          try {
+            const response = await fetch(`/api/items/${itemId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to fetch item details");
+            }
+
+            const data = await response.json();
+            if (!data.success) {
+              throw new Error(data.message || "Failed to fetch item details");
+            }
+
+            displayItemDetails(data.item);
+            setupClaimSection(data.item);
+            checkCurrentUser(data.item);
+          } catch (error) {
+            console.error("Error fetching item details:", error);
+            alert(error.message);
+            window.location.href = "/items.html";
+          }
+        }
+
+        // Display item details
+        function displayItemDetails(item) {
+          document.getElementById("itemTitle").textContent = item.title;
+          document.getElementById("itemDescription").textContent =
+            item.description;
+          document.getElementById("itemLocation").textContent = item.location;
+
+          // Set item type badge
+          const typeBadge = document.getElementById("itemType");
+          typeBadge.textContent = item.type === "lost" ? "Lost" : "Found";
+          typeBadge.className = `inline-block px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2 ${
+            item.type === "lost"
+              ? "bg-red-100 text-red-800"
+              : "bg-green-100 text-green-800"
+          }`;
+
+          // Set item status badge
+          const statusBadge = document.getElementById("itemStatus");
+          statusBadge.textContent =
+            item.status === "active"
+              ? "Active"
+              : item.status === "claimed"
+              ? "Claimed"
+              : item.status === "accepted"
+              ? "Accepted"
+              : "Rejected";
+          statusBadge.className = `inline-block px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2 ${
+            item.status === "active"
+              ? "bg-blue-100 text-blue-800"
+              : item.status === "claimed"
+              ? "bg-yellow-100 text-yellow-800"
+              : item.status === "accepted"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`;
+
+          // Set date
+          const date = new Date(item.createdAt);
+          document.getElementById(
+            "itemDate"
+          ).textContent = `Posted on ${date.toLocaleDateString()}`;
+
+          // Set image if available
+          if (item.image) {
+            document.getElementById("itemImage").src = item.image;
+            document.getElementById("itemImage").classList.remove("hidden");
+            document.getElementById("noImage").classList.add("hidden");
+          }
+
+          // Set owner info
+          if (item.postedBy.profileImage) {
+            document.getElementById("ownerImage").src =
+              item.postedBy.profileImage;
+            document.getElementById("ownerImage").classList.remove("hidden");
+            document.getElementById("noOwnerImage").classList.add("hidden");
+          }
+          document.getElementById(
+            "ownerName"
+          ).textContent = `${item.postedBy.firstName} ${item.postedBy.lastName}`;
+          document.getElementById("ownerDepartment").textContent =
+            item.postedBy.department;
+
+          // Set validity question for found items
+          if (item.type === "found" && item.validityQuestion) {
+            document
+              .getElementById("validitySection")
+              .classList.remove("hidden");
+            document.getElementById("validityQuestion").textContent =
+              item.validityQuestion;
+
+            // Show answer only to owner or claimant
+            if (
+              item.validityAnswer &&
+              (currentUserId === item.postedBy._id.toString() ||
+                (item.claimedBy &&
+                  currentUserId === item.claimedBy._id.toString()))
+            ) {
+              document
+                .getElementById("validityAnswerSection")
+                .classList.remove("hidden");
+              document.getElementById("validityAnswer").textContent =
+                item.validityAnswer;
+            }
+          }
+
+          // Set claimer info if claimed
+          if (item.claimedBy) {
+            if (item.claimedBy.profileImage) {
+              document.getElementById("claimerImage").src =
+                item.claimedBy.profileImage;
+              document
+                .getElementById("claimerImage")
+                .classList.remove("hidden");
+              document.getElementById("noClaimerImage").classList.add("hidden");
+            }
+            document.getElementById(
+              "claimerName"
+            ).textContent = `${item.claimedBy.firstName} ${item.claimedBy.lastName}`;
+            document.getElementById("claimerDepartment").textContent =
+              item.claimedBy.department;
+          }
+        }
+
+        // Setup claim section based on item and user
+        function setupClaimSection(item) {
+          // Only show claim section for active items that aren't posted by current user
+          if (
+            item.status === "active" &&
+            currentUserId !== item.postedBy._id.toString()
+          ) {
+            document.getElementById("claimSection").classList.remove("hidden");
+
+            // For found items, show validity question input
+            if (item.type === "found" && item.validityQuestion) {
+              document
+                .getElementById("validityInput")
+                .classList.remove("hidden");
+            }
+          }
+
+          // Show claim management section to item owner if claimed
+          if (
+            currentUserId === item.postedBy._id.toString() &&
+            item.status === "claimed"
+          ) {
+            document
+              .getElementById("claimManagementSection")
+              .classList.remove("hidden");
+            document.getElementById("claimInfo").classList.remove("hidden");
+            document.getElementById("claimActions").classList.remove("hidden");
+          }
+        }
+
+        // Check current user and set up UI accordingly
+        async function checkCurrentUser(item) {
+          if (!token) return;
+
+          try {
+            const response = await fetch("/api/users/me", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              if (data.success) {
+                currentUserId = data.user._id;
+
+                // Set current user image in comment form
+                if (data.user.profileImage) {
+                  document.getElementById("currentUserImage").src =
+                    data.user.profileImage;
+                  document
+                    .getElementById("currentUserImage")
+                    .classList.remove("hidden");
+                  document
+                    .getElementById("noCurrentUserImage")
+                    .classList.add("hidden");
+                }
+
+                // Re-setup claim section with user info
+                setupClaimSection(item);
+              }
+            }
+          } catch (error) {
+            console.error("Error fetching current user:", error);
+          }
+        }
+
+        // Handle claim submission
+        document
+          .getElementById("claimForm")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            if (!token) {
+              alert("Please log in to claim items");
+              window.location.href = "/login.html";
+              return;
+            }
+
+            try {
+              const claimAnswer = document.getElementById("claimAnswer").value;
+              const response = await fetch(`/api/items/${itemId}/claim`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  validityAnswer: claimAnswer,
+                }),
+              });
+
+              const data = await response.json();
+              if (!response.ok) {
+                throw new Error(data.message || "Failed to claim item");
+              }
+
+              alert(
+                "Item claimed successfully! The owner will review your claim."
+              );
+              window.location.reload();
+            } catch (error) {
+              console.error("Error claiming item:", error);
+              alert(error.message);
+            }
+          });
+
+        // Handle claim acceptance
+        document
+          .getElementById("acceptClaimBtn")
+          .addEventListener("click", async function () {
+            if (!confirm("Are you sure you want to accept this claim?")) return;
+
+            try {
+              const response = await fetch(
+                `/api/items/${itemId}/accept-claim`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+
+              const data = await response.json();
+              if (!response.ok) {
+                throw new Error(data.message || "Failed to accept claim");
+              }
+
+              alert("Claim accepted successfully!");
+              window.location.reload();
+            } catch (error) {
+              console.error("Error accepting claim:", error);
+              alert(error.message);
+            }
+          });
+
+        // Handle claim rejection
+        document
+          .getElementById("rejectClaimBtn")
+          .addEventListener("click", async function () {
+            if (!confirm("Are you sure you want to reject this claim?")) return;
+
+            try {
+              const response = await fetch(
+                `/api/items/${itemId}/reject-claim`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+
+              const data = await response.json();
+              if (!response.ok) {
+                throw new Error(data.message || "Failed to reject claim");
+              }
+
+              alert("Claim rejected successfully!");
+              window.location.reload();
+            } catch (error) {
+              console.error("Error rejecting claim:", error);
+              alert(error.message);
+            }
+          });
+
+        // Handle comment submission
+        document
+          .getElementById("commentForm")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            if (!token) {
+              alert("Please log in to post comments");
+              window.location.href = "/login.html";
+              return;
+            }
+
+            const content = document
+              .getElementById("commentContent")
+              .value.trim();
+            if (!content) {
+              alert("Please enter a comment");
+              return;
+            }
+
+            try {
+              const response = await fetch(`/api/items/${itemId}/comments`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ content }),
+              });
+
+              const data = await response.json();
+              if (!response.ok) {
+                throw new Error(data.message || "Failed to post comment");
+              }
+
+              document.getElementById("commentContent").value = "";
+              fetchComments();
+            } catch (error) {
+              console.error("Error posting comment:", error);
+              alert(error.message);
+            }
+          });
+
+        // Fetch comments for this item
+        async function fetchComments() {
+          try {
+            const response = await fetch(`/api/items/${itemId}/comments`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+              throw new Error(data.message || "Failed to fetch comments");
+            }
+
+            displayComments(data.comments);
+          } catch (error) {
+            console.error("Error fetching comments:", error);
+          }
+        }
+
+        // Display comments
+        function displayComments(comments) {
+          const commentsList = document.getElementById("commentsList");
+          commentsList.innerHTML = "";
+
+          if (comments.length === 0) {
+            commentsList.innerHTML =
+              '<p class="text-gray-500">No comments yet</p>';
+            return;
+          }
+
+          comments.forEach((comment) => {
+            const commentDiv = document.createElement("div");
+            commentDiv.className =
+              "border-b border-gray-200 pb-4 last:border-b-0 last:pb-0";
+
+            const isCurrentUserComment =
+              currentUserId === comment.postedBy._id.toString();
+
+            commentDiv.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center space-x-3">
+                                ${
+                                  comment.postedBy.profileImage
+                                    ? `<img src="${comment.postedBy.profileImage}" class="w-10 h-10 rounded-full object-cover">`
+                                    : `<div class="bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user text-gray-500"></i>
+                                    </div>`
+                                }
+                                <div>
+                                    <p class="font-medium">${
+                                      comment.postedBy.firstName
+                                    } ${comment.postedBy.lastName}</p>
+                                    <p class="text-sm text-gray-600">${
+                                      comment.postedBy.department
+                                    }</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500">${new Date(
+                              comment.createdAt
+                            ).toLocaleString()}</p>
+                        </div>
+                        <p class="text-gray-700 mb-2">${comment.content}</p>
+                        ${
+                          isCurrentUserComment
+                            ? `
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-800 text-sm edit-comment" data-id="${comment._id}">Edit</button>
+                                <button class="text-red-600 hover:text-red-800 text-sm delete-comment" data-id="${comment._id}">Delete</button>
+                            </div>
+                        `
+                            : ""
+                        }
+                    `;
+
+            commentsList.appendChild(commentDiv);
+          });
+
+          // Add event listeners to edit/delete buttons
+          document.querySelectorAll(".edit-comment").forEach((button) => {
+            button.addEventListener("click", function () {
+              const commentId = this.getAttribute("data-id");
+              editComment(commentId);
+            });
+          });
+
+          document.querySelectorAll(".delete-comment").forEach((button) => {
+            button.addEventListener("click", function () {
+              const commentId = this.getAttribute("data-id");
+              deleteComment(commentId);
+            });
+          });
+        }
+
+        // Edit comment
+        async function editComment(commentId) {
+          const comment = await fetchComment(commentId);
+          if (!comment) return;
+
+          const commentDiv = document
+            .querySelector(`.edit-comment[data-id="${commentId}"]`)
+            .closest(".border-b");
+          commentDiv.innerHTML = `
+                    <form class="comment-edit-form" data-id="${commentId}">
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2">${comment.content}</textarea>
+                        <div class="flex space-x-2">
+                            <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded-md text-sm">Save</button>
+                            <button type="button" class="cancel-edit bg-gray-600 text-white px-3 py-1 rounded-md text-sm">Cancel</button>
+                        </div>
+                    </form>
+                `;
+
+          commentDiv
+            .querySelector(".cancel-edit")
+            .addEventListener("click", () => {
+              fetchComments();
+            });
+
+          commentDiv
+            .querySelector(".comment-edit-form")
+            .addEventListener("submit", async function (e) {
+              e.preventDefault();
+              const newContent = this.querySelector("textarea").value.trim();
+
+              if (!newContent) {
+                alert("Comment cannot be empty");
+                return;
+              }
+
+              try {
+                const response = await fetch(`/api/comments/${commentId}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify({ content: newContent }),
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                  throw new Error(data.message || "Failed to update comment");
+                }
+
+                fetchComments();
+              } catch (error) {
+                console.error("Error updating comment:", error);
+                alert(error.message);
+              }
+            });
+        }
+
+        // Delete comment
+        async function deleteComment(commentId) {
+          if (!confirm("Are you sure you want to delete this comment?")) return;
+
+          try {
+            const response = await fetch(`/api/comments/${commentId}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+              throw new Error(data.message || "Failed to delete comment");
+            }
+
+            fetchComments();
+          } catch (error) {
+            console.error("Error deleting comment:", error);
+            alert(error.message);
+          }
+        }
+
+        // Fetch single comment
+        async function fetchComment(commentId) {
+          try {
+            const response = await fetch(`/api/comments/${commentId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+              throw new Error(data.message || "Failed to fetch comment");
+            }
+
+            return data.comment;
+          } catch (error) {
+            console.error("Error fetching comment:", error);
+            alert(error.message);
+            return null;
+          }
+        }
+
+        // Initialize page
+        fetchItemDetails();
+        fetchComments();
+      });
+    </script>
+  </body>
+</html>

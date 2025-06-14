@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile | BUP Lost & Found</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .item-card {
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .item-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      }
+
+      .tab-active {
+        color: #2563eb;
+        border-bottom: 3px solid #2563eb;
+        font-weight: 600;
+      }
+
+      .tab-inactive {
+        color: #64748b;
+        border-bottom: 3px solid transparent;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .tab-inactive:hover {
+        color: #334155;
+      }
+
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        display: inline-block;
+      }
+
+      .comment-container {
+        border-left: 3px solid #3b82f6;
+        transition: all 0.2s ease;
+        background-color: white;
+      }
+
+      .comment-container:hover {
+        border-left-color: #2563eb;
+        background-color: #f8fafc;
+      }
+
+      .notification-dot {
+        position: absolute;
+        top: 8px;
+        right: -4px;
+        width: 8px;
+        height: 8px;
+        background-color: #ef4444;
+        border-radius: 50%;
+      }
+
+      .expandable {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+
+      .expanded {
+        max-height: 1000px;
+        transition: max-height 0.5s ease-in;
+      }
+
+      .shadow-soft {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .shadow-medium {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      }
+
+      .gradient-header {
+        background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+      }
+
+      .gradient-btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      }
+
+      .gradient-btn-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+
+      .gradient-btn-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+
+      .gradient-btn-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      }
+
+      .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .smooth-transition {
+        transition: all 0.2s ease-in-out;
+      }
+
+      .hover-scale {
+        transition: transform 0.2s ease;
+      }
+
+      .hover-scale:hover {
+        transform: scale(1.02);
+      }
+
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 20px;
+      }
+
+      .animate-pulse-slow {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-header text-white shadow-lg sticky top-0 z-50">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="bg-white p-2 rounded-lg shadow-md hover-scale">
+            <i class="fas fa-user-circle text-blue-600 text-xl"></i>
+          </div>
+          <h1 class="text-xl font-bold">BUP Lost & Found - My Profile</h1>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button
+            onclick="window.location.href='home.html'"
+            class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md smooth-transition"
+          >
+            <i class="fas fa-home"></i>
+            <span class="hidden md:inline">Home</span>
+          </button>
+          <button
+            id="logoutBtn"
+            class="gradient-btn-danger hover:opacity-90 px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md smooth-transition"
+          >
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="hidden md:inline">Logout</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
+      <!-- Profile Section -->
+      <div class="bg-white rounded-xl shadow-medium p-6 mb-8">
+        <div class="flex flex-col md:flex-row gap-8">
+          <!-- Profile Picture and Basic Info -->
+          <div class="md:w-1/3 flex flex-col items-center px-4">
+            <div class="relative mb-4">
+              <img
+                id="profileImage"
+                src=""
+                alt="Profile"
+                class="w-40 h-40 rounded-full object-cover border-4 border-blue-100 shadow-md hover-scale"
+              />
+              <div
+                id="onlineStatus"
+                class="absolute bottom-3 right-3 w-4 h-4 bg-green-400 rounded-full border-2 border-white"
+              ></div>
+            </div>
+            <h2
+              id="userFullName"
+              class="text-2xl font-bold text-gray-800 text-center"
+            ></h2>
+            <p id="userDepartment" class="text-gray-600 text-center"></p>
+            <div class="mt-2 flex flex-col items-center space-y-1">
+              <p id="userEmail" class="text-gray-500 text-sm flex items-center">
+                <i class="fas fa-envelope mr-2 text-blue-500"></i>
+                <span class="truncate max-w-xs"></span>
+              </p>
+              <p id="userPhone" class="text-gray-500 text-sm flex items-center">
+                <i class="fas fa-phone-alt mr-2 text-blue-500"></i>
+                <span></span>
+              </p>
+            </div>
+
+            <button
+              id="toggleUpdateBtn"
+              class="mt-6 gradient-btn-primary hover:opacity-90 text-white px-6 py-2.5 rounded-lg shadow-md smooth-transition"
+            >
+              <i class="fas fa-edit mr-2"></i>Update Profile
+            </button>
+          </div>
+
+          <!-- Update Profile Form (Collapsed by default) -->
+          <div id="updateProfileForm" class="md:w-2/3 expandable">
+            <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+              <h3
+                class="text-lg font-semibold text-gray-800 mb-4 flex items-center"
+              >
+                <i class="fas fa-user-edit text-blue-500 mr-3 text-xl"></i>
+                <span>Update Profile Information</span>
+              </h3>
+
+              <form id="profileForm" class="space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label
+                      for="firstName"
+                      class="block text-sm font-medium text-gray-700 mb-2"
+                      >First Name</label
+                    >
+                    <input
+                      type="text"
+                      id="firstName"
+                      class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="lastName"
+                      class="block text-sm font-medium text-gray-700 mb-2"
+                      >Last Name</label
+                    >
+                    <input
+                      type="text"
+                      id="lastName"
+                      class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 cursor-not-allowed"
+                    disabled
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="phone"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Phone Number</label
+                  >
+                  <input
+                    type="tel"
+                    id="phone"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="department"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Department</label
+                  >
+                  <input
+                    type="text"
+                    id="department"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2"
+                    >Profile Image</label
+                  >
+                  <div class="flex items-center space-x-4">
+                    <input
+                      type="file"
+                      id="profileImageInput"
+                      accept="image/*"
+                      class="hidden"
+                    />
+                    <button
+                      type="button"
+                      onclick="document.getElementById('profileImageInput').click()"
+                      class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg smooth-transition border border-gray-200"
+                    >
+                      <i class="fas fa-upload mr-2"></i>Choose Image
+                    </button>
+                    <span id="profileImageName" class="text-sm text-gray-500"
+                      >No file chosen</span
+                    >
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    for="currentPassword"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Current Password (Required for updates)</label
+                  >
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div class="pt-2 flex justify-end space-x-4">
+                  <button
+                    type="button"
+                    id="cancelUpdateBtn"
+                    class="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 smooth-transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    id="saveProfileBtn"
+                    class="gradient-btn-primary hover:opacity-90 text-white px-5 py-2.5 rounded-lg shadow-md smooth-transition"
+                  >
+                    <i class="fas fa-save mr-2"></i>Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Change Password Section -->
+            <div class="mt-6 bg-blue-50 p-6 rounded-xl border border-blue-100">
+              <h3
+                class="text-lg font-semibold text-gray-800 mb-4 flex items-center"
+              >
+                <i class="fas fa-key text-blue-500 mr-3 text-xl"></i>
+                <span>Change Password</span>
+              </h3>
+
+              <form id="changePasswordForm" class="space-y-5">
+                <div>
+                  <label
+                    for="oldPassword"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Current Password</label
+                  >
+                  <input
+                    type="password"
+                    id="oldPassword"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="newPassword"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >New Password</label
+                  >
+                  <input
+                    type="password"
+                    id="newPassword"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="confirmNewPassword"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Confirm New Password</label
+                  >
+                  <input
+                    type="password"
+                    id="confirmNewPassword"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                  <button
+                    type="submit"
+                    id="changePasswordBtn"
+                    class="gradient-btn-primary hover:opacity-90 text-white px-5 py-2.5 rounded-lg shadow-md smooth-transition"
+                  >
+                    <i class="fas fa-key mr-2"></i>Change Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs for Profile Sections -->
+      <div class="mb-6">
+        <div class="border-b border-gray-200">
+          <nav class="flex space-x-8 overflow-x-auto">
+            <button
+              id="myItemsTab"
+              class="px-4 py-3 tab-active text-sm md:text-base"
+            >
+              <i class="fas fa-boxes mr-2"></i>My Items
+            </button>
+            <button
+              id="claimedItemsTab"
+              class="px-4 py-3 tab-inactive text-sm md:text-base"
+            >
+              <i class="fas fa-hand-holding-heart mr-2"></i>Claimed Items
+            </button>
+            <button
+              id="myCommentsTab"
+              class="px-4 py-3 tab-inactive text-sm md:text-base"
+            >
+              <i class="fas fa-comments mr-2"></i>My Comments
+            </button>
+            <button
+              id="mySuggestionsTab"
+              class="px-4 py-3 tab-inactive text-sm md:text-base"
+            >
+              <i class="fas fa-lightbulb mr-2"></i>My Suggestions
+            </button>
+            <button
+              id="pendingClaimsTab"
+              class="px-4 py-3 tab-inactive relative text-sm md:text-base"
+            >
+              <i class="fas fa-bell mr-2"></i>Pending Claims
+              <span
+                id="pendingClaimsBadge"
+                class="notification-dot hidden"
+              ></span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Content Sections -->
+      <div id="contentSections">
+        <!-- My Items Section -->
+        <div id="myItemsSection">
+          <div
+            class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+          >
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+              <i class="fas fa-boxes text-blue-500 mr-3 text-xl"></i>My Lost &
+              Found Items
+            </h3>
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+              <button
+                id="postLostBtn"
+                class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition"
+              >
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Post Lost Item</span>
+              </button>
+              <button
+                id="postFoundBtn"
+                class="gradient-btn-success hover:opacity-90 text-white px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition"
+              >
+                <i class="fas fa-check-circle"></i>
+                <span>Post Found Item</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
+          >
+            <!-- Items will be loaded here dynamically -->
+            <div class="col-span-full text-center py-10 text-gray-500">
+              <i
+                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
+              ></i>
+              <p>Loading your items...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Claimed Items Section -->
+        <div id="claimedItemsSection" class="hidden">
+          <h3
+            class="text-xl font-semibold text-gray-800 mb-6 flex items-center"
+          >
+            <i class="fas fa-hand-holding-heart text-blue-500 mr-3 text-xl"></i>
+            <span>Items You've Claimed</span>
+          </h3>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
+          >
+            <!-- Claimed items will be loaded here dynamically -->
+            <div class="col-span-full text-center py-10 text-gray-500">
+              <i
+                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
+              ></i>
+              <p>Loading claimed items...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Comments Section -->
+        <div id="myCommentsSection" class="hidden">
+          <h3
+            class="text-xl font-semibold text-gray-800 mb-6 flex items-center"
+          >
+            <i class="fas fa-comments text-blue-500 mr-3 text-xl"></i>
+            <span>My Comments</span>
+          </h3>
+
+          <div id="commentsContainer" class="space-y-4 max-w-4xl mx-auto">
+            <!-- Comments will be loaded here dynamically -->
+            <div class="text-center py-10 text-gray-500">
+              <i
+                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
+              ></i>
+              <p>Loading your comments...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Suggestions Section -->
+        <div id="mySuggestionsSection" class="hidden">
+          <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
+          >
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+              <i class="fas fa-lightbulb text-yellow-500 mr-3 text-xl"></i>
+              <span>My Suggestions</span>
+            </h3>
+            <button
+              id="addSuggestionBtn"
+              class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2.5 rounded-lg flex items-center space-x-2 shadow-md smooth-transition w-full md:w-auto"
+            >
+              <i class="fas fa-plus"></i>
+              <span>Add Suggestion</span>
+            </button>
+          </div>
+
+          <div id="suggestionsContainer" class="space-y-4 max-w-4xl mx-auto">
+            <!-- Suggestions will be loaded here dynamically -->
+            <div class="text-center py-10 text-gray-500">
+              <i
+                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
+              ></i>
+              <p>Loading your suggestions...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Claims Section -->
+        <div id="pendingClaimsSection" class="hidden">
+          <h3
+            class="text-xl font-semibold text-gray-800 mb-6 flex items-center"
+          >
+            <i class="fas fa-bell text-blue-500 mr-3 text-xl"></i>
+            <span>Pending Claims on Your Items</span>
+          </h3>
+
+          <div id="pendingClaimsContainer" class="space-y-6 max-w-4xl mx-auto">
+            <!-- Pending claims will be loaded here dynamically -->
+            <div class="text-center py-10 text-gray-500">
+              <i
+                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
+              ></i>
+              <p>Loading pending claims...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Add Suggestion Modal -->
+    <div
+      id="suggestionModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 fade-in mx-4"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h3
+            class="text-xl font-bold text-gray-800 flex items-center space-x-3"
+          >
+            <i class="fas fa-lightbulb text-yellow-500 text-2xl"></i>
+            <span>Add Your Suggestion</span>
+          </h3>
+          <button
+            id="closeSuggestionModal"
+            class="text-gray-500 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100"
+          >
+            <i class="fas fa-times text-lg"></i>
+          </button>
+        </div>
+        <textarea
+          id="suggestionText"
+          rows="4"
+          class="w-full px-4 py-3 border border-gray-200 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+          placeholder="Write your suggestion here..."
+        ></textarea>
+        <div class="flex justify-end space-x-3">
+          <button
+            id="cancelSuggestionBtn"
+            class="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 smooth-transition"
+          >
+            Cancel
+          </button>
+          <button
+            id="submitSuggestionBtn"
+            class="gradient-btn-primary hover:opacity-90 text-white px-5 py-2.5 rounded-lg shadow-md smooth-transition"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div
+      id="itemModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden overflow-y-auto py-8"
+    >
+      <div
+        class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 fade-in mx-4 my-8"
+      >
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h3
+              id="itemModalTitle"
+              class="text-2xl font-bold text-gray-800"
+            ></h3>
+            <p id="itemModalType" class="text-sm text-gray-500"></p>
+          </div>
+          <button
+            id="closeItemModal"
+            class="text-gray-500 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100"
+          >
+            <i class="fas fa-times text-lg"></i>
+          </button>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 mb-6">
+          <div class="lg:w-1/2">
+            <div
+              class="relative h-64 bg-gray-100 rounded-xl overflow-hidden mb-4"
+            >
+              <img
+                id="itemModalImage"
+                src=""
+                alt="Item"
+                class="w-full h-full object-cover hover-scale"
+              />
+              <div
+                id="itemImagePlaceholder"
+                class="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-50"
+              >
+                <i class="fas fa-image text-5xl opacity-30"></i>
+              </div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
+                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
+                <span>Location Details</span>
+              </h4>
+              <p id="itemModalLocation" class="text-gray-700 pl-6"></p>
+            </div>
+          </div>
+          <div class="lg:w-1/2">
+            <div class="mb-5">
+              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
+                <i class="fas fa-align-left mr-2 text-blue-500"></i>
+                <span>Description</span>
+              </h4>
+              <p id="itemModalDescription" class="text-gray-700 pl-6"></p>
+            </div>
+
+            <div
+              id="validityQuestionContainer"
+              class="mb-5 hidden bg-blue-50 p-4 rounded-lg border border-blue-100"
+            >
+              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
+                <i class="fas fa-question-circle mr-2 text-blue-500"></i>
+                <span>Validity Question</span>
+              </h4>
+              <p
+                id="itemModalQuestion"
+                class="text-gray-700 pl-6 font-medium"
+              ></p>
+            </div>
+
+            <div class="mb-5">
+              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
+                <i class="fas fa-user mr-2 text-blue-500"></i>
+                <span>Posted By</span>
+              </h4>
+              <div class="flex items-center space-x-3 pl-6">
+                <img
+                  id="itemModalPosterImage"
+                  src=""
+                  alt="User"
+                  class="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
+                />
+                <div>
+                  <p id="itemModalPosterName" class="font-medium"></p>
+                  <p id="itemModalPosterDept" class="text-sm text-gray-500"></p>
+                </div>
+              </div>
+            </div>
+
+            <div id="itemStatusContainer" class="mb-5 pl-6">
+              <span id="itemModalStatus" class="status-badge"></span>
+            </div>
+
+            <div id="claimedByContainer" class="mb-5 hidden">
+              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
+                <i class="fas fa-user-tag mr-2 text-blue-500"></i>
+                <span>Claimed By</span>
+              </h4>
+              <div class="flex items-center space-x-3 pl-6">
+                <img
+                  id="itemModalClaimedByImage"
+                  src=""
+                  alt="User"
+                  class="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
+                />
+                <div>
+                  <p id="itemModalClaimedByName" class="font-medium"></p>
+                  <p
+                    id="itemModalClaimedByDept"
+                    class="text-sm text-gray-500"
+                  ></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="claimActionsContainer"
+          class="hidden bg-blue-50 p-5 rounded-xl border border-blue-100 mb-6"
+        >
+          <h4 class="font-semibold mb-3 text-gray-800">Claim Actions</h4>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button
+              id="acceptClaimBtn"
+              class="gradient-btn-success hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
+            >
+              <i class="fas fa-check mr-2"></i>Accept Claim
+            </button>
+            <button
+              id="rejectClaimBtn"
+              class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
+            >
+              <i class="fas fa-times mr-2"></i>Reject Claim
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="contactInfoContainer"
+          class="hidden bg-green-50 p-5 rounded-xl border border-green-100 mb-6"
+        >
+          <h4 class="font-semibold mb-3 text-gray-800 flex items-center">
+            <i class="fas fa-address-card mr-2 text-green-500"></i>
+            <span>Contact Information</span>
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-3 rounded-lg border border-gray-100">
+              <p class="text-sm text-gray-600 mb-1">Email:</p>
+              <p
+                id="contactEmail"
+                class="font-medium text-blue-600 break-all"
+              ></p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-gray-100">
+              <p class="text-sm text-gray-600 mb-1">Phone:</p>
+              <p id="contactPhone" class="font-medium"></p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="itemActionsContainer"
+          class="flex flex-col sm:flex-row gap-3 mb-6"
+        >
+          <button
+            id="editItemBtn"
+            class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
+          >
+            <i class="fas fa-edit mr-2"></i>Edit Item
+          </button>
+          <button
+            id="deleteItemBtn"
+            class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
+          >
+            <i class="fas fa-trash mr-2"></i>Delete Item
+          </button>
+        </div>
+
+        <div id="commentsSection" class="mt-6">
+          <h4 class="font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-comments mr-2 text-blue-500"></i>
+            <span>Comments</span>
+          </h4>
+          <div
+            id="commentsContainer"
+            class="space-y-3 mb-4 max-h-60 overflow-y-auto pr-2 scrollbar-thin"
+          >
+            <!-- Comments will be loaded here -->
+          </div>
+
+          <div id="addCommentContainer" class="mt-4">
+            <div class="flex items-start space-x-3">
+              <img
+                id="commentUserImage"
+                src=""
+                alt="User"
+                class="w-10 h-10 rounded-full object-cover border border-gray-200 mt-1"
+              />
+              <div class="flex-1">
+                <textarea
+                  id="commentText"
+                  rows="3"
+                  class="w-full px-4 py-3 border border-gray-200 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+                  placeholder="Add a comment..."
+                ></textarea>
+                <button
+                  id="submitCommentBtn"
+                  class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition w-full"
+                >
+                  Post Comment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Global variables
+      let currentUser = null;
+      let currentItems = [];
+      let currentComments = [];
+      let currentSuggestions = [];
+      let pendingClaims = [];
+      let selectedItemId = null;
+      let selectedClaimId = null;
+      let activeTab = "myItems";
+
+      // DOM Elements
+      const profileImage = document.getElementById("profileImage");
+      const userFullName = document.getElementById("userFullName");
+      const userDepartment = document.getElementById("userDepartment");
+      const userEmail = document.getElementById("userEmail");
+      const userPhone = document.getElementById("userPhone");
+      const toggleUpdateBtn = document.getElementById("toggleUpdateBtn");
+      const updateProfileForm = document.getElementById("updateProfileForm");
+      const profileForm = document.getElementById("profileForm");
+      const firstNameInput = document.getElementById("firstName");
+      const lastNameInput = document.getElementById("lastName");
+      const emailInput = document.getElementById("email");
+      const phoneInput = document.getElementById("phone");
+      const departmentInput = document.getElementById("department");
+      const profileImageInput = document.getElementById("profileImageInput");
+      const profileImageName = document.getElementById("profileImageName");
+      const currentPasswordInput = document.getElementById("currentPassword");
+      const cancelUpdateBtn = document.getElementById("cancelUpdateBtn");
+      const saveProfileBtn = document.getElementById("saveProfileBtn");
+      const changePasswordForm = document.getElementById("changePasswordForm");
+      const oldPasswordInput = document.getElementById("oldPassword");
+      const newPasswordInput = document.getElementById("newPassword");
+      const confirmNewPasswordInput =
+        document.getElementById("confirmNewPassword");
+      const changePasswordBtn = document.getElementById("changePasswordBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // Tab buttons
+      const myItemsTab = document.getElementById("myItemsTab");
+      const claimedItemsTab = document.getElementById("claimedItemsTab");
+      const myCommentsTab = document.getElementById("myCommentsTab");
+      const mySuggestionsTab = document.getElementById("mySuggestionsTab");
+      const pendingClaimsTab = document.getElementById("pendingClaimsTab");
+      const pendingClaimsBadge = document.getElementById("pendingClaimsBadge");
+
+      // Content sections
+      const myItemsSection = document.getElementById("myItemsSection");
+      const claimedItemsSection = document.getElementById(
+        "claimedItemsSection"
+      );
+      const myCommentsSection = document.getElementById("myCommentsSection");
+      const mySuggestionsSection = document.getElementById(
+        "mySuggestionsSection"
+      );
+      const pendingClaimsSection = document.getElementById(
+        "pendingClaimsSection"
+      );
+
+      // Item related elements
+      const postLostBtn = document.getElementById("postLostBtn");
+      const postFoundBtn = document.getElementById("postFoundBtn");
+      const itemsContainer = document
+        .getElementById("myItemsSection")
+        .querySelector(".grid");
+      const claimedItemsContainer = document
+        .getElementById("claimedItemsSection")
+        .querySelector(".grid");
+      const commentsContainer = document.getElementById("commentsContainer");
+      const suggestionsContainer = document.getElementById(
+        "suggestionsContainer"
+      );
+      const pendingClaimsContainer = document.getElementById(
+        "pendingClaimsContainer"
+      );
+
+      // Modals
+      const suggestionModal = document.getElementById("suggestionModal");
+      const closeSuggestionModal = document.getElementById(
+        "closeSuggestionModal"
+      );
+      const cancelSuggestionBtn = document.getElementById(
+        "cancelSuggestionBtn"
+      );
+      const suggestionText = document.getElementById("suggestionText");
+      const submitSuggestionBtn = document.getElementById(
+        "submitSuggestionBtn"
+      );
+      const addSuggestionBtn = document.getElementById("addSuggestionBtn");
+
+      const itemModal = document.getElementById("itemModal");
+      const closeItemModal = document.getElementById("closeItemModal");
+      const itemModalTitle = document.getElementById("itemModalTitle");
+      const itemModalType = document.getElementById("itemModalType");
+      const itemModalImage = document.getElementById("itemModalImage");
+      const itemImagePlaceholder = document.getElementById(
+        "itemImagePlaceholder"
+      );
+      const itemModalDescription = document.getElementById(
+        "itemModalDescription"
+      );
+      const itemModalLocation = document.getElementById("itemModalLocation");
+      const itemModalQuestion = document.getElementById("itemModalQuestion");
+      const itemModalPosterImage = document.getElementById(
+        "itemModalPosterImage"
+      );
+      const itemModalPosterName = document.getElementById(
+        "itemModalPosterName"
+      );
+      const itemModalPosterDept = document.getElementById(
+        "itemModalPosterDept"
+      );
+      const itemModalStatus = document.getElementById("itemModalStatus");
+      const itemStatusContainer = document.getElementById(
+        "itemStatusContainer"
+      );
+      const validityQuestionContainer = document.getElementById(
+        "validityQuestionContainer"
+      );
+      const claimedByContainer = document.getElementById("claimedByContainer");
+      const itemModalClaimedByImage = document.getElementById(
+        "itemModalClaimedByImage"
+      );
+      const itemModalClaimedByName = document.getElementById(
+        "itemModalClaimedByName"
+      );
+      const itemModalClaimedByDept = document.getElementById(
+        "itemModalClaimedByDept"
+      );
+      const claimActionsContainer = document.getElementById(
+        "claimActionsContainer"
+      );
+      const acceptClaimBtn = document.getElementById("acceptClaimBtn");
+      const rejectClaimBtn = document.getElementById("rejectClaimBtn");
+      const contactInfoContainer = document.getElementById(
+        "contactInfoContainer"
+      );
+      const contactEmail = document.getElementById("contactEmail");
+      const contactPhone = document.getElementById("contactPhone");
+      const itemActionsContainer = document.getElementById(
+        "itemActionsContainer"
+      );
+      const editItemBtn = document.getElementById("editItemBtn");
+      const deleteItemBtn = document.getElementById("deleteItemBtn");
+      const modalCommentsContainer =
+        document.getElementById("commentsContainer");
+      const commentText = document.getElementById("commentText");
+      const submitCommentBtn = document.getElementById("submitCommentBtn");
+      const addCommentContainer = document.getElementById(
+        "addCommentContainer"
+      );
+      const commentUserImage = document.getElementById("commentUserImage");
+
+      // Check authentication and load user data
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        try {
+          // Get current user
+          const response = await fetch("/api/users/me", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch user data");
+          }
+
+          const data = await response.json();
+          currentUser = data.user;
+          loadUserData(currentUser);
+          loadMyItems();
+          loadClaimedItems();
+          loadMyComments();
+          loadMySuggestions();
+          loadPendingClaims();
+
+          // Set up profile image change handler
+          profileImageInput.addEventListener("change", (e) => {
+            if (e.target.files.length > 0) {
+              profileImageName.textContent = e.target.files[0].name;
+            } else {
+              profileImageName.textContent = "No file chosen";
+            }
+          });
+        } catch (error) {
+          console.error("Error:", error);
+          localStorage.removeItem("token");
+          window.location.href = "login.html";
+        }
+      });
+
+      // Load user data into the form
+      function loadUserData(user) {
+        userFullName.textContent = `${user.firstName} ${user.lastName}`;
+        userDepartment.textContent = user.department;
+        userEmail.textContent = user.email;
+        userPhone.textContent = user.phone;
+
+        // Set form values
+        firstNameInput.value = user.firstName;
+        lastNameInput.value = user.lastName;
+        emailInput.value = user.email;
+        phoneInput.value = user.phone;
+        departmentInput.value = user.department;
+
+        // Set profile image
+        if (user.profileImage) {
+          profileImage.src = user.profileImage;
+          profileImage.onerror = () => {
+            profileImage.src =
+              "https://ui-avatars.com/api/?name=" +
+              encodeURIComponent(user.firstName + " " + user.lastName) +
+              "&background=random";
+          };
+          commentUserImage.src = user.profileImage;
+          commentUserImage.onerror = () => {
+            commentUserImage.src =
+              "https://ui-avatars.com/api/?name=" +
+              encodeURIComponent(user.firstName + " " + user.lastName) +
+              "&background=random";
+          };
+        } else {
+          profileImage.src =
+            "https://ui-avatars.com/api/?name=" +
+            encodeURIComponent(user.firstName + " " + user.lastName) +
+            "&background=random";
+          commentUserImage.src =
+            "https://ui-avatars.com/api/?name=" +
+            encodeURIComponent(user.firstName + " " + user.lastName) +
+            "&background=random";
+        }
+      }
+
+      // Toggle update profile form
+      toggleUpdateBtn.addEventListener("click", () => {
+        updateProfileForm.classList.toggle("expanded");
+        if (updateProfileForm.classList.contains("expanded")) {
+          toggleUpdateBtn.innerHTML =
+            '<i class="fas fa-times mr-2"></i>Cancel Update';
+        } else {
+          toggleUpdateBtn.innerHTML =
+            '<i class="fas fa-edit mr-2"></i>Update Profile';
+        }
+      });
+
+      // Cancel update
+      cancelUpdateBtn.addEventListener("click", () => {
+        updateProfileForm.classList.remove("expanded");
+        toggleUpdateBtn.innerHTML =
+          '<i class="fas fa-edit mr-2"></i>Update Profile';
+        loadUserData(currentUser);
+      });
+
+      // Update profile
+      profileForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("firstName", firstNameInput.value);
+        formData.append("lastName", lastNameInput.value);
+        formData.append("phone", phoneInput.value);
+        formData.append("department", departmentInput.value);
+        formData.append("currentPassword", currentPasswordInput.value);
+
+        if (profileImageInput.files[0]) {
+          formData.append("profileImage", profileImageInput.files[0]);
+        }
+
+        try {
+          saveProfileBtn.disabled = true;
+          saveProfileBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+          const response = await fetch("/api/users/me", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to update profile");
+          }
+
+          const { user } = await response.json();
+          currentUser = user;
+          loadUserData(user);
+
+          alert("Profile updated successfully");
+          updateProfileForm.classList.remove("expanded");
+          toggleUpdateBtn.innerHTML =
+            '<i class="fas fa-edit mr-2"></i>Update Profile';
+        } catch (error) {
+          console.error("Error updating profile:", error);
+          alert(error.message || "Failed to update profile. Please try again.");
+        } finally {
+          saveProfileBtn.disabled = false;
+          saveProfileBtn.innerHTML =
+            '<i class="fas fa-save mr-2"></i>Save Changes';
+        }
+      });
+
+      // Change password
+      changePasswordForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (newPasswordInput.value !== confirmNewPasswordInput.value) {
+          alert("New passwords do not match");
+          return;
+        }
+
+        try {
+          changePasswordBtn.disabled = true;
+          changePasswordBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Changing...';
+
+          const response = await fetch("/api/users/change-password", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              currentPassword: oldPasswordInput.value,
+              newPassword: newPasswordInput.value,
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to change password");
+          }
+
+          alert("Password changed successfully");
+          changePasswordForm.reset();
+        } catch (error) {
+          console.error("Error changing password:", error);
+          alert(
+            error.message || "Failed to change password. Please try again."
+          );
+        } finally {
+          changePasswordBtn.disabled = false;
+          changePasswordBtn.innerHTML =
+            '<i class="fas fa-key mr-2"></i>Change Password';
+        }
+      });
+
+      // Load user's items
+      async function loadMyItems() {
+        try {
+          itemsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10 text-gray-500">
+              <i class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"></i>
+              <p>Loading your items...</p>
+            </div>
+          `;
+
+          const response = await fetch("/api/items?postedBy=me", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Failed to load items");
+
+          const data = await response.json();
+          currentItems = data.items;
+          renderMyItems(currentItems);
+        } catch (error) {
+          console.error("Error loading items:", error);
+          itemsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10 text-red-500">
+              <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
+              <p>Failed to load items. Please try again.</p>
+              <button onclick="loadMyItems()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
+                <i class="fas fa-sync-alt mr-1"></i> Retry
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Render user's items
+      function renderMyItems(items) {
+        if (items.length === 0) {
+          itemsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10 text-gray-500">
+              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
+                <i class="fas fa-box-open text-4xl text-blue-400 mb-3"></i>
+                <h3 class="text-lg font-medium mb-2">No Items Posted Yet</h3>
+                <p class="text-gray-600 mb-4">You haven't posted any lost or found items yet.</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button id="postLostBtn" class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Post Lost Item</span>
+                  </button>
+                  <button id="postFoundBtn" class="gradient-btn-success hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Post Found Item</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+
+          // Re-attach event listeners to buttons
+          document
+            .getElementById("postLostBtn")
+            .addEventListener("click", () => {
+              window.location.href = "post-item.html?type=lost";
+            });
+          document
+            .getElementById("postFoundBtn")
+            .addEventListener("click", () => {
+              window.location.href = "post-item.html?type=found";
+            });
+
+          return;
+        }
+
+        itemsContainer.innerHTML = items
+          .map(
+            (item) => `
+            <div class="bg-white rounded-xl shadow-soft overflow-hidden item-card hover:shadow-medium" data-id="${
+              item._id
+            }">
+              <div class="relative h-48 overflow-hidden">
+                ${
+                  item.image
+                    ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">`
+                    : `<div class="w-full h-full bg-gray-50 flex items-center justify-center">
+                        <i class="fas fa-image text-4xl text-gray-300"></i>
+                      </div>`
+                }
+                <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium
+                    ${
+                      item.type === "lost"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-green-100 text-green-800"
+                    }">
+                    ${item.type === "lost" ? "Lost" : "Found"}
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1 truncate">${
+                  item.title
+                }</h3>
+                <p class="text-gray-600 text-sm mb-2 line-clamp-2">${
+                  item.description
+                }</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-gray-500 flex items-center">
+                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                    <span class="truncate max-w-[120px]">${item.location}</span>
+                  </span>
+                  <span class="text-xs text-gray-500">
+                    ${new Date(item.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <div class="mt-3 flex justify-between items-center">
+                  <span class="text-xs ${
+                    item.status === "active"
+                      ? "bg-blue-100 text-blue-800"
+                      : item.status === "claimed"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : item.status === "accepted"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
+                  } px-2 py-1 rounded-full">
+                    ${
+                      item.status === "active"
+                        ? "Active"
+                        : item.status === "claimed"
+                        ? "Claimed"
+                        : item.status === "accepted"
+                        ? "Reunited"
+                        : "Rejected"
+                    }
+                  </span>
+                  ${
+                    item.claimedBy
+                      ? `<span class="text-xs text-gray-500 truncate max-w-[100px]">Claimed by ${item.claimedBy.firstName}</span>`
+                      : ""
+                  }
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+
+        // Add click event to items
+        document.querySelectorAll("[data-id]").forEach((el) => {
+          el.addEventListener("click", () => openItemModal(el.dataset.id));
+        });
+      }
+
+      // Load claimed items
+      async function loadClaimedItems() {
+        try {
+          claimedItemsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10 text-gray-500">
+              <i class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"></i>
+              <p>Loading claimed items...</p>
+            </div>
+          `;
+
+          const response = await fetch("/api/items?claimedBy=me", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Failed to load claimed items");
+
+          const data = await response.json();
+          renderClaimedItems(data.items);
+        } catch (error) {
+          console.error("Error loading claimed items:", error);
+          claimedItemsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10 text-red-500">
+              <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
+              <p>Failed to load claimed items. Please try again.</p>
+              <button onclick="loadClaimedItems()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
+                <i class="fas fa-sync-alt mr-1"></i> Retry
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Render claimed items
+      function renderClaimedItems(items) {
+        if (items.length === 0) {
+          claimedItemsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10 text-gray-500">
+              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
+                <i class="fas fa-hand-holding-heart text-4xl text-blue-400 mb-3"></i>
+                <h3 class="text-lg font-medium mb-2">No Claimed Items</h3>
+                <p class="text-gray-600">You haven't claimed any items yet.</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        claimedItemsContainer.innerHTML = items
+          .map(
+            (item) => `
+            <div class="bg-white rounded-xl shadow-soft overflow-hidden item-card hover:shadow-medium" data-id="${
+              item._id
+            }">
+              <div class="relative h-48 overflow-hidden">
+                ${
+                  item.image
+                    ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">`
+                    : `<div class="w-full h-full bg-gray-50 flex items-center justify-center">
+                        <i class="fas fa-image text-4xl text-gray-300"></i>
+                      </div>`
+                }
+                <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium
+                    ${
+                      item.type === "lost"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-green-100 text-green-800"
+                    }">
+                    ${item.type === "lost" ? "Lost" : "Found"}
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="font-bold text-gray-800 mb-1 truncate">${
+                  item.title
+                }</h3>
+                <p class="text-gray-600 text-sm mb-2 line-clamp-2">${
+                  item.description
+                }</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-gray-500 flex items-center">
+                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
+                    <span class="truncate max-w-[120px]">${item.location}</span>
+                  </span>
+                  <span class="text-xs text-gray-500">
+                    ${new Date(item.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <div class="mt-3">
+                  <span class="text-xs ${
+                    item.status === "accepted"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-yellow-100 text-yellow-800"
+                  } px-2 py-1 rounded-full">
+                    ${
+                      item.status === "accepted"
+                        ? "Claim Accepted"
+                        : "Claim Pending"
+                    }
+                  </span>
+                </div>
+                ${
+                  item.status === "accepted"
+                    ? `<div class="mt-3 bg-green-50 p-2 rounded-lg border border-green-100">
+                        <p class="text-xs text-green-700 flex items-center">
+                          <i class="fas fa-info-circle mr-1"></i>
+                          <span>Contact the owner to retrieve your item</span>
+                        </p>
+                      </div>`
+                    : ""
+                }
+              </div>
+            </div>
+          `
+          )
+          .join("");
+
+        // Add click event to claimed items
+        document
+          .querySelectorAll("#claimedItemsSection [data-id]")
+          .forEach((el) => {
+            el.addEventListener("click", () => openItemModal(el.dataset.id));
+          });
+      }
+
+      // Load user's comments
+      async function loadMyComments() {
+        try {
+          commentsContainer.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+              <i class="fas fa-spinner fa-spin text-xl mb-2 animate-pulse-slow"></i>
+              <p>Loading your comments...</p>
+            </div>
+          `;
+
+          const response = await fetch("/api/comments?postedBy=me", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Failed to load comments");
+
+          const data = await response.json();
+          currentComments = data.comments;
+          renderMyComments(currentComments);
+        } catch (error) {
+          console.error("Error loading comments:", error);
+          commentsContainer.innerHTML = `
+            <div class="text-center py-10 text-red-500">
+              <i class="fas fa-exclamation-circle text-xl mb-2"></i>
+              <p>Failed to load comments. Please try again.</p>
+              <button onclick="loadMyComments()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
+                <i class="fas fa-sync-alt mr-1"></i> Retry
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Render user's comments
+      function renderMyComments(comments) {
+        if (comments.length === 0) {
+          commentsContainer.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
+                <i class="fas fa-comment-slash text-4xl text-blue-400 mb-3"></i>
+                <h3 class="text-lg font-medium mb-2">No Comments Yet</h3>
+                <p class="text-gray-600">You haven't posted any comments yet.</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        commentsContainer.innerHTML = comments
+          .map(
+            (comment) => `
+            <div class="bg-white p-5 rounded-xl shadow-soft border border-gray-100 comment-container hover-scale">
+              <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center space-x-3">
+                  <img src="${
+                    comment.postedBy.profileImage ||
+                    "https://ui-avatars.com/api/?name=" +
+                      encodeURIComponent(
+                        comment.postedBy.firstName +
+                          " " +
+                          comment.postedBy.lastName
+                      ) +
+                      "&background=random"
+                  }"
+                       alt="${comment.postedBy.firstName}"
+                       class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                  <div>
+                    <p class="font-medium text-gray-800">${
+                      comment.postedBy.firstName
+                    } ${comment.postedBy.lastName}</p>
+                    <p class="text-xs text-gray-500">${
+                      comment.postedBy.department
+                    }</p>
+                  </div>
+                </div>
+                <span class="text-xs text-gray-400">
+                  ${new Date(comment.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+              <div class="pl-13">
+                <p class="text-gray-700 mb-4">${comment.content}</p>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs text-gray-500">
+                    On item: <span class="font-medium text-blue-600">${
+                      comment.item.title
+                    }</span>
+                  </span>
+                  <div class="flex space-x-3">
+                    <button onclick="editComment('${
+                      comment._id
+                    }')" class="text-blue-500 hover:text-blue-700 text-xs smooth-transition">
+                      <i class="fas fa-edit mr-1"></i> Edit
+                    </button>
+                    <button onclick="deleteComment('${
+                      comment._id
+                    }')" class="text-red-500 hover:text-red-700 text-xs smooth-transition">
+                      <i class="fas fa-trash mr-1"></i> Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // Load user's suggestions
+      async function loadMySuggestions() {
+        try {
+          suggestionsContainer.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+              <i class="fas fa-spinner fa-spin text-xl mb-2 animate-pulse-slow"></i>
+              <p>Loading your suggestions...</p>
+            </div>
+          `;
+
+          const response = await fetch("/api/suggestions?postedBy=me", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Failed to load suggestions");
+
+          const data = await response.json();
+          currentSuggestions = data.suggestions;
+          renderMySuggestions(currentSuggestions);
+        } catch (error) {
+          console.error("Error loading suggestions:", error);
+          suggestionsContainer.innerHTML = `
+            <div class="text-center py-10 text-red-500">
+              <i class="fas fa-exclamation-circle text-xl mb-2"></i>
+              <p>Failed to load suggestions. Please try again.</p>
+              <button onclick="loadMySuggestions()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
+                <i class="fas fa-sync-alt mr-1"></i> Retry
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Render user's suggestions
+      function renderMySuggestions(suggestions) {
+        if (suggestions.length === 0) {
+          suggestionsContainer.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
+                <i class="fas fa-lightbulb text-4xl text-yellow-400 mb-3"></i>
+                <h3 class="text-lg font-medium mb-2">No Suggestions Yet</h3>
+                <p class="text-gray-600">You haven't posted any suggestions yet.</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        suggestionsContainer.innerHTML = suggestions
+          .map(
+            (suggestion) => `
+            <div class="bg-white p-5 rounded-xl shadow-soft border border-gray-100 hover-scale">
+              <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center space-x-3">
+                  <div class="bg-blue-100 p-3 rounded-full">
+                    <i class="fas fa-lightbulb text-blue-500"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-800">${
+                      suggestion.postedBy.firstName
+                    } ${suggestion.postedBy.lastName}</p>
+                    <p class="text-xs text-gray-500">${
+                      suggestion.postedBy.department
+                    }</p>
+                  </div>
+                </div>
+                <span class="text-xs text-gray-400">
+                  ${new Date(suggestion.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+              <div class="pl-16">
+                <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400 mb-4">
+                  <p class="text-gray-700 italic">"${suggestion.content}"</p>
+                </div>
+                <div class="flex justify-end space-x-3">
+                  <button onclick="editSuggestion('${
+                    suggestion._id
+                  }')" class="text-blue-500 hover:text-blue-700 text-xs smooth-transition">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                  </button>
+                  <button onclick="deleteSuggestion('${
+                    suggestion._id
+                  }')" class="text-red-500 hover:text-red-700 text-xs smooth-transition">
+                    <i class="fas fa-trash mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // Load pending claims
+      async function loadPendingClaims() {
+        try {
+          pendingClaimsContainer.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+              <i class="fas fa-spinner fa-spin text-xl mb-2 animate-pulse-slow"></i>
+              <p>Loading pending claims...</p>
+            </div>
+          `;
+
+          const response = await fetch(
+            "/api/items?status=claimed&postedBy=me",
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+
+          if (!response.ok) throw new Error("Failed to load pending claims");
+
+          const data = await response.json();
+          pendingClaims = data.items;
+          renderPendingClaims(pendingClaims);
+
+          // Update notification badge
+          if (pendingClaims.length > 0) {
+            pendingClaimsBadge.classList.remove("hidden");
+          } else {
+            pendingClaimsBadge.classList.add("hidden");
+          }
+        } catch (error) {
+          console.error("Error loading pending claims:", error);
+          pendingClaimsContainer.innerHTML = `
+            <div class="text-center py-10 text-red-500">
+              <i class="fas fa-exclamation-circle text-xl mb-2"></i>
+              <p>Failed to load pending claims. Please try again.</p>
+              <button onclick="loadPendingClaims()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
+                <i class="fas fa-sync-alt mr-1"></i> Retry
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Render pending claims
+      function renderPendingClaims(claims) {
+        if (claims.length === 0) {
+          pendingClaimsContainer.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
+                <i class="fas fa-check-circle text-4xl text-green-400 mb-3"></i>
+                <h3 class="text-lg font-medium mb-2">No Pending Claims</h3>
+                <p class="text-gray-600">No one has claimed your items yet.</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        pendingClaimsContainer.innerHTML = claims
+          .map(
+            (claim) => `
+            <div class="bg-white rounded-xl shadow-soft overflow-hidden hover-scale" data-id="${
+              claim._id
+            }">
+              <div class="p-5">
+                <div class="flex justify-between items-start mb-3">
+                  <h3 class="font-bold text-gray-800 text-lg">${
+                    claim.title
+                  }</h3>
+                  <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                    Pending Claim
+                  </span>
+                </div>
+                <p class="text-gray-600 text-sm mb-4 line-clamp-2">${
+                  claim.description
+                }</p>
+
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-4">
+                  <h4 class="font-medium text-sm mb-2 text-gray-700">Claimed By:</h4>
+                  <div class="flex items-center space-x-3">
+                    <img src="${
+                      claim.claimedBy.profileImage ||
+                      "https://ui-avatars.com/api/?name=" +
+                        encodeURIComponent(
+                          claim.claimedBy.firstName +
+                            " " +
+                            claim.claimedBy.lastName
+                        ) +
+                        "&background=random"
+                    }"
+                         alt="${claim.claimedBy.firstName}"
+                         class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                    <div>
+                      <p class="text-sm font-medium text-gray-800">${
+                        claim.claimedBy.firstName
+                      } ${claim.claimedBy.lastName}</p>
+                      <p class="text-xs text-gray-500">${
+                        claim.claimedBy.department
+                      }</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <button onclick="acceptClaim('${
+                    claim._id
+                  }')" class="gradient-btn-success hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1">
+                    <i class="fas fa-check mr-2"></i>Accept
+                  </button>
+                  <button onclick="rejectClaim('${
+                    claim._id
+                  }')" class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1">
+                    <i class="fas fa-times mr-2"></i>Reject
+                  </button>
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // Open item modal
+      async function openItemModal(itemId) {
+        try {
+          itemModal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+
+          // Show loading state
+          itemModalTitle.textContent = "Loading...";
+          itemModalDescription.textContent = "";
+          itemModalLocation.textContent = "";
+          itemModalQuestion.textContent = "";
+          modalCommentsContainer.innerHTML =
+            '<div class="text-center py-5"><i class="fas fa-spinner fa-spin animate-pulse-slow"></i></div>';
+
+          const response = await fetch(`/api/items/${itemId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Failed to load item details");
+
+          const { item } = await response.json();
+          selectedItemId = itemId;
+
+          // Populate modal
+          itemModalTitle.textContent = item.title;
+          itemModalType.textContent =
+            item.type === "lost" ? "Lost Item" : "Found Item";
+          itemModalDescription.textContent = item.description;
+          itemModalLocation.textContent = item.location;
+
+          if (item.image) {
+            itemModalImage.src = item.image;
+            itemModalImage.alt = item.title;
+            itemModalImage.classList.remove("hidden");
+            itemImagePlaceholder.classList.add("hidden");
+          } else {
+            itemModalImage.classList.add("hidden");
+            itemImagePlaceholder.classList.remove("hidden");
+          }
+
+          // Set poster info
+          itemModalPosterName.textContent = `${item.postedBy.firstName} ${item.postedBy.lastName}`;
+          itemModalPosterDept.textContent = item.postedBy.department;
+          if (item.postedBy.profileImage) {
+            itemModalPosterImage.src = item.postedBy.profileImage;
+            itemModalPosterImage.onerror = () => {
+              itemModalPosterImage.src =
+                "https://ui-avatars.com/api/?name=" +
+                encodeURIComponent(
+                  item.postedBy.firstName + " " + item.postedBy.lastName
+                ) +
+                "&background=random";
+            };
+          } else {
+            itemModalPosterImage.src =
+              "https://ui-avatars.com/api/?name=" +
+              encodeURIComponent(
+                item.postedBy.firstName + " " + item.postedBy.lastName
+              ) +
+              "&background=random";
+          }
+
+          // Set status
+          let statusText = "";
+          let statusClass = "";
+          switch (item.status) {
+            case "active":
+              statusText = "Active";
+              statusClass = "bg-blue-100 text-blue-800";
+              break;
+            case "claimed":
+              statusText = "Claimed";
+              statusClass = "bg-yellow-100 text-yellow-800";
+              break;
+            case "accepted":
+              statusText = "Reunited";
+              statusClass = "bg-green-100 text-green-800";
+              break;
+            case "rejected":
+              statusText = "Rejected";
+              statusClass = "bg-red-100 text-red-800";
+              break;
+          }
+          itemModalStatus.textContent = statusText;
+          itemModalStatus.className = `status-badge ${statusClass}`;
+
+          // Show validity question if it's a found item
+          if (item.type === "found" && item.validityQuestion) {
+            validityQuestionContainer.classList.remove("hidden");
+            itemModalQuestion.textContent = item.validityQuestion;
+          } else {
+            validityQuestionContainer.classList.add("hidden");
+          }
+
+          // Show claimed by info if claimed
+          if (item.claimedBy) {
+            claimedByContainer.classList.remove("hidden");
+            itemModalClaimedByName.textContent = `${item.claimedBy.firstName} ${item.claimedBy.lastName}`;
+            itemModalClaimedByDept.textContent = item.claimedBy.department;
+            if (item.claimedBy.profileImage) {
+              itemModalClaimedByImage.src = item.claimedBy.profileImage;
+              itemModalClaimedByImage.onerror = () => {
+                itemModalClaimedByImage.src =
+                  "https://ui-avatars.com/api/?name=" +
+                  encodeURIComponent(
+                    item.claimedBy.firstName + " " + item.claimedBy.lastName
+                  ) +
+                  "&background=random";
+              };
+            } else {
+              itemModalClaimedByImage.src =
+                "https://ui-avatars.com/api/?name=" +
+                encodeURIComponent(
+                  item.claimedBy.firstName + " " + item.claimedBy.lastName
+                ) +
+                "&background=random";
+            }
+          } else {
+            claimedByContainer.classList.add("hidden");
+          }
+
+          // Show claim actions if it's the owner and status is claimed
+          if (
+            item.postedBy._id === currentUser._id &&
+            item.status === "claimed"
+          ) {
+            claimActionsContainer.classList.remove("hidden");
+          } else {
+            claimActionsContainer.classList.add("hidden");
+          }
+
+          // Show contact info if status is accepted and current user is either owner or claimant
+          if (
+            item.status === "accepted" &&
+            (item.postedBy._id === currentUser._id ||
+              (item.claimedBy && item.claimedBy._id === currentUser._id))
+          ) {
+            contactInfoContainer.classList.remove("hidden");
+            if (item.postedBy._id === currentUser._id) {
+              // Show claimant's contact info to owner
+              contactEmail.textContent = item.claimedBy.email;
+              contactPhone.textContent = item.claimedBy.phone;
+            } else {
+              // Show owner's contact info to claimant
+              contactEmail.textContent = item.postedBy.email;
+              contactPhone.textContent = item.postedBy.phone;
+            }
+          } else {
+            contactInfoContainer.classList.add("hidden");
+          }
+
+          // Show item actions if it's the owner and status is active or rejected
+          if (
+            item.postedBy._id === currentUser._id &&
+            (item.status === "active" || item.status === "rejected")
+          ) {
+            itemActionsContainer.classList.remove("hidden");
+          } else {
+            itemActionsContainer.classList.add("hidden");
+          }
+
+          // Load comments
+          loadItemComments(itemId);
+        } catch (error) {
+          console.error("Error loading item details:", error);
+          itemModalTitle.textContent = "Error";
+          itemModalDescription.innerHTML = `
+            <div class="text-red-500 bg-red-50 p-3 rounded-lg">
+              <i class="fas fa-exclamation-circle mr-2"></i>
+              Failed to load item details. Please try again.
+            </div>
+          `;
+        }
+      }
+
+      // Load comments for an item
+      async function loadItemComments(itemId) {
+        try {
+          modalCommentsContainer.innerHTML =
+            '<div class="text-center py-5"><i class="fas fa-spinner fa-spin animate-pulse-slow"></i></div>';
+
+          const response = await fetch(`/api/items/${itemId}/comments`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Failed to load comments");
+
+          const data = await response.json();
+          renderItemComments(data.comments);
+
+          // Enable/disable comment form based on item status
+          const item =
+            currentItems.find((i) => i._id === itemId) ||
+            pendingClaims.find((i) => i._id === itemId);
+          if (item && item.status !== "active") {
+            addCommentContainer.classList.add("hidden");
+          } else {
+            addCommentContainer.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Error loading comments:", error);
+          modalCommentsContainer.innerHTML = `
+            <div class="text-center py-3 text-red-500 bg-red-50 rounded-lg">
+              <i class="fas fa-exclamation-circle mr-2"></i>
+              Failed to load comments
+            </div>
+          `;
+        }
+      }
+
+      // Render comments in item modal
+      function renderItemComments(comments) {
+        if (comments.length === 0) {
+          modalCommentsContainer.innerHTML = `
+            <div class="text-center py-3 text-gray-500 bg-gray-50 rounded-lg">
+              No comments yet. Be the first to comment!
+            </div>
+          `;
+          return;
+        }
+
+        modalCommentsContainer.innerHTML = comments
+          .map(
+            (comment) => `
+            <div class="bg-white p-4 rounded-lg comment-container mb-3 hover-scale">
+              <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0">
+                  <img src="${
+                    comment.postedBy.profileImage ||
+                    "https://ui-avatars.com/api/?name=" +
+                      encodeURIComponent(
+                        comment.postedBy.firstName +
+                          " " +
+                          comment.postedBy.lastName
+                      ) +
+                      "&background=random"
+                  }"
+                       alt="${comment.postedBy.firstName}"
+                       class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between mb-1">
+                    <div>
+                      <span class="font-medium text-gray-900">${
+                        comment.postedBy.firstName
+                      } ${comment.postedBy.lastName}</span>
+                      <span class="text-xs text-gray-500 ml-2">${
+                        comment.postedBy.department
+                      }</span>
+                    </div>
+                    <span class="text-xs text-gray-400">
+                      ${formatCommentTime(comment.createdAt)}
+                    </span>
+                  </div>
+                  <div class="comment-content pl-4">
+                    <p class="text-gray-700">${comment.content}</p>
+                    ${
+                      comment.postedBy._id === currentUser._id
+                        ? `<div class="mt-2 flex justify-end space-x-2">
+                            <button onclick="editComment('${comment._id}')" class="text-blue-500 hover:text-blue-700 text-xs smooth-transition">
+                              <i class="fas fa-edit mr-1"></i> Edit
+                            </button>
+                            <button onclick="deleteComment('${comment._id}')" class="text-red-500 hover:text-red-700 text-xs smooth-transition">
+                              <i class="fas fa-trash mr-1"></i> Delete
+                            </button>
+                          </div>`
+                        : ""
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+
+        // Scroll to bottom of comments
+        modalCommentsContainer.scrollTop = modalCommentsContainer.scrollHeight;
+      }
+
+      // Format comment time
+      function formatCommentTime(dateString) {
+        const now = new Date();
+        const commentDate = new Date(dateString);
+        const diffInSeconds = Math.floor((now - commentDate) / 1000);
+
+        if (diffInSeconds < 60) {
+          return "Just now";
+        } else if (diffInSeconds < 3600) {
+          const minutes = Math.floor(diffInSeconds / 60);
+          return `${minutes} ${minutes === 1 ? "min" : "mins"} ago`;
+        } else if (diffInSeconds < 86400) {
+          const hours = Math.floor(diffInSeconds / 3600);
+          return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+        } else if (diffInSeconds < 604800) {
+          const days = Math.floor(diffInSeconds / 86400);
+          return `${days} ${days === 1 ? "day" : "days"} ago`;
+        } else {
+          return commentDate.toLocaleDateString();
+        }
+      }
+
+      // Close modal and reset body overflow
+      function closeModal() {
+        itemModal.classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+
+      // Accept claim
+      async function acceptClaim(itemId) {
+        if (!confirm("Are you sure you want to accept this claim?")) return;
+
+        try {
+          const response = await fetch(`/api/items/${itemId}/accept-claim`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to accept claim");
+          }
+
+          const { item } = await response.json();
+          alert("Claim accepted successfully");
+          closeModal();
+          loadMyItems();
+          loadPendingClaims();
+        } catch (error) {
+          console.error("Error accepting claim:", error);
+          alert(error.message || "Failed to accept claim. Please try again.");
+        }
+      }
+
+      // Reject claim
+      async function rejectClaim(itemId) {
+        if (!confirm("Are you sure you want to reject this claim?")) return;
+
+        try {
+          const response = await fetch(`/api/items/${itemId}/reject-claim`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to reject claim");
+          }
+
+          const { item } = await response.json();
+          alert("Claim rejected successfully");
+          closeModal();
+          loadMyItems();
+          loadPendingClaims();
+        } catch (error) {
+          console.error("Error rejecting claim:", error);
+          alert(error.message || "Failed to reject claim. Please try again.");
+        }
+      }
+
+      // Edit comment
+      async function editComment(commentId) {
+        const comment = currentComments.find((c) => c._id === commentId);
+        if (!comment) return;
+
+        const newContent = prompt("Edit your comment:", comment.content);
+        if (newContent === null || newContent.trim() === comment.content)
+          return;
+
+        try {
+          const response = await fetch(`/api/comments/${commentId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ content: newContent.trim() }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to update comment");
+          }
+
+          alert("Comment updated successfully");
+          loadMyComments();
+          if (selectedItemId) {
+            loadItemComments(selectedItemId);
+          }
+        } catch (error) {
+          console.error("Error updating comment:", error);
+          alert(error.message || "Failed to update comment. Please try again.");
+        }
+      }
+
+      // Delete comment
+      async function deleteComment(commentId) {
+        if (!confirm("Are you sure you want to delete this comment?")) return;
+
+        try {
+          const response = await fetch(`/api/comments/${commentId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to delete comment");
+          }
+
+          alert("Comment deleted successfully");
+          loadMyComments();
+          if (selectedItemId) {
+            loadItemComments(selectedItemId);
+          }
+        } catch (error) {
+          console.error("Error deleting comment:", error);
+          alert(error.message || "Failed to delete comment. Please try again.");
+        }
+      }
+
+      // Edit suggestion
+      async function editSuggestion(suggestionId) {
+        const suggestion = currentSuggestions.find(
+          (s) => s._id === suggestionId
+        );
+        if (!suggestion) return;
+
+        const newContent = prompt("Edit your suggestion:", suggestion.content);
+        if (newContent === null || newContent.trim() === suggestion.content)
+          return;
+
+        try {
+          const response = await fetch(`/api/suggestions/${suggestionId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ content: newContent.trim() }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to update suggestion");
+          }
+
+          alert("Suggestion updated successfully");
+          loadMySuggestions();
+        } catch (error) {
+          console.error("Error updating suggestion:", error);
+          alert(
+            error.message || "Failed to update suggestion. Please try again."
+          );
+        }
+      }
+
+      // Delete suggestion
+      async function deleteSuggestion(suggestionId) {
+        if (!confirm("Are you sure you want to delete this suggestion?"))
+          return;
+
+        try {
+          const response = await fetch(`/api/suggestions/${suggestionId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to delete suggestion");
+          }
+
+          alert("Suggestion deleted successfully");
+          loadMySuggestions();
+        } catch (error) {
+          console.error("Error deleting suggestion:", error);
+          alert(
+            error.message || "Failed to delete suggestion. Please try again."
+          );
+        }
+      }
+
+      // Edit item
+      editItemBtn.addEventListener("click", () => {
+        window.location.href = `post-item.html?edit=${selectedItemId}`;
+      });
+
+      // Delete item
+      deleteItemBtn.addEventListener("click", async () => {
+        if (!confirm("Are you sure you want to delete this item?")) return;
+
+        try {
+          const response = await fetch(`/api/items/${selectedItemId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to delete item");
+          }
+
+          alert("Item deleted successfully");
+          closeModal();
+          loadMyItems();
+        } catch (error) {
+          console.error("Error deleting item:", error);
+          alert(error.message || "Failed to delete item. Please try again.");
+        }
+      });
+
+      // Accept claim from modal
+      acceptClaimBtn.addEventListener("click", () => {
+        acceptClaim(selectedItemId);
+      });
+
+      // Reject claim from modal
+      rejectClaimBtn.addEventListener("click", () => {
+        rejectClaim(selectedItemId);
+      });
+
+      // Submit comment
+      submitCommentBtn.addEventListener("click", async () => {
+        const content = commentText.value.trim();
+        if (!content) {
+          alert("Please enter your comment");
+          return;
+        }
+
+        try {
+          submitCommentBtn.disabled = true;
+          submitCommentBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i> Posting...';
+
+          const response = await fetch(
+            `/api/items/${selectedItemId}/comments`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: JSON.stringify({ content }),
+            }
+          );
+
+          if (!response.ok) throw new Error("Failed to submit comment");
+
+          commentText.value = "";
+          loadItemComments(selectedItemId);
+          loadMyComments();
+        } catch (error) {
+          console.error("Error submitting comment:", error);
+          alert("Failed to submit comment. Please try again.");
+        } finally {
+          submitCommentBtn.disabled = false;
+          submitCommentBtn.innerHTML = "Post Comment";
+        }
+      });
+
+      // Add suggestion
+      addSuggestionBtn.addEventListener("click", () => {
+        suggestionText.value = "";
+        suggestionModal.classList.remove("hidden");
+      });
+
+      closeSuggestionModal.addEventListener("click", () => {
+        suggestionModal.classList.add("hidden");
+      });
+
+      cancelSuggestionBtn.addEventListener("click", () => {
+        suggestionModal.classList.add("hidden");
+      });
+
+      submitSuggestionBtn.addEventListener("click", async () => {
+        const content = suggestionText.value.trim();
+        if (!content) {
+          alert("Please enter your suggestion");
+          return;
+        }
+
+        try {
+          submitSuggestionBtn.disabled = true;
+          submitSuggestionBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
+
+          const response = await fetch("/api/suggestions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ content }),
+          });
+
+          if (!response.ok) throw new Error("Failed to submit suggestion");
+
+          suggestionModal.classList.add("hidden");
+          loadMySuggestions();
+        } catch (error) {
+          console.error("Error submitting suggestion:", error);
+          alert("Failed to submit suggestion. Please try again.");
+        } finally {
+          submitSuggestionBtn.disabled = false;
+          submitSuggestionBtn.innerHTML = "Submit";
+        }
+      });
+
+      // Item modal
+      closeItemModal.addEventListener("click", closeModal);
+
+      // Close modal when clicking outside
+      itemModal.addEventListener("click", (e) => {
+        if (e.target === itemModal) {
+          closeModal();
+        }
+      });
+
+      // Tab switching
+      myItemsTab.addEventListener("click", () => {
+        activeTab = "myItems";
+        myItemsTab.classList.remove("tab-inactive");
+        myItemsTab.classList.add("tab-active");
+        claimedItemsTab.classList.remove("tab-active");
+        claimedItemsTab.classList.add("tab-inactive");
+        myCommentsTab.classList.remove("tab-active");
+        myCommentsTab.classList.add("tab-inactive");
+        mySuggestionsTab.classList.remove("tab-active");
+        mySuggestionsTab.classList.add("tab-inactive");
+        pendingClaimsTab.classList.remove("tab-active");
+        pendingClaimsTab.classList.add("tab-inactive");
+
+        myItemsSection.classList.remove("hidden");
+        claimedItemsSection.classList.add("hidden");
+        myCommentsSection.classList.add("hidden");
+        mySuggestionsSection.classList.add("hidden");
+        pendingClaimsSection.classList.add("hidden");
+      });
+
+      claimedItemsTab.addEventListener("click", () => {
+        activeTab = "claimedItems";
+        claimedItemsTab.classList.remove("tab-inactive");
+        claimedItemsTab.classList.add("tab-active");
+        myItemsTab.classList.remove("tab-active");
+        myItemsTab.classList.add("tab-inactive");
+        myCommentsTab.classList.remove("tab-active");
+        myCommentsTab.classList.add("tab-inactive");
+        mySuggestionsTab.classList.remove("tab-active");
+        mySuggestionsTab.classList.add("tab-inactive");
+        pendingClaimsTab.classList.remove("tab-active");
+        pendingClaimsTab.classList.add("tab-inactive");
+
+        claimedItemsSection.classList.remove("hidden");
+        myItemsSection.classList.add("hidden");
+        myCommentsSection.classList.add("hidden");
+        mySuggestionsSection.classList.add("hidden");
+        pendingClaimsSection.classList.add("hidden");
+      });
+
+      myCommentsTab.addEventListener("click", () => {
+        activeTab = "myComments";
+        myCommentsTab.classList.remove("tab-inactive");
+        myCommentsTab.classList.add("tab-active");
+        myItemsTab.classList.remove("tab-active");
+        myItemsTab.classList.add("tab-inactive");
+        claimedItemsTab.classList.remove("tab-active");
+        claimedItemsTab.classList.add("tab-inactive");
+        mySuggestionsTab.classList.remove("tab-active");
+        mySuggestionsTab.classList.add("tab-inactive");
+        pendingClaimsTab.classList.remove("tab-active");
+        pendingClaimsTab.classList.add("tab-inactive");
+
+        myCommentsSection.classList.remove("hidden");
+        myItemsSection.classList.add("hidden");
+        claimedItemsSection.classList.add("hidden");
+        mySuggestionsSection.classList.add("hidden");
+        pendingClaimsSection.classList.add("hidden");
+      });
+
+      mySuggestionsTab.addEventListener("click", () => {
+        activeTab = "mySuggestions";
+        mySuggestionsTab.classList.remove("tab-inactive");
+        mySuggestionsTab.classList.add("tab-active");
+        myItemsTab.classList.remove("tab-active");
+        myItemsTab.classList.add("tab-inactive");
+        claimedItemsTab.classList.remove("tab-active");
+        claimedItemsTab.classList.add("tab-inactive");
+        myCommentsTab.classList.remove("tab-active");
+        myCommentsTab.classList.add("tab-inactive");
+        pendingClaimsTab.classList.remove("tab-active");
+        pendingClaimsTab.classList.add("tab-inactive");
+
+        mySuggestionsSection.classList.remove("hidden");
+        myItemsSection.classList.add("hidden");
+        claimedItemsSection.classList.add("hidden");
+        myCommentsSection.classList.add("hidden");
+        pendingClaimsSection.classList.add("hidden");
+      });
+
+      pendingClaimsTab.addEventListener("click", () => {
+        activeTab = "pendingClaims";
+        pendingClaimsTab.classList.remove("tab-inactive");
+        pendingClaimsTab.classList.add("tab-active");
+        myItemsTab.classList.remove("tab-active");
+        myItemsTab.classList.add("tab-inactive");
+        claimedItemsTab.classList.remove("tab-active");
+        claimedItemsTab.classList.add("tab-inactive");
+        myCommentsTab.classList.remove("tab-active");
+        myCommentsTab.classList.add("tab-inactive");
+        mySuggestionsTab.classList.remove("tab-active");
+        mySuggestionsTab.classList.add("tab-inactive");
+
+        pendingClaimsSection.classList.remove("hidden");
+        myItemsSection.classList.add("hidden");
+        claimedItemsSection.classList.add("hidden");
+        myCommentsSection.classList.add("hidden");
+        mySuggestionsSection.classList.add("hidden");
+
+        // Clear notification badge when viewing pending claims
+        pendingClaimsBadge.classList.add("hidden");
+      });
+
+      // Navigation
+      postLostBtn.addEventListener("click", () => {
+        window.location.href = "post-item.html?type=lost";
+      });
+
+      postFoundBtn.addEventListener("click", () => {
+        window.location.href = "post-item.html?type=found";
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      });
+
+      // Press Escape to close modals
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (!itemModal.classList.contains("hidden")) {
+            closeModal();
+          }
+          if (!suggestionModal.classList.contains("hidden")) {
+            suggestionModal.classList.add("hidden");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
