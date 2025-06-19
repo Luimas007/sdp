@@ -245,6 +245,7 @@ app.post(
         success: true,
         message: "User registered successfully. Please verify your email.",
         userId: user._id,
+        profileImage: user.profileImage, // Include profile image in response
       });
     } catch (error) {
       console.error(error);
@@ -281,9 +282,22 @@ app.post("/api/auth/verify", async (req, res) => {
     user.otpExpires = undefined;
     await user.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Email verified successfully" });
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+      token,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        department: user.department,
+        profileImage: user.profileImage, // Include profile image in response
+      },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -358,6 +372,7 @@ app.post("/api/auth/login", async (req, res) => {
       success: true,
       message: "OTP sent to your email",
       userId: user._id,
+      profileImage: user.profileImage, // Include profile image in response
     });
   } catch (error) {
     console.error(error);
@@ -399,7 +414,7 @@ app.post("/api/auth/verify-login", async (req, res) => {
         email: user.email,
         phone: user.phone,
         department: user.department,
-        profileImage: user.profileImage,
+        profileImage: user.profileImage, // Include profile image in response
       },
     });
   } catch (error) {
@@ -482,6 +497,35 @@ app.get("/api/users/me", authenticate, async (req, res) => {
       "-password -otp -otpExpires"
     );
     res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.get("/api/users/:id/profile-image", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("profileImage");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (!user.profileImage) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Profile image not found" });
+    }
+
+    // Check if file exists
+    if (fs.existsSync(path.join(__dirname, user.profileImage))) {
+      return res.sendFile(path.join(__dirname, user.profileImage));
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "Profile image file not found" });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -1235,7 +1279,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Route for landing page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
+  res.sendFile(path.join(__dirname, "public", "home.html"));
 });
 
 // Start server
