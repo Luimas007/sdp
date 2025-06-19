@@ -1233,6 +1233,11 @@ app.get("/api/stats", authenticate, async (req, res) => {
 // Serve static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Route for landing page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
