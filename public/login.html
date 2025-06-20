@@ -15,13 +15,15 @@
             rgba(0, 0, 0, 0.5),
             rgba(0, 0, 0, 0.5)
           ),
-          url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80");
+          url("bup.jpg");
         background-size: cover;
         background-position: center;
       }
     </style>
   </head>
-  <body class="min-h-screen bg-gray-100">
+  <body
+    class="bg-[url('login.jpg')] bg-cover bg-center bg-no-repeat min-h-screen"
+  >
     <div class="min-h-screen flex items-center justify-center p-4">
       <div
         class="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row"
@@ -30,8 +32,8 @@
         <div
           class="hidden md:block md:w-1/2 bg-auth text-white p-8 flex flex-col justify-center"
         >
-          <h1 class="text-3xl font-bold mb-4">Welcome Back!</h1>
-          <p class="mb-6">Sign in to continue to Campus Lost & Found</p>
+          <h1 class="text-3xl font-bold mb-4">Authentication System</h1>
+          <p class="mb-6">Sign in to continue to BUP Lost & Found</p>
           <div class="space-y-4">
             <div class="flex items-center">
               <i class="fas fa-check-circle mr-2"></i>
@@ -223,19 +225,16 @@
         .addEventListener("submit", async function (e) {
           e.preventDefault();
 
-          // Reset errors
           document
             .querySelectorAll('[id$="Error"]')
             .forEach((el) => el.classList.add("hidden"));
 
-          // Validate email
           const email = document.getElementById("email").value.trim();
           if (!email || !validateEmail(email)) {
             document.getElementById("emailError").classList.remove("hidden");
             return;
           }
 
-          // Validate password
           const password = document.getElementById("password").value;
           if (!password) {
             document.getElementById("passwordError").classList.remove("hidden");
@@ -295,11 +294,8 @@
             const data = await response.json();
 
             if (data.success) {
-              // Store token in localStorage or sessionStorage
               localStorage.setItem("token", data.token);
               localStorage.setItem("user", JSON.stringify(data.user));
-
-              // Redirect to dashboard or home page
               window.location.href = "home.html";
             } else {
               alert(data.message || "Verification failed. Please try again.");
