@@ -3,628 +3,477 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>University Lost & Found Bulletin</title>
+    <title>BUP Lost & Found | Campus Bulletin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
+      :root {
+        --primary: #4f46e5;
+        --primary-light: #6366f1;
+        --secondary: #10b981;
+        --danger: #ef4444;
+        --dark: #1e293b;
+        --light: #f8fafc;
+      }
+
       body {
         font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        min-height: 100vh;
       }
 
-      .fade-in {
-        animation: fadeIn 0.3s ease-in-out;
+      .nav-glass {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .suggestion-card:hover {
+      .card-hover:hover {
         transform: translateY(-5px);
-        transition: all 0.3s ease;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
       }
 
-      .item-card {
-        transition: all 0.3s ease;
+      .stat-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.9) 0%,
+          rgba(255, 255, 255, 0.95) 100%
+        );
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
       }
 
-      .item-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      }
-
-      .profile-img {
-        transition: all 0.3s ease;
-      }
-
-      .profile-img:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-      }
-
-      .tab-active {
-        color: #1d4ed8;
-        border-bottom: 3px solid #1d4ed8;
-        font-weight: 600;
-      }
-
-      .tab-inactive {
-        color: #6b7280;
-        border-bottom: 3px solid transparent;
-        font-weight: 500;
-      }
-
-      .status-badge {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-      }
-
-      /* Enhanced comment styling */
-      .comment-container {
-        border-left: 3px solid #3b82f6;
-        transition: all 0.2s ease;
-      }
-
-      .comment-container:hover {
-        border-left-color: #1d4ed8;
-        background-color: #f8fafc;
-      }
-
-      .comment-time {
-        font-size: 0.75rem;
-        color: #64748b;
-      }
-
-      .comment-content {
+      .shine-effect {
         position: relative;
+        overflow: hidden;
       }
 
-      .comment-content:before {
+      .shine-effect::after {
         content: "";
         position: absolute;
-        left: -1.5rem;
-        top: 0;
-        bottom: 0;
-        width: 1px;
-        background-color: #e2e8f0;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          to bottom right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0) 45%,
+          rgba(255, 255, 255, 0.3) 48%,
+          rgba(255, 255, 255, 0.3) 52%,
+          rgba(255, 255, 255, 0) 55%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: shine 3s infinite linear;
       }
 
-      /* Smooth scrolling for comments */
-      .comments-scroll-container {
-        scroll-behavior: smooth;
-      }
-
-      /* Enhanced input focus */
-      .enhanced-focus:focus {
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-      }
-
-      /* Pulse animation for new comments */
-      @keyframes pulse {
+      @keyframes shine {
         0% {
-          background-color: #f8fafc;
-        }
-        50% {
-          background-color: #f1f5f9;
+          transform: translateX(-100%) rotate(30deg);
         }
         100% {
-          background-color: #f8fafc;
+          transform: translateX(100%) rotate(30deg);
         }
       }
 
-      .new-comment {
-        animation: pulse 1.5s ease-in-out;
+      .pulse-animation {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+        }
+      }
+
+      .text-gradient {
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--primary-light) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     </style>
   </head>
-  <body class="bg-gray-50">
-    <!-- Header -->
-    <header
-      class="bg-gradient-to-r from-blue-700 to-blue-600 text-white shadow-lg sticky top-0 z-50"
-    >
+  <body class="antialiased text-slate-800">
+    <!-- Navigation Bar -->
+    <nav class="nav-glass fixed w-full z-50">
       <div
         class="container mx-auto px-4 py-3 flex justify-between items-center"
       >
         <div class="flex items-center space-x-3">
-          <div class="bg-white p-2 rounded-lg shadow-md">
-            <i class="fas fa-search-location text-blue-600 text-xl"></i>
+          <div class="shine-effect relative rounded-lg">
+            <div
+              class="bg-gradient-to-br from-indigo-500 to-indigo-600 p-2 rounded-lg"
+            >
+              <i class="fas fa-search-location text-white text-xl"></i>
+            </div>
           </div>
-          <h1 class="text-xl font-bold">BUP Lost & Found</h1>
+          <h1
+            class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent"
+          >
+            BUP <span class="font-light">Lost & Found</span>
+          </h1>
         </div>
         <div class="flex items-center space-x-4">
           <button
-            id="profileBtn"
-            class="flex items-center space-x-2 hover:bg-blue-500 px-3 py-1 rounded-full transition"
+            id="postItemBtn"
+            class="relative overflow-hidden group px-5 py-2.5 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-medium shadow-lg hover:shadow-indigo-300 transition-all duration-300"
+          >
+            <span class="relative z-10 flex items-center">
+              <i class="fas fa-plus mr-2"></i> Post Item
+            </span>
+            <span
+              class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            ></span>
+          </button>
+
+          <!-- Profile Button -->
+          <a
+            href="profile.html"
+            class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-indigo-50 transition"
           >
             <div class="relative">
               <img
                 id="profileImage"
-                src=""
+                src="https://via.placeholder.com/40"
                 alt="Profile"
-                class="profile-img w-9 h-9 rounded-full object-cover border-2 border-white shadow"
+                class="w-8 h-8 rounded-full border-2 border-white shadow-md object-cover"
               />
               <div
-                id="onlineStatus"
-                class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"
+                class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white"
               ></div>
             </div>
-            <span id="userName" class="font-medium hidden md:inline"
-              >Profile</span
-            >
-          </button>
+            <span id="userName" class="font-medium text-slate-700">User</span>
+          </a>
+
+          <!-- Logout Button -->
           <button
             id="logoutBtn"
-            class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition flex items-center space-x-2 shadow-md"
+            class="flex items-center px-3 py-2 text-slate-700 hover:text-red-600 transition"
           >
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="hidden md:inline">Logout</span>
+            <i class="fas fa-sign-out-alt mr-2"></i>
+            <span class="font-medium">Logout</span>
           </button>
         </div>
       </div>
-    </header>
+    </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div
-          class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500 hover:shadow-lg transition transform hover:-translate-y-1"
-        >
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="text-gray-500 text-sm font-medium">Lost Items</p>
-              <h3 id="lostCount" class="text-3xl font-bold text-gray-800">0</h3>
-              <p class="text-xs text-gray-400 mt-1">Currently active</p>
-            </div>
-            <div class="bg-blue-100 p-3 rounded-full">
-              <i class="fas fa-exclamation-circle text-blue-500 text-xl"></i>
-            </div>
-          </div>
-        </div>
-        <div
-          class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500 hover:shadow-lg transition transform hover:-translate-y-1"
-        >
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="text-gray-500 text-sm font-medium">Found Items</p>
-              <h3 id="foundCount" class="text-3xl font-bold text-gray-800">
-                0
-              </h3>
-              <p class="text-xs text-gray-400 mt-1">Waiting for owners</p>
-            </div>
-            <div class="bg-green-100 p-3 rounded-full">
-              <i class="fas fa-check-circle text-green-500 text-xl"></i>
-            </div>
-          </div>
-        </div>
-        <div
-          class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500 hover:shadow-lg transition transform hover:-translate-y-1"
-        >
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="text-gray-500 text-sm font-medium">Reunited Items</p>
-              <h3 id="claimedCount" class="text-3xl font-bold text-gray-800">
-                0
-              </h3>
-              <p class="text-xs text-gray-400 mt-1">Success stories</p>
-            </div>
-            <div class="bg-purple-100 p-3 rounded-full">
-              <i class="fas fa-hands-helping text-purple-500 text-xl"></i>
-            </div>
-          </div>
-        </div>
-      </div>
+    <main class="container mx-auto px-4 pt-24 pb-12">
+      <!-- Hero Section -->
+      <section class="mb-12 text-center">
+        <h2 class="text-4xl font-bold text-slate-800 mb-3">
+          Campus Lost & Found
+        </h2>
+        <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+          Reuniting lost items with their owners across Bangladesh University of
+          Professionals
+        </p>
+      </section>
 
-      <!-- Search and Action Buttons -->
-      <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+      <!-- Search and Stats Section -->
+      <section class="mb-12">
         <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+          class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-slate-100"
         >
-          <div class="flex-1 relative">
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-            >
-              <i class="fas fa-search text-gray-400"></i>
-            </div>
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search for lost or found items..."
-              class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition enhanced-focus"
-            />
-            <button
-              id="searchBtn"
-              class="absolute right-3 top-3 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition"
-            >
-              Search
-            </button>
-          </div>
-          <div class="flex space-x-3">
-            <button
-              id="postLostBtn"
-              class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg flex items-center space-x-2 transition shadow-md transform hover:scale-105"
-            >
-              <i class="fas fa-exclamation-circle"></i>
-              <span>Post Lost Item</span>
-            </button>
-            <button
-              id="postFoundBtn"
-              class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-3 rounded-lg flex items-center space-x-2 transition shadow-md transform hover:scale-105"
-            >
-              <i class="fas fa-check-circle"></i>
-              <span>Post Found Item</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tabs for Lost/Found Items -->
-      <div class="mb-6">
-        <div class="border-b border-gray-200">
-          <nav class="flex space-x-8">
-            <button id="allTab" class="px-4 py-3 tab-active">All Items</button>
-            <button id="lostTab" class="px-4 py-3 tab-inactive">
-              Lost Items
-            </button>
-            <button id="foundTab" class="px-4 py-3 tab-inactive">
-              Found Items
-            </button>
-          </nav>
-        </div>
-      </div>
-
-      <!-- Items Grid -->
-      <div
-        id="itemsContainer"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
-      >
-        <!-- Items will be loaded here dynamically -->
-        <div class="col-span-full text-center py-10 text-gray-500">
-          <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
-          <p>Loading items...</p>
-        </div>
-      </div>
-
-      <!-- Suggestions Section -->
-      <div class="bg-white p-6 rounded-xl shadow-md mb-8">
-        <div class="flex justify-between items-center mb-4">
-          <h2
-            class="text-xl font-bold text-gray-800 flex items-center space-x-2"
+          <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
           >
-            <i class="fas fa-lightbulb text-yellow-500"></i>
-            <span>Community Suggestions</span>
+            <div class="relative flex-grow">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <i class="fas fa-search text-slate-400"></i>
+              </div>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search for lost or found items..."
+                class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              />
+              <button
+                id="searchBtn"
+                class="absolute right-3 top-3 text-slate-400 hover:text-indigo-600 transition"
+              >
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                id="filterAll"
+                class="filter-btn active px-4 py-2 rounded-lg font-medium bg-indigo-600 text-white shadow-md hover:bg-indigo-700 transition"
+              >
+                All Items
+              </button>
+              <button
+                id="filterLost"
+                class="filter-btn px-4 py-2 rounded-lg font-medium bg-red-100 text-red-600 shadow-md hover:bg-red-200 transition"
+              >
+                <i class="fas fa-question-circle mr-2"></i> Lost
+              </button>
+              <button
+                id="filterFound"
+                class="filter-btn px-4 py-2 rounded-lg font-medium bg-green-100 text-green-600 shadow-md hover:bg-green-200 transition"
+              >
+                <i class="fas fa-check-circle mr-2"></i> Found
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <div
+            class="stat-card rounded-xl shadow-sm p-6 text-center border border-slate-100"
+          >
+            <div
+              class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <i class="fas fa-boxes text-indigo-600 text-xl"></i>
+            </div>
+            <h3 class="text-slate-500 text-sm font-medium mb-1">Total Items</h3>
+            <p id="totalItems" class="text-3xl font-bold text-indigo-600">0</p>
+          </div>
+          <div
+            class="stat-card rounded-xl shadow-sm p-6 text-center border border-slate-100"
+          >
+            <div
+              class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <i class="fas fa-question-circle text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-slate-500 text-sm font-medium mb-1">Lost Items</h3>
+            <p id="lostItems" class="text-3xl font-bold text-red-600">0</p>
+          </div>
+          <div
+            class="stat-card rounded-xl shadow-sm p-6 text-center border border-slate-100"
+          >
+            <div
+              class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <i class="fas fa-check-circle text-green-600 text-xl"></i>
+            </div>
+            <h3 class="text-slate-500 text-sm font-medium mb-1">Found Items</h3>
+            <p id="foundItems" class="text-3xl font-bold text-green-600">0</p>
+          </div>
+          <div
+            class="stat-card rounded-xl shadow-sm p-6 text-center border border-slate-100"
+          >
+            <div
+              class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <i class="fas fa-hands-helping text-purple-600 text-xl"></i>
+            </div>
+            <h3 class="text-slate-500 text-sm font-medium mb-1">Reunited</h3>
+            <p id="reunitedItems" class="text-3xl font-bold text-purple-600">
+              0
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Items Section -->
+      <section class="mb-12">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-slate-800 flex items-center">
+            <span class="w-1 h-6 bg-indigo-600 rounded-full mr-3"></span>
+            Recent Items
           </h2>
           <button
-            id="addSuggestionBtn"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition shadow-md transform hover:scale-105"
+            id="viewAllItemsBtn"
+            class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center transition"
           >
-            <i class="fas fa-plus"></i>
-            <span>Add Suggestion</span>
+            View All <i class="fas fa-arrow-right ml-2 text-sm"></i>
           </button>
-        </div>
-
-        <div id="suggestionsContainer" class="space-y-4">
-          <!-- Suggestions will be loaded here dynamically -->
-          <div class="text-center py-5 text-gray-500">
-            <i class="fas fa-spinner fa-spin text-xl mb-2"></i>
-            <p>Loading suggestions...</p>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Modals -->
-    <!-- Add Suggestion Modal -->
-    <div
-      id="suggestionModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
-    >
-      <div
-        class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 fade-in mx-4"
-      >
-        <div class="flex justify-between items-center mb-4">
-          <h3
-            class="text-xl font-bold text-gray-800 flex items-center space-x-2"
-          >
-            <i class="fas fa-lightbulb text-yellow-500"></i>
-            <span>Add Your Suggestion</span>
-          </h3>
-          <button
-            id="closeSuggestionModal"
-            class="text-gray-500 hover:text-gray-700 transition"
-          >
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        <textarea
-          id="suggestionText"
-          rows="4"
-          class="w-full px-3 py-2 border border-gray-200 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition enhanced-focus"
-          placeholder="Write your suggestion here..."
-        ></textarea>
-        <div class="flex justify-end space-x-3">
-          <button
-            id="cancelSuggestionBtn"
-            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
-          >
-            Cancel
-          </button>
-          <button
-            id="submitSuggestionBtn"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition shadow-md"
-          >
-            Submit
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Item Details Modal -->
-    <div
-      id="itemModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden overflow-y-auto py-8"
-    >
-      <div
-        class="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 fade-in mx-4"
-      >
-        <div class="flex justify-between items-start mb-4">
-          <div>
-            <h3
-              id="itemModalTitle"
-              class="text-xl font-bold text-gray-800"
-            ></h3>
-            <p id="itemModalType" class="text-sm text-gray-500"></p>
-          </div>
-          <button
-            id="closeItemModal"
-            class="text-gray-500 hover:text-gray-700 transition"
-          >
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-
-        <div class="flex flex-col md:flex-row gap-6 mb-6">
-          <div class="md:w-1/2">
-            <div
-              class="relative h-64 bg-gray-100 rounded-xl overflow-hidden mb-4"
-            >
-              <img
-                id="itemModalImage"
-                src=""
-                alt="Item"
-                class="w-full h-full object-cover"
-              />
-              <div
-                id="itemImagePlaceholder"
-                class="absolute inset-0 flex items-center justify-center text-gray-400"
-              >
-                <i class="fas fa-image text-4xl"></i>
-              </div>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
-                <span>Location:</span>
-              </h4>
-              <p id="itemModalLocation" class="text-gray-700 pl-6"></p>
-            </div>
-          </div>
-          <div class="md:w-1/2">
-            <div class="mb-4">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-align-left mr-2 text-blue-500"></i>
-                <span>Description:</span>
-              </h4>
-              <p id="itemModalDescription" class="text-gray-700 pl-6"></p>
-            </div>
-
-            <div id="validityQuestionContainer" class="mb-4 hidden">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-question-circle mr-2 text-blue-500"></i>
-                <span>Validity Question:</span>
-              </h4>
-              <p id="itemModalQuestion" class="text-gray-700 pl-6"></p>
-            </div>
-
-            <div class="mb-4">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-user mr-2 text-blue-500"></i>
-                <span>Posted By:</span>
-              </h4>
-              <div class="flex items-center space-x-3 pl-6">
-                <img
-                  id="itemModalPosterImage"
-                  src=""
-                  alt="User"
-                  class="w-10 h-10 rounded-full object-cover border-2 border-white shadow"
-                />
-                <div>
-                  <p id="itemModalPosterName" class="font-medium"></p>
-                  <p id="itemModalPosterDept" class="text-sm text-gray-500"></p>
-                </div>
-              </div>
-            </div>
-
-            <div id="itemStatusContainer" class="mb-4 pl-6">
-              <span id="itemModalStatus" class="status-badge"></span>
-            </div>
-          </div>
         </div>
 
         <div
-          id="claimFormContainer"
-          class="hidden bg-blue-50 p-4 rounded-xl mb-4"
+          id="itemsContainer"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          <h4 class="font-semibold mb-3 text-gray-800 flex items-center">
-            <i class="fas fa-hand-holding-heart mr-2 text-blue-500"></i>
-            <span>Claim This Item</span>
-          </h4>
-          <div class="mb-3">
-            <label
-              for="validityAnswer"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Answer to Validity Question</label
-            >
-            <input
-              type="text"
-              id="validityAnswer"
-              class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition enhanced-focus"
-            />
+          <!-- Items will be loaded here dynamically -->
+          <div class="col-span-full text-center py-12">
+            <div class="inline-block p-4 bg-indigo-100 rounded-full mb-3">
+              <i class="fas fa-spinner fa-spin text-3xl text-indigo-600"></i>
+            </div>
+            <p class="text-slate-500">Loading items...</p>
           </div>
-          <button
-            id="submitClaimBtn"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition shadow-md w-full"
-          >
-            Submit Claim
-          </button>
+        </ Solutionsdiv>
+      </section>
+
+      <!-- Suggestions Section -->
+      <section>
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-slate-800 flex items-center">
+            <span class="w-1 h-6 bg-indigo-600 rounded-full mr-3"></span>
+            Community Suggestions
+          </h2>
         </div>
 
-        <div id="commentsSection" class="mt-6">
-          <h4 class="font-semibold mb-3 text-gray-800 flex items-center">
-            <i class="fas fa-comments mr-2 text-blue-500"></i>
-            <span>Comments</span>
-          </h4>
-          <div
-            id="commentsContainer"
-            class="space-y-3 mb-4 max-h-60 overflow-y-auto pr-2 comments-scroll-container"
-          >
-            <!-- Comments will be loaded here -->
-          </div>
-
-          <div id="addCommentContainer" class="mt-4">
-            <div class="flex items-start space-x-3">
-              <img
-                id="commentUserImage"
-                src=""
-                alt="User"
-                class="w-9 h-9 rounded-full object-cover border border-gray-200 mt-1"
-              />
-              <div class="flex-1">
-                <textarea
-                  id="commentText"
-                  rows="2"
-                  class="w-full px-3 py-2 border border-gray-200 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition enhanced-focus"
-                  placeholder="Add a comment..."
-                ></textarea>
+        <div
+          class="bg-white rounded-xl shadow-sm p-6 mb-6 border border-slate-100"
+        >
+          <div class="flex items-start space-x-4">
+            <img
+              id="currentUserImage"
+              src="https://via.placeholder.com/40"
+              alt="You"
+              class="w-10 h-10 rounded-full mt-1 border-2 border-indigo-100 shadow-sm"
+            />
+            <div class="flex-grow">
+              <textarea
+                id="suggestionInput"
+                rows="3"
+                placeholder="Share your suggestions to improve our service..."
+                class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+ dents              ></textarea>
+              <div class="flex justify-end mt-3">
                 <button
-                  id="submitCommentBtn"
-                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition shadow-md w-full"
+                  id="postSuggestionBtn"
+                  class="px-5 py-2.5 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-medium shadow-md hover:shadow-indigo-300 transition-all"
                 >
-                  Post Comment
+                  Post Suggestion
                 </button>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
+        <div id="suggestionsContainer" class="space-y-4">
+          <!-- Suggestions will be loaded here dynamically -->
+          <div class="text-center py-12">
+            <div class="inline-block p-4 bg-indigo-100 rounded-full mb-3">
+              <i class="fas fa-spinner fa-spin text-3xl text-indigo-600"></i>
+            </div>
+            <p class="text-slate-500">Loading suggestions...</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-6 md:mb-0">
+            <div class="flex items-center space-x-3 mb-3">
+              <div class="bg-indigo-600 p-2 rounded-lg">
+                <i class="fas fa-search-location text-white"></i>
+              </div>
+              <h3 class="text-xl font-bold text-white">BUP Lost & Found</h3>
+            </div>
+            <p class="max-w-md">
+              Bangladesh University of Professionals campus lost and found
+              bulletin system.
+            </p>
+          </div>
+          <div class="flex space-x-6">
+            <a href="#" class="text-slate-400 hover:text-white transition">
+              <i class="fab fa-facebook-f text-lg"></i>
+            </a>
+            <a href="#" class="text-slate-400 hover:text-white transition">
+              <i class="fab fa-twitter text-lg"></i>
+            </a>
+            <a href="#" class="text-slate-400 hover:text-white transition">
+              <i class="fab fa-instagram text-lg"></i>
+            </a>
+            <a href="#" class="text-slate-400 hover:text-white transition">
+              <i class="fab fa-linkedin-in text-lg"></i>
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-slate-800 mt-8 pt-8 text-center text-sm">
+          <p>© 2023 BUP Lost & Found System. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Script -->
     <script>
       // Global variables
       let currentUser = null;
-      let currentItems = [];
-      let currentItemType = "all";
-      let selectedItemId = null;
+      let currentFilter = "all";
+      let currentSearchTerm = "";
 
       // DOM Elements
+      const profileImage = document.getElementById("profileImage");
+      const currentUserImage = document.getElementById("currentUserImage");
+      const userName = document.getElementById("userName");
       const searchInput = document.getElementById("searchInput");
       const searchBtn = document.getElementById("searchBtn");
-      const postLostBtn = document.getElementById("postLostBtn");
-      const postFoundBtn = document.getElementById("postFoundBtn");
-      const logoutBtn = document.getElementById("logoutBtn");
-      const profileBtn = document.getElementById("profileBtn");
-      const userName = document.getElementById("userName");
-      const profileImage = document.getElementById("profileImage");
-      const lostCount = document.getElementById("lostCount");
-      const foundCount = document.getElementById("foundCount");
-      const claimedCount = document.getElementById("claimedCount");
+      const filterAll = document.getElementById("filterAll");
+      const filterLost = document.getElementById("filterLost");
+      const filterFound = document.getElementById("filterFound");
+      const totalItems = document.getElementById("totalItems");
+      const lostItems = document.getElementById("lostItems");
+      const foundItems = document.getElementById("foundItems");
+      const reunitedItems = document.getElementById("reunitedItems");
       const itemsContainer = document.getElementById("itemsContainer");
-      const allTab = document.getElementById("allTab");
-      const lostTab = document.getElementById("lostTab");
-      const foundTab = document.getElementById("foundTab");
+      const suggestionInput = document.getElementById("suggestionInput");
+      const postSuggestionBtn = document.getElementById("postSuggestionBtn");
       const suggestionsContainer = document.getElementById(
         "suggestionsContainer"
       );
-      const addSuggestionBtn = document.getElementById("addSuggestionBtn");
-      const suggestionModal = document.getElementById("suggestionModal");
-      const closeSuggestionModal = document.getElementById(
-        "closeSuggestionModal"
-      );
-      const cancelSuggestionBtn = document.getElementById(
-        "cancelSuggestionBtn"
-      );
-      const suggestionText = document.getElementById("suggestionText");
-      const submitSuggestionBtn = document.getElementById(
-        "submitSuggestionBtn"
-      );
-      const itemModal = document.getElementById("itemModal");
-      const closeItemModal = document.getElementById("closeItemModal");
-      const itemModalTitle = document.getElementById("itemModalTitle");
-      const itemModalType = document.getElementById("itemModalType");
-      const itemModalImage = document.getElementById("itemModalImage");
-      const itemImagePlaceholder = document.getElementById(
-        "itemImagePlaceholder"
-      );
-      const itemModalDescription = document.getElementById(
-        "itemModalDescription"
-      );
-      const itemModalLocation = document.getElementById("itemModalLocation");
-      const itemModalQuestion = document.getElementById("itemModalQuestion");
-      const itemModalPosterImage = document.getElementById(
-        "itemModalPosterImage"
-      );
-      const itemModalPosterName = document.getElementById(
-        "itemModalPosterName"
-      );
-      const itemModalPosterDept = document.getElementById(
-        "itemModalPosterDept"
-      );
-      const itemModalStatus = document.getElementById("itemModalStatus");
-      const itemStatusContainer = document.getElementById(
-        "itemStatusContainer"
-      );
-      const validityQuestionContainer = document.getElementById(
-        "validityQuestionContainer"
-      );
-      const claimFormContainer = document.getElementById("claimFormContainer");
-      const validityAnswer = document.getElementById("validityAnswer");
-      const submitClaimBtn = document.getElementById("submitClaimBtn");
-      const commentsContainer = document.getElementById("commentsContainer");
-      const commentText = document.getElementById("commentText");
-      const submitCommentBtn = document.getElementById("submitCommentBtn");
-      const addCommentContainer = document.getElementById(
-        "addCommentContainer"
-      );
-      const commentUserImage = document.getElementById("commentUserImage");
+      const postItemBtn = document.getElementById("postItemBtn");
+      const viewAllItemsBtn = document.getElementById("viewAllItemsBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
 
-      // Check authentication and load user data
+      // Initialize the page
       document.addEventListener("DOMContentLoaded", async () => {
-        const token = localStorage.getItem("token");
+        // Check authentication
+        await checkAuth();
 
+        // Load user data
+        await loadUserData();
+
+        // Load stats
+        await loadStats();
+
+        // Load items
+        await loadItems();
+
+        // Load suggestions
+        await loadSuggestions();
+
+        // Set up event listeners
+        setupEventListeners();
+      });
+
+      // Check authentication
+      async function checkAuth() {
+        const token = localStorage.getItem("token");
         if (!token) {
           window.location.href = "login.html";
           return;
         }
+      }
 
+      // Load user data
+      async function loadUserData() {
         try {
-          // Get current user
           const response = await fetch("/api/users/me", {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
 
@@ -634,58 +483,21 @@
 
           const data = await response.json();
           currentUser = data.user;
-          userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
 
-          // Set profile image
+          // Update UI with user data
           if (currentUser.profileImage) {
             profileImage.src = currentUser.profileImage;
-            profileImage.onerror = () => {
-              profileImage.src =
-                "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(
-                  currentUser.firstName + " " + currentUser.lastName
-                ) +
-                "&background=random";
-            };
-          } else {
-            profileImage.src =
-              "https://ui-avatars.com/api/?name=" +
-              encodeURIComponent(
-                currentUser.firstName + " " + currentUser.lastName
-              ) +
-              "&background=random";
+            currentUserImage.src = currentUser.profileImage;
+          } else if (currentUser.idCardImage) {
+            profileImage.src = currentUser.idCardImage;
+            currentUserImage.src = currentUser.idCardImage;
           }
-
-          // Set comment user image
-          if (currentUser.profileImage) {
-            commentUserImage.src = currentUser.profileImage;
-            commentUserImage.onerror = () => {
-              commentUserImage.src =
-                "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(
-                  currentUser.firstName + " " + currentUser.lastName
-                ) +
-                "&background=random";
-            };
-          } else {
-            commentUserImage.src =
-              "https://ui-avatars.com/api/?name=" +
-              encodeURIComponent(
-                currentUser.firstName + " " + currentUser.lastName
-              ) +
-              "&background=random";
-          }
-
-          // Load initial data
-          loadStats();
-          loadItems();
-          loadSuggestions();
+          userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
         } catch (error) {
-          console.error("Error:", error);
-          localStorage.removeItem("token");
+          console.error("Error loading user data:", error);
           window.location.href = "login.html";
         }
-      });
+      }
 
       // Load statistics
       async function loadStats() {
@@ -696,36 +508,59 @@
             },
           });
 
-          if (!response.ok) throw new Error("Failed to load stats");
+          if (!response.ok) {
+            throw new Error("Failed to fetch stats");
+          }
 
           const data = await response.json();
-          lostCount.textContent = data.stats.lostCount;
-          foundCount.textContent = data.stats.foundCount;
-          claimedCount.textContent = data.stats.claimedCount;
+
+          // Update stats with animation
+          animateValue(
+            totalItems,
+            0,
+            data.stats.lostCount + data.stats.foundCount,
+            1000
+          );
+          animateValue(lostItems, 0, data.stats.lostCount, 1000);
+          animateValue(foundItems, 0, data.stats.foundCount, 1000);
+          animateValue(reunitedItems, 0, data.stats.claimedCount, 1000);
         } catch (error) {
           console.error("Error loading stats:", error);
-          // Show error in UI
-          lostCount.textContent = "--";
-          foundCount.textContent = "--";
-          claimedCount.textContent = "--";
+          totalItems.textContent = "--";
+          lostItems.textContent = "--";
+          foundItems.textContent = "--";
+          reunitedItems.textContent = "--";
         }
       }
 
+      // Animate counter values
+      function animateValue(element, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          element.textContent = Math.floor(progress * (end - start) + start);
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          }
+        };
+        window.requestAnimationFrame(step);
+      }
+
       // Load items
-      async function loadItems(searchTerm = "", type = currentItemType) {
+      async function loadItems() {
         try {
-          itemsContainer.innerHTML = `
-                    <div class="col-span-full text-center py-10 text-gray-500">
-                        <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
-                        <p>Loading items...</p>
-                    </div>
-                `;
+          showLoading(itemsContainer, "Loading items...");
 
           let url = "/api/items";
-          if (searchTerm || type !== "all") {
-            url += `?${
-              searchTerm ? `search=${encodeURIComponent(searchTerm)}&` : ""
-            }${type !== "all" ? `type=${type}` : ""}`;
+          if (currentFilter !== "all" || currentSearchTerm) {
+            url += "?";
+            if (currentFilter !== "all") {
+              url += `type=${currentFilter}&`;
+            }
+            if (currentSearchTerm) {
+              url += `search=${encodeURIComponent(currentSearchTerm)}`;
+            }
           }
 
           const response = await fetch(url, {
@@ -734,39 +569,62 @@
             },
           });
 
-          if (!response.ok) throw new Error("Failed to load items");
+          if (!response.ok) {
+            throw new Error("Failed to fetch items");
+          }
 
           const data = await response.json();
-          currentItems = data.items;
-          renderItems(currentItems);
+          renderItems(data.items);
         } catch (error) {
           console.error("Error loading items:", error);
-          itemsContainer.innerHTML = `
-                    <div class="col-span-full text-center py-10 text-red-500">
-                        <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
-                        <p>Failed to load items. Please try again.</p>
-                        <button onclick="loadItems()" class="mt-2 text-blue-500 hover:text-blue-700">
-                            <i class="fas fa-sync-alt mr-1"></i> Retry
-                        </button>
-                    </div>
-                `;
+          showError(
+            itemsContainer,
+            "Failed to load items. Please try again later."
+          );
         }
+      }
+
+      // Show loading state
+      function showLoading(container, message) {
+        container.innerHTML = `
+                <div class="col-span-full text-center py-12">
+                    <div class="inline-block p-4 bg-indigo-100 rounded-full mb-3">
+                        <i class="fas fa-spinner fa-spin text-3xl text-indigo-600"></i>
+                    </div>
+                    <p class="text-slate-500">${message}</p>
+                </div>
+            `;
+      }
+
+      // Show error state
+      function showError(container, message) {
+        container.innerHTML = `
+                <div class="col-span-full text-center py-12">
+                    <div class="inline-block p-4 bg-red-100 rounded-full mb-3">
+                        <i class="fas fa-exclamation-triangle text-3xl text-red-600"></i>
+                    </div>
+                    <p class="text-slate-500">${message}</p>
+                    <button class="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Try Again
+                    </button>
+                </div>
+            `;
+
+        container.querySelector("button").addEventListener("click", loadItems);
       }
 
       // Render items
       function renderItems(items) {
         if (items.length === 0) {
           itemsContainer.innerHTML = `
-                    <div class="col-span-full text-center py-10 text-gray-500">
-                        <i class="fas fa-box-open text-2xl mb-2"></i>
-                        <p>No items found.</p>
+                    <div class="col-span-full text-center py-12">
+                        <div class="inline-block p-4 bg-indigo-100 rounded-full mb-3">
+                            <i class="fas fa-box-open text-3xl text-indigo-600"></i>
+                        </div>
+                        <p class="text-slate-500">No items found</p>
                         ${
-                          searchInput.value.trim()
-                            ? `
-                            <button onclick="searchInput.value='';loadItems()" class="mt-2 text-blue-500 hover:text-blue-700">
-                                Clear search
-                            </button>
-                        `
+                          currentSearchTerm
+                            ? `<p class="text-sm mt-2">Try a different search term</p>`
                             : ""
                         }
                     </div>
@@ -775,42 +633,53 @@
         }
 
         itemsContainer.innerHTML = items
+          .slice(0, 6)
           .map(
             (item) => `
-                <div class="bg-white rounded-xl shadow-md overflow-hidden item-card hover:shadow-lg" data-id="${
+                <div class="card-hover bg-white rounded-xl shadow-sm overflow-hidden cursor-pointer border border-slate-100" data-id="${
                   item._id
                 }">
                     <div class="relative h-48 overflow-hidden">
                         ${
                           item.image
-                            ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">`
-                            : `<div class="w-full h-full bg-gray-100 flex items-center justify-center">
-                                <i class="fas fa-image text-4xl text-gray-400"></i>
+                            ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">`
+                            : `<div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
+                                <i class="fas fa-image fa-3x"></i>
                             </div>`
                         }
-                        <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium 
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold 
+                                ${
+                                  item.type === "lost"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-green-100 text-green-800"
+                                }">
+                                ${item.type === "lost" ? "Lost" : "Found"}
+                            </span>
                             ${
-                              item.type === "lost"
-                                ? "bg-red-100 text-red-800"
-                                : "bg-green-100 text-green-800"
-                            }">
-                            ${item.type === "lost" ? "Lost" : "Found"}
+                              item.status === "claimed"
+                                ? `
+                                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 ml-2">
+                                    Reunited
+                                </span>
+                            `
+                                : ""
+                            }
                         </div>
                     </div>
-                    <div class="p-4">
+                    <div class="p-5">
                         <h3 class="font-bold text-lg mb-1 truncate">${
                           item.title
                         }</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">${
+                        <p class="text-slate-600 text-sm mb-3 line-clamp-2">${
                           item.description
                         }</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs text-gray-500 flex items-center">
-                                <i class="fas fa-map-marker-alt mr-1"></i> ${
-                                  item.location
-                                }
+                        <div class="flex items-center justify-between text-sm text-slate-500">
+                            <span class="flex items-center">
+                                <i class="fas fa-map-marker-alt mr-1.5 text-indigo-500"></i> 
+                                ${item.location}
                             </span>
-                            <span class="text-xs text-gray-500">
+                            <span class="text-slate-400">
                                 ${new Date(item.createdAt).toLocaleDateString()}
                             </span>
                         </div>
@@ -820,21 +689,18 @@
           )
           .join("");
 
-        // Add click event to items
-        document.querySelectorAll("[data-id]").forEach((el) => {
-          el.addEventListener("click", () => openItemModal(el.dataset.id));
+        document.querySelectorAll(".card-hover").forEach((card) => {
+          card.addEventListener("click", () => {
+            const itemId = card.getAttribute("data-id");
+            window.location.href = `item.html?id=${itemId}`;
+          });
         });
       }
 
       // Load suggestions
       async function loadSuggestions() {
         try {
-          suggestionsContainer.innerHTML = `
-                    <div class="text-center py-5 text-gray-500">
-                        <i class="fas fa-spinner fa-spin text-xl mb-2"></i>
-                        <p>Loading suggestions...</p>
-                    </div>
-                `;
+          showLoading(suggestionsContainer, "Loading suggestions...");
 
           const response = await fetch("/api/suggestions", {
             headers: {
@@ -842,21 +708,18 @@
             },
           });
 
-          if (!response.ok) throw new Error("Failed to load suggestions");
+          if (!response.ok) {
+            throw new Error("Failed to fetch suggestions");
+          }
 
           const data = await response.json();
           renderSuggestions(data.suggestions);
         } catch (error) {
           console.error("Error loading suggestions:", error);
-          suggestionsContainer.innerHTML = `
-                    <div class="text-center py-5 text-red-500">
-                        <i class="fas fa-exclamation-circle text-xl mb-2"></i>
-                        <p>Failed to load suggestions. Please try again.</p>
-                        <button onclick="loadSuggestions()" class="mt-2 text-blue-500 hover:text-blue-700">
-                            <i class="fas fa-sync-alt mr-1"></i> Retry
-                        </button>
-                    </div>
-                `;
+          showError(
+            suggestionsContainer,
+            "Failed to load suggestions. Please try again later."
+          );
         }
       }
 
@@ -864,9 +727,11 @@
       function renderSuggestions(suggestions) {
         if (suggestions.length === 0) {
           suggestionsContainer.innerHTML = `
-                    <div class="text-center py-5 text-gray-500">
-                        <i class="fas fa-comment-slash text-xl mb-2"></i>
-                        <p>No suggestions yet. Be the first to add one!</p>
+                    <div class="text-center py-12">
+                        <div class="inline-block p-4 bg-indigo-100 rounded-full mb-3">
+                            <i class="fas fa-comment-slash text-3xl text-indigo-600"></i>
+                        </div>
+                        <p class="text-slate-500">No suggestions yet. Be the first to share!</p>
                     </div>
                 `;
           return;
@@ -875,252 +740,45 @@
         suggestionsContainer.innerHTML = suggestions
           .map(
             (suggestion) => `
-                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 suggestion-card transition hover:border-blue-200">
-                    <div class="flex items-start">
-                        <div class="bg-blue-100 p-2 rounded-full mr-3">
-                            <i class="fas fa-lightbulb text-blue-500"></i>
-                        </div>
+                <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-100 transition hover:border-indigo-200" data-id="${
+                  suggestion._id
+                }">
+                    <div class="flex items-start space-x-4">
+                        ${
+                          suggestion.postedBy.profileImage
+                            ? `<img src="${suggestion.postedBy.profileImage}" alt="${suggestion.postedBy.firstName}" class="w-10 h-10 rounded-full border-2 border-indigo-100 shadow-sm mt-1">`
+                            : `<div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center mt-1 border-2 border-indigo-100">
+                                <i class="fas fa-user text-slate-400"></i>
+                              </div>`
+                        }
                         <div class="flex-1">
-                            <p class="text-gray-700 mb-3">"${
-                              suggestion.content
-                            }"</p>
                             <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2">
-                                    <img src="${
-                                      suggestion.postedBy.profileImage ||
-                                      "https://ui-avatars.com/api/?name=" +
-                                        encodeURIComponent(
-                                          suggestion.postedBy.firstName +
-                                            " " +
-                                            suggestion.postedBy.lastName
-                                        ) +
-                                        "&background=random"
-                                    }" 
-                                         alt="${suggestion.postedBy.firstName}" 
-                                         class="w-6 h-6 rounded-full object-cover border border-gray-200">
-                                    <span class="text-sm text-gray-600">
-                                        ${suggestion.postedBy.firstName} ${
-              suggestion.postedBy.lastName
-            } - ${suggestion.postedBy.department}
-                                    </span>
-                                </div>
-                                <span class="text-xs text-gray-400">
-                                    ${new Date(
-                                      suggestion.createdAt
-                                    ).toLocaleDateString()}
+                                <h4 class="font-medium text-slate-800">${
+                                  suggestion.postedBy.firstName
+                                } ${suggestion.postedBy.lastName}</h4>
+                                <span class="text-xs text-slate-400">
+                                    ${formatTimeAgo(
+                                      new Date(suggestion.createdAt)
+                                    )}
                                 </span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            `
-          )
-          .join("");
-      }
-
-      // Open item modal
-      async function openItemModal(itemId) {
-        try {
-          itemModal.classList.remove("hidden");
-          document.body.style.overflow = "hidden";
-
-          // Show loading state
-          itemModalTitle.textContent = "Loading...";
-          itemModalDescription.textContent = "";
-          itemModalLocation.textContent = "";
-          itemModalQuestion.textContent = "";
-          commentsContainer.innerHTML =
-            '<div class="text-center py-5"><i class="fas fa-spinner fa-spin"></i></div>';
-
-          const response = await fetch(`/api/items/${itemId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-
-          if (!response.ok) throw new Error("Failed to load item details");
-
-          const { item } = await response.json();
-          selectedItemId = itemId;
-
-          // Populate modal
-          itemModalTitle.textContent = item.title;
-          itemModalType.textContent =
-            item.type === "lost" ? "Lost Item" : "Found Item";
-          itemModalDescription.textContent = item.description;
-          itemModalLocation.textContent = item.location;
-
-          if (item.image) {
-            itemModalImage.src = item.image;
-            itemModalImage.alt = item.title;
-            itemModalImage.classList.remove("hidden");
-            itemImagePlaceholder.classList.add("hidden");
-          } else {
-            itemModalImage.classList.add("hidden");
-            itemImagePlaceholder.classList.remove("hidden");
-          }
-
-          // Set poster info
-          itemModalPosterName.textContent = `${item.postedBy.firstName} ${item.postedBy.lastName}`;
-          itemModalPosterDept.textContent = item.postedBy.department;
-          if (item.postedBy.profileImage) {
-            itemModalPosterImage.src = item.postedBy.profileImage;
-            itemModalPosterImage.onerror = () => {
-              itemModalPosterImage.src =
-                "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(
-                  item.postedBy.firstName + " " + item.postedBy.lastName
-                ) +
-                "&background=random";
-            };
-          } else {
-            itemModalPosterImage.src =
-              "https://ui-avatars.com/api/?name=" +
-              encodeURIComponent(
-                item.postedBy.firstName + " " + item.postedBy.lastName
-              ) +
-              "&background=random";
-          }
-
-          // Set status
-          let statusText = "";
-          let statusClass = "";
-          switch (item.status) {
-            case "active":
-              statusText = "Active";
-              statusClass = "bg-blue-100 text-blue-800";
-              break;
-            case "claimed":
-              statusText = "Claimed";
-              statusClass = "bg-yellow-100 text-yellow-800";
-              break;
-            case "accepted":
-              statusText = "Reunited";
-              statusClass = "bg-green-100 text-green-800";
-              break;
-            case "rejected":
-              statusText = "Rejected";
-              statusClass = "bg-red-100 text-red-800";
-              break;
-          }
-          itemModalStatus.textContent = statusText;
-          itemModalStatus.className = `status-badge ${statusClass}`;
-
-          // Show validity question if it's a found item
-          if (item.type === "found" && item.validityQuestion) {
-            validityQuestionContainer.classList.remove("hidden");
-            itemModalQuestion.textContent = item.validityQuestion;
-          } else {
-            validityQuestionContainer.classList.add("hidden");
-          }
-
-          // Show claim form if it's a found item and active
-          if (
-            item.type === "found" &&
-            item.status === "active" &&
-            item.postedBy._id !== currentUser._id
-          ) {
-            claimFormContainer.classList.remove("hidden");
-          } else {
-            claimFormContainer.classList.add("hidden");
-          }
-
-          // Load comments
-          loadComments(itemId);
-        } catch (error) {
-          console.error("Error loading item details:", error);
-          itemModalTitle.textContent = "Error";
-          itemModalDescription.innerHTML = `
-                    <div class="text-red-500">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        Failed to load item details. Please try again.
-                    </div>
-                `;
-        }
-      }
-
-      // Load comments for an item
-      async function loadComments(itemId) {
-        try {
-          commentsContainer.innerHTML =
-            '<div class="text-center py-5"><i class="fas fa-spinner fa-spin"></i></div>';
-
-          const response = await fetch(`/api/items/${itemId}/comments`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-
-          if (!response.ok) throw new Error("Failed to load comments");
-
-          const data = await response.json();
-          renderComments(data.comments);
-
-          // Enable/disable comment form based on item status
-          const item = currentItems.find((i) => i._id === itemId);
-          if (item && item.status !== "active") {
-            addCommentContainer.classList.add("hidden");
-          } else {
-            addCommentContainer.classList.remove("hidden");
-          }
-        } catch (error) {
-          console.error("Error loading comments:", error);
-          commentsContainer.innerHTML = `
-                    <div class="text-center py-3 text-red-500">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        Failed to load comments
-                    </div>
-                `;
-        }
-      }
-
-      // Render comments
-      function renderComments(comments) {
-        if (comments.length === 0) {
-          commentsContainer.innerHTML = `
-                    <div class="text-center py-3 text-gray-500">
-                        No comments yet. Be the first to comment!
-                    </div>
-                `;
-          return;
-        }
-
-        commentsContainer.innerHTML = comments
-          .map(
-            (comment) => `
-                <div class="bg-white p-4 rounded-lg comment-container">
-                    <div class="flex items-start space-x-3">
-                        <div class="flex-shrink-0">
-                            <img src="${
-                              comment.postedBy.profileImage ||
-                              "https://ui-avatars.com/api/?name=" +
-                                encodeURIComponent(
-                                  comment.postedBy.firstName +
-                                    " " +
-                                    comment.postedBy.lastName
-                                ) +
-                                "&background=random"
-                            }" 
-                                 alt="${comment.postedBy.firstName}" 
-                                 class="w-10 h-10 rounded-full object-cover border border-gray-200">
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-1">
-                                <div>
-                                    <span class="font-medium text-gray-900">${
-                                      comment.postedBy.firstName
-                                    } ${comment.postedBy.lastName}</span>
-                                    <span class="text-xs text-gray-500 ml-2">${
-                                      comment.postedBy.department
-                                    }</span>
-                                </div>
-                                <span class="comment-time text-xs">
-                                    ${formatCommentTime(comment.createdAt)}
-                                </span>
+                            <p class="text-slate-700 mt-2 mb-3">${
+                              suggestion.content
+                            }</p>
+                            ${
+                              suggestion.postedBy._id === currentUser._id
+                                ? `
+                            <div class="flex justify-end space-x-3">
+                                <button class="edit-suggestion-btn text-indigo-600 text-sm font-medium hover:text-indigo-800 transition flex items-center">
+                                    <i class="fas fa-edit mr-1.5"></i> Edit
+                                </button>
+                                <button class="delete-suggestion-btn text-red-600 text-sm font-medium hover:text-red-800 transition flex items-center">
+                                    <i class="fas fa-trash mr-1.5"></i> Delete
+                                </button>
                             </div>
-                            <div class="comment-content pl-4">
-                                <p class="text-gray-700">${comment.content}</p>
-                            </div>
+                            `
+                                : ""
+                            }
                         </div>
                     </div>
                 </div>
@@ -1128,109 +786,59 @@
           )
           .join("");
 
-        // Scroll to bottom of comments
-        commentsContainer.scrollTop = commentsContainer.scrollHeight;
+        document.querySelectorAll(".edit-suggestion-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const suggestionCard = btn.closest("[data-id]");
+            const suggestionId = suggestionCard.getAttribute("data-id");
+            editSuggestion(suggestionId);
+          });
+        });
+
+        document.querySelectorAll(".delete-suggestion-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const suggestionCard = btn.closest("[data-id]");
+            const suggestionId = suggestionCard.getAttribute("data-id");
+            deleteSuggestion(suggestionId);
+          });
+        });
       }
 
-      // Format comment time
-      function formatCommentTime(dateString) {
-        const now = new Date();
-        const commentDate = new Date(dateString);
-        const diffInSeconds = Math.floor((now - commentDate) / 1000);
+      // Format time ago
+      function formatTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
 
-        if (diffInSeconds < 60) {
-          return "Just now";
-        } else if (diffInSeconds < 3600) {
-          const minutes = Math.floor(diffInSeconds / 60);
-          return `${minutes} ${minutes === 1 ? "min" : "mins"} ago`;
-        } else if (diffInSeconds < 86400) {
-          const hours = Math.floor(diffInSeconds / 3600);
-          return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
-        } else if (diffInSeconds < 604800) {
-          const days = Math.floor(diffInSeconds / 86400);
-          return `${days} ${days === 1 ? "day" : "days"} ago`;
-        } else {
-          return commentDate.toLocaleDateString();
-        }
+        let interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) return `${interval}y ago`;
+
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) return `${interval}mo ago`;
+
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) return `${interval}d ago`;
+
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) return `${interval}h ago`;
+
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) return `${interval}m ago`;
+
+        return "Just now";
       }
 
-      // Close modal and reset body overflow
-      function closeModal() {
-        itemModal.classList.add("hidden");
-        document.body.style.overflow = "auto";
-      }
-
-      // Event Listeners
-      // Search functionality
-      searchBtn.addEventListener("click", () => {
-        loadItems(searchInput.value.trim());
-      });
-
-      searchInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          loadItems(searchInput.value.trim());
-        }
-      });
-
-      // Tab switching
-      allTab.addEventListener("click", () => {
-        currentItemType = "all";
-        allTab.classList.remove("tab-inactive");
-        allTab.classList.add("tab-active");
-        lostTab.classList.remove("tab-active");
-        lostTab.classList.add("tab-inactive");
-        foundTab.classList.remove("tab-active");
-        foundTab.classList.add("tab-inactive");
-        loadItems(searchInput.value.trim());
-      });
-
-      lostTab.addEventListener("click", () => {
-        currentItemType = "lost";
-        lostTab.classList.remove("tab-inactive");
-        lostTab.classList.add("tab-active");
-        allTab.classList.remove("tab-active");
-        allTab.classList.add("tab-inactive");
-        foundTab.classList.remove("tab-active");
-        foundTab.classList.add("tab-inactive");
-        loadItems(searchInput.value.trim(), "lost");
-      });
-
-      foundTab.addEventListener("click", () => {
-        currentItemType = "found";
-        foundTab.classList.remove("tab-inactive");
-        foundTab.classList.add("tab-active");
-        allTab.classList.remove("tab-active");
-        allTab.classList.add("tab-inactive");
-        lostTab.classList.remove("tab-active");
-        lostTab.classList.add("tab-inactive");
-        loadItems(searchInput.value.trim(), "found");
-      });
-
-      // Suggestion modal
-      addSuggestionBtn.addEventListener("click", () => {
-        suggestionText.value = "";
-        suggestionModal.classList.remove("hidden");
-      });
-
-      closeSuggestionModal.addEventListener("click", () => {
-        suggestionModal.classList.add("hidden");
-      });
-
-      cancelSuggestionBtn.addEventListener("click", () => {
-        suggestionModal.classList.add("hidden");
-      });
-
-      submitSuggestionBtn.addEventListener("click", async () => {
-        const content = suggestionText.value.trim();
+      // Post new suggestion
+      async function postSuggestion() {
+        const content = suggestionInput.value.trim();
         if (!content) {
-          alert("Please enter your suggestion");
+          showToast("Please enter your suggestion", "error");
           return;
         }
 
         try {
-          submitSuggestionBtn.disabled = true;
-          submitSuggestionBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
+          postSuggestionBtn.disabled = true;
+          postSuggestionBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i> Posting...';
 
           const response = await fetch("/api/suggestions", {
             method: "POST",
@@ -1241,155 +849,229 @@
             body: JSON.stringify({ content }),
           });
 
-          if (!response.ok) throw new Error("Failed to submit suggestion");
-
-          suggestionModal.classList.add("hidden");
-          loadSuggestions();
-        } catch (error) {
-          console.error("Error submitting suggestion:", error);
-          alert("Failed to submit suggestion. Please try again.");
-        } finally {
-          submitSuggestionBtn.disabled = false;
-          submitSuggestionBtn.innerHTML = "Submit";
-        }
-      });
-
-      // Item modal
-      closeItemModal.addEventListener("click", closeModal);
-
-      // Close modal when clicking outside
-      itemModal.addEventListener("click", (e) => {
-        if (e.target === itemModal) {
-          closeModal();
-        }
-      });
-
-      // Submit claim
-      submitClaimBtn.addEventListener("click", async () => {
-        const answer = validityAnswer.value.trim();
-        if (!answer) {
-          alert("Please provide an answer to the validity question");
-          return;
-        }
-
-        try {
-          submitClaimBtn.disabled = true;
-          submitClaimBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
-
-          const response = await fetch(`/api/items/${selectedItemId}/claim`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({ validityAnswer: answer }),
-          });
-
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to submit claim");
+            throw new Error("Failed to post suggestion");
           }
 
-          const { item } = await response.json();
-
-          // Show success message
-          const originalBtnContent = submitClaimBtn.innerHTML;
-          submitClaimBtn.disabled = true;
-          submitClaimBtn.innerHTML =
-            '<i class="fas fa-check mr-2"></i> Claim Submitted!';
-
-          setTimeout(() => {
-            closeModal();
-            loadItems();
-            loadStats();
-            submitClaimBtn.disabled = false;
-            submitClaimBtn.innerHTML = originalBtnContent;
-          }, 1500);
+          const data = await response.json();
+          suggestionInput.value = "";
+          showToast("Suggestion posted successfully!", "success");
+          await loadSuggestions();
         } catch (error) {
-          console.error("Error submitting claim:", error);
-          alert(error.message || "Failed to submit claim. Please try again.");
-          submitClaimBtn.disabled = false;
-          submitClaimBtn.innerHTML = "Submit Claim";
+          console.error("Error posting suggestion:", error);
+          showToast("Failed to post suggestion. Please try again.", "error");
+        } finally {
+          postSuggestionBtn.disabled = false;
+          postSuggestionBtn.textContent = "Post Suggestion";
         }
-      });
+      }
 
-      // Submit comment
-      submitCommentBtn.addEventListener("click", async () => {
-        const content = commentText.value.trim();
-        if (!content) {
-          alert("Please enter your comment");
-          return;
-        }
+      // Show toast notification
+      function showToast(message, type) {
+        const toast = document.createElement("div");
+        toast.className = `fixed bottom-5 right-5 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+          type === "success" ? "bg-green-500" : "bg-red-500"
+        } animate-fade-in-up`;
+        toast.textContent = message;
 
-        try {
-          submitCommentBtn.disabled = true;
-          submitCommentBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i> Posting...';
+        document.body.appendChild(toast);
 
-          const response = await fetch(
-            `/api/items/${selectedItemId}/comments`,
-            {
-              method: "POST",
+        setTimeout(() => {
+          toast.classList.remove("animate-fade-in-up");
+          toast.classList.add("animate-fade-out-down");
+          setTimeout(() => {
+            toast.remove();
+          }, 300);
+        }, 3000);
+      }
+
+      // Edit suggestion
+      async function editSuggestion(suggestionId) {
+        const suggestionCard = document.querySelector(
+          `[data-id="${suggestionId}"]`
+        );
+        const contentElement = suggestionCard.querySelector("p.text-slate-700");
+        const originalContent = contentElement.textContent;
+
+        contentElement.innerHTML = `
+                <textarea class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mb-3">${originalContent}</textarea>
+                <div class="flex justify-end space-x-3">
+                    <button class="save-edit-btn px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition">
+                        Save
+                    </button>
+                    <button class="cancel-edit-btn px-4 py-2 bg-slate-200 text-slate-700 rounded-lg font-medium hover:bg-slate-300 transition">
+                        Cancel
+                    </button>
+                </div>
+            `;
+
+        const textarea = contentElement.querySelector("textarea");
+        textarea.focus();
+        textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
+
+        const saveBtn = contentElement.querySelector(".save-edit-btn");
+        const cancelBtn = contentElement.querySelector(".cancel-edit-btn");
+
+        saveBtn.addEventListener("click", async () => {
+          const newContent = textarea.value.trim();
+          if (!newContent) {
+            showToast("Suggestion cannot be empty", "error");
+            return;
+          }
+
+          try {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML =
+              '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+
+            const response = await fetch(`/api/suggestions/${suggestionId}`, {
+              method: "PUT",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({ content }),
+              body: JSON.stringify({ content: newContent }),
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to update suggestion");
             }
-          );
 
-          if (!response.ok) throw new Error("Failed to submit comment");
-
-          commentText.value = "";
-          loadComments(selectedItemId);
-
-          // Highlight the new comment
-          const lastComment = commentsContainer.lastElementChild;
-          if (lastComment) {
-            lastComment.classList.add("new-comment");
-            setTimeout(() => {
-              lastComment.classList.remove("new-comment");
-            }, 1500);
+            showToast("Suggestion updated successfully!", "success");
+            await loadSuggestions();
+          } catch (error) {
+            console.error("Error updating suggestion:", error);
+            showToast(
+              "Failed to update suggestion. Please try again.",
+              "error"
+            );
+          } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = "Save";
           }
+        });
+
+        cancelBtn.addEventListener("click", () => {
+          contentElement.textContent = originalContent;
+        });
+      }
+
+      // Delete suggestion
+      async function deleteSuggestion(suggestionId) {
+        if (!confirm("Are you sure you want to delete this suggestion?")) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/suggestions/${suggestionId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to delete suggestion");
+          }
+
+          showToast("Suggestion deleted successfully!", "success");
+          await loadSuggestions();
         } catch (error) {
-          console.error("Error submitting comment:", error);
-          alert("Failed to submit comment. Please try again.");
-        } finally {
-          submitCommentBtn.disabled = false;
-          submitCommentBtn.innerHTML = "Post Comment";
+          console.error("Error deleting suggestion:", error);
+          showToast("Failed to delete suggestion. Please try again.", "error");
         }
-      });
+      }
 
-      // Navigation
-      postLostBtn.addEventListener("click", () => {
-        window.location.href = "post-item.html?type=lost";
-      });
-
-      postFoundBtn.addEventListener("click", () => {
-        window.location.href = "post-item.html?type=found";
-      });
-
-      profileBtn.addEventListener("click", () => {
-        window.location.href = "profile.html";
-      });
-
-      logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-      });
-
-      // Press Escape to close modals
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          if (!itemModal.classList.contains("hidden")) {
-            closeModal();
-          }
-          if (!suggestionModal.classList.contains("hidden")) {
-            suggestionModal.classList.add("hidden");
-          }
+      // Logout function
+      async function logout() {
+        try {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          window.location.href = "login.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          window.location.href = "login.html";
         }
-      });
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        // Search functionality
+        searchBtn.addEventListener("click", () => {
+          currentSearchTerm = searchInput.value.trim();
+          loadItems();
+        });
+
+        searchInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            currentSearchTerm = searchInput.value.trim();
+            loadItems();
+          }
+        });
+
+        // Filter buttons
+        filterAll.addEventListener("click", () => {
+          currentFilter = "all";
+          updateFilterButtons();
+          loadItems();
+        });
+
+        filterLost.addEventListener("click", () => {
+          currentFilter = "lost";
+          updateFilterButtons();
+          loadItems();
+        });
+
+        filterFound.addEventListener("click", () => {
+          currentFilter = "found";
+          updateFilterButtons();
+          loadItems();
+        });
+
+        // Post suggestion
+        postSuggestionBtn.addEventListener("click", postSuggestion);
+
+        // Post item button
+        postItemBtn.addEventListener("click", () => {
+          window.location.href = "post-item.html";
+        });
+
+        // View all items button
+        viewAllItemsBtn.addEventListener("click", () => {
+          currentFilter = "all";
+          currentSearchTerm = "";
+          searchInput.value = "";
+          updateFilterButtons();
+          loadItems();
+        });
+
+        // Logout button
+        logoutBtn.addEventListener("click", logout);
+      }
+
+      // Update filter buttons active state
+      function updateFilterButtons() {
+        filterAll.classList.remove("active", "bg-indigo-600", "text-white");
+        filterLost.classList.remove("active", "bg-red-600", "text-white");
+        filterFound.classList.remove("active", "bg-green-600", "text-white");
+
+        filterAll.classList.add("bg-indigo-100", "text-indigo-600");
+        filterLost.classList.add("bg-red-100", "text-red-600");
+        filterFound.classList.add("bg-green-100", "text-green-600");
+
+        if (currentFilter === "all") {
+          filterAll.classList.add("active", "bg-indigo-600", "text-white");
+          filterAll.classList.remove("bg-indigo-100");
+        } else if (currentFilter === "lost") {
+          filterLost.classList.add("active", "bg-red-600", "text-white");
+          filterLost.classList.remove("bg-red-100");
+        } else if (currentFilter === "found") {
+          filterFound.classList.add("active", "bg-green-600", "text-white");
+          filterFound.classList.remove("bg-green-100");
+        }
+      }
     </script>
   </body>
 </html>

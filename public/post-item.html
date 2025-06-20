@@ -3,418 +3,742 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post Lost & Found Item | Campus Connect</title>
+    <title>Post Lost/Found Item | BUP Lost & Found</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
     <style>
-      .file-upload {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        border: 2px dashed #ccc;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-      }
-      .file-upload:hover {
-        border-color: #4f46e5;
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
         background-color: #f8fafc;
       }
-      .file-upload.active {
-        border-color: #4f46e5;
-        background-color: #e0e7ff;
+
+      .nav-glass {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       }
-      #imagePreview {
-        max-height: 200px;
-        object-fit: contain;
-        margin-top: 10px;
-        display: none;
+
+      .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+
+      .shine-effect {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .shine-effect::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          to bottom right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0) 45%,
+          rgba(255, 255, 255, 0.3) 48%,
+          rgba(255, 255, 255, 0.3) 52%,
+          rgba(255, 255, 255, 0) 55%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: shine 3s infinite linear;
+      }
+
+      @keyframes shine {
+        0% {
+          transform: translateX(-100%) rotate(30deg);
+        }
+        100% {
+          transform: translateX(100%) rotate(30deg);
+        }
       }
     </style>
   </head>
-  <body class="bg-gray-50 min-h-screen">
-    <!-- Header -->
-    <header class="bg-indigo-600 text-white shadow-md">
+  <body class="antialiased text-slate-800">
+    <!-- Navigation Bar -->
+    <nav class="nav-glass fixed w-full z-50">
       <div
-        class="container mx-auto px-4 py-4 flex justify-between items-center"
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
       >
-        <h1 class="text-2xl font-bold">Campus Connect</h1>
-        <nav>
-          <ul class="flex space-x-6">
-            <li><a href="home.html" class="hover:underline">Home</a></li>
-            <li><a href="profile.html" class="hover:underline">Profile</a></li>
-            <li>
-              <a href="post-item.html" class="font-semibold underline"
-                >Post Item</a
-              >
-            </li>
-          </ul>
-        </nav>
+        <a href="home.html" class="flex items-center space-x-3">
+          <div class="shine-effect relative rounded-lg">
+            <div
+              class="bg-gradient-to-br from-indigo-500 to-indigo-600 p-2 rounded-lg"
+            >
+              <i class="fas fa-search-location text-white text-xl"></i>
+            </div>
+          </div>
+          <h1
+            class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent"
+          >
+            BUP <span class="font-light">Lost & Found</span>
+          </h1>
+        </a>
+        <div class="flex items-center space-x-4">
+          <a
+            href="profile.html"
+            class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-indigo-50 transition"
+          >
+            <div class="relative">
+              <img
+                id="profileImage"
+                src="https://via.placeholder.com/40"
+                alt="Profile"
+                class="w-8 h-8 rounded-full border-2 border-white shadow-md object-cover"
+              />
+              <div
+                class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white"
+              ></div>
+            </div>
+            <span id="userName" class="font-medium text-slate-700">User</span>
+          </a>
+          <button
+            id="logoutBtn"
+            class="flex items-center px-3 py-2 text-slate-700 hover:text-red-600 transition"
+          >
+            <i class="fas fa-sign-out-alt mr-2"></i>
+            <span class="font-medium">Logout</span>
+          </button>
+        </div>
       </div>
-    </header>
+    </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-      <div
-        class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden"
-      >
-        <!-- Form Header -->
-        <div class="bg-indigo-600 px-6 py-4">
-          <h2 class="text-xl font-semibold text-white">
-            Post a Lost or Found Item
+    <main class="container mx-auto px-4 pt-24 pb-12">
+      <div class="max-w-4xl mx-auto">
+        <div
+          class="bg-white rounded-xl shadow-sm p-6 mb-6 border border-slate-100"
+        >
+          <h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center">
+            <span class="w-1 h-6 bg-indigo-600 rounded-full mr-3"></span>
+            Post New Item
           </h2>
-          <p class="text-indigo-100">
-            Help reunite lost items with their owners or report found items
+          <p class="text-slate-600 mb-6">
+            Fill out the form below to post a lost or found item
           </p>
-        </div>
 
-        <!-- Form Content -->
-        <div class="p-6">
-          <form id="postItemForm" class="space-y-6">
-            <!-- Item Type Selection -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
+          <form id="itemForm" enctype="multipart/form-data">
+            <input type="hidden" id="itemId" value="" />
+
+            <!-- Item Type -->
+            <div class="mb-6">
+              <label class="block text-slate-700 font-medium mb-2"
                 >Item Type</label
               >
               <div class="flex space-x-4">
-                <label class="inline-flex items-center">
+                <label class="flex items-center">
                   <input
                     type="radio"
                     name="type"
                     value="lost"
-                    class="h-4 w-4 text-indigo-600"
+                    class="form-radio h-5 w-5 text-indigo-600"
                     checked
                   />
-                  <span class="ml-2 text-gray-700">Lost Item</span>
+                  <span class="ml-2 text-slate-700">Lost Item</span>
                 </label>
-                <label class="inline-flex items-center">
+                <label class="flex items-center">
                   <input
                     type="radio"
                     name="type"
                     value="found"
-                    class="h-4 w-4 text-indigo-600"
+                    class="form-radio h-5 w-5 text-indigo-600"
                   />
-                  <span class="ml-2 text-gray-700">Found Item</span>
+                  <span class="ml-2 text-slate-700">Found Item</span>
                 </label>
               </div>
             </div>
 
-            <!-- Title -->
-            <div>
-              <label for="title" class="block text-sm font-medium text-gray-700"
-                >Title*</label
+            <!-- Item Title -->
+            <div class="mb-6">
+              <label for="title" class="block text-slate-700 font-medium mb-2"
+                >Item Title</label
               >
               <input
                 type="text"
                 id="title"
                 name="title"
                 required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                placeholder="e.g., Black Wallet, iPhone 13, etc."
+                class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                placeholder="e.g. Black Wallet, iPhone 12, etc."
               />
             </div>
 
             <!-- Description -->
-            <div>
+            <div class="mb-6">
               <label
                 for="description"
-                class="block text-sm font-medium text-gray-700"
-                >Description*</label
+                class="block text-slate-700 font-medium mb-2"
+                >Description</label
               >
               <textarea
                 id="description"
                 name="description"
                 rows="3"
                 required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                placeholder="Provide detailed description including brand, color, distinguishing features, etc."
+                class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                placeholder="Provide detailed description of the item"
               ></textarea>
             </div>
 
             <!-- Location -->
-            <div>
+            <div class="mb-6">
               <label
                 for="location"
-                class="block text-sm font-medium text-gray-700"
-                >Location*</label
+                class="block text-slate-700 font-medium mb-2"
+                >Location</label
               >
               <input
                 type="text"
                 id="location"
                 name="location"
                 required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                placeholder="Where did you lose/find it? e.g., Library, Cafeteria, etc."
-              />
-            </div>
-
-            <!-- Validity Question (for found items) -->
-            <div id="validityQuestionContainer" class="hidden">
-              <label
-                for="validityQuestion"
-                class="block text-sm font-medium text-gray-700"
-                >Ownership Verification Question*</label
-              >
-              <input
-                type="text"
-                id="validityQuestion"
-                name="validityQuestion"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                placeholder="Ask a question only the real owner would know (e.g., What's the brand of the case?)"
-              />
-            </div>
-
-            <!-- Validity Answer (for found items) -->
-            <div id="validityAnswerContainer" class="hidden">
-              <label
-                for="validityAnswer"
-                class="block text-sm font-medium text-gray-700"
-                >Expected Answer*</label
-              >
-              <input
-                type="text"
-                id="validityAnswer"
-                name="validityAnswer"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                placeholder="The correct answer to your question"
+                class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                placeholder="Where did you lose/find this item?"
               />
             </div>
 
             <!-- Image Upload -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
+            <div class="mb-6">
+              <label class="block text-slate-700 font-medium mb-2"
                 >Item Image</label
               >
-              <div id="fileUpload" class="file-upload">
-                <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  accept="image/*"
-                  class="hidden"
+              <div class="flex items-center justify-center w-full">
+                <label
+                  for="image"
+                  class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition"
+                >
+                  <div
+                    class="flex flex-col items-center justify-center pt-5 pb-6"
+                  >
+                    <i
+                      class="fas fa-cloud-upload-alt text-3xl text-slate-400 mb-2"
+                    ></i>
+                    <p class="mb-2 text-sm text-slate-500">
+                      <span class="font-semibold">Click to upload</span> or drag
+                      and drop
+                    </p>
+                    <p class="text-xs text-slate-500">PNG, JPG (MAX. 5MB)</p>
+                  </div>
+                  <input
+                    id="image"
+                    name="image"
+                    type="file"
+                    class="hidden"
+                    accept="image/*"
+                  />
+                </label>
+              </div>
+              <div id="imagePreview" class="mt-3 hidden">
+                <img
+                  id="previewImage"
+                  src="#"
+                  alt="Preview"
+                  class="max-h-40 rounded-lg border border-slate-200"
                 />
-                <i class="fas fa-camera text-4xl text-indigo-500 mb-2"></i>
-                <p class="text-gray-600 text-center">
-                  Click to upload an image <br />
-                  or drag and drop
-                </p>
-                <p class="text-gray-400 text-sm mt-1">PNG, JPG up to 5MB</p>
-                <img id="imagePreview" alt="Preview" class="rounded-md" />
+                <button
+                  type="button"
+                  id="removeImage"
+                  class="mt-2 text-red-600 text-sm font-medium hover:text-red-800 transition"
+                >
+                  <i class="fas fa-trash mr-1"></i> Remove Image
+                </button>
               </div>
             </div>
 
-            <!-- Submit Button -->
-            <div class="flex justify-end">
+            <!-- Validity Questions -->
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-slate-700 font-medium"
+                  >Verification Questions</label
+                >
+                <span class="text-sm text-slate-500"
+                  >At least 1 required (max 10)</span
+                >
+              </div>
+              <p class="text-sm text-slate-500 mb-4">
+                These questions will be used to verify the claimant's identity.
+                For found items, ask questions only the real owner would know.
+              </p>
+
+              <div id="questionsContainer">
+                <!-- Questions will be added here dynamically -->
+                <div
+                  class="question-group mb-4 p-4 bg-slate-50 rounded-lg border border-slate-200"
+                >
+                  <div class="flex justify-between items-center mb-2">
+                    <label class="text-slate-700 font-medium"
+                      >Question #1</label
+                    >
+                    <button
+                      type="button"
+                      class="remove-question text-red-600 text-sm font-medium hover:text-red-800 transition"
+                    >
+                      <i class="fas fa-trash mr-1"></i> Remove
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    name="questions[0][question]"
+                    required
+                    class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition mb-2"
+                    placeholder="Enter verification question"
+                  />
+                  <input
+                    type="text"
+                    name="questions[0][answer]"
+                    required
+                    class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                    placeholder="Enter expected answer (only visible to you)"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                id="addQuestionBtn"
+                class="mt-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200 transition flex items-center"
+              >
+                <i class="fas fa-plus mr-2"></i> Add Another Question
+              </button>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex justify-end space-x-3">
+              <button
+                type="button"
+                id="cancelBtn"
+                class="px-6 py-3 border border-slate-200 text-slate-700 rounded-lg font-medium hover:bg-slate-100 transition"
+              >
+                Cancel
+              </button>
               <button
                 type="submit"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                id="submitBtn"
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition"
               >
-                <i class="fas fa-paper-plane mr-2"></i> Post Item
+                Post Item
               </button>
             </div>
           </form>
         </div>
+
+        <!-- Success Message (Hidden by default) -->
+        <div
+          id="successMessage"
+          class="bg-white rounded-xl shadow-sm p-6 border border-slate-100 hidden"
+        >
+          <div class="text-center">
+            <div
+              class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4"
+            >
+              <i class="fas fa-check text-green-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-slate-800 mb-2">
+              Item Posted Successfully!
+            </h3>
+            <p class="text-slate-600 mb-6">
+              Your item has been posted to the bulletin.
+            </p>
+            <div class="flex justify-center space-x-3">
+              <a
+                href="home.html"
+                class="px-6 py-3 border border-slate-200 text-slate-700 rounded-lg font-medium hover:bg-slate-100 transition"
+              >
+                Back to Home
+              </a>
+              <button
+                type="button"
+                id="editItemBtn"
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition"
+              >
+                Edit This Item
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 right-4 hidden">
-      <div
-        class="bg-green-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center"
-      >
-        <span id="toastMessage"></span>
-        <button onclick="hideToast()" class="ml-4">
-          <i class="fas fa-times"></i>
-        </button>
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8">
+      <div class="container mx-auto px-4 text-center">
+        <p class="mb-2">
+          Bangladesh University of Professionals (BUP) Lost & Found System
+        </p>
+        <p class="text-gray-400 text-sm">© 2023 All Rights Reserved</p>
       </div>
-    </div>
+    </footer>
 
+    <!-- Script -->
     <script>
+      // DOM Elements
+      const itemForm = document.getElementById("itemForm");
+      const questionsContainer = document.getElementById("questionsContainer");
+      const addQuestionBtn = document.getElementById("addQuestionBtn");
+      const submitBtn = document.getElementById("submitBtn");
+      const cancelBtn = document.getElementById("cancelBtn");
+      const successMessage = document.getElementById("successMessage");
+      const editItemBtn = document.getElementById("editItemBtn");
+      const imageInput = document.getElementById("image");
+      const imagePreview = document.getElementById("imagePreview");
+      const previewImage = document.getElementById("previewImage");
+      const removeImage = document.getElementById("removeImage");
+      const profileImage = document.getElementById("profileImage");
+      const userName = document.getElementById("userName");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // Global variables
+      let currentUser = null;
+      let questionCount = 1;
+      let isEditMode = false;
+      let currentItemId = null;
+
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check authentication
+        await checkAuth();
+
+        // Load user data
+        await loadUserData();
+
+        // Check if we're editing an existing item
+        checkEditMode();
+
+        // Set up event listeners
+        setupEventListeners();
+      });
+
       // Check authentication
-      document.addEventListener("DOMContentLoaded", function () {
+      async function checkAuth() {
         const token = localStorage.getItem("token");
         if (!token) {
           window.location.href = "login.html";
           return;
         }
-
-        // Setup file upload
-        setupFileUpload();
-
-        // Handle type change
-        document.querySelectorAll('input[name="type"]').forEach((radio) => {
-          radio.addEventListener("change", handleTypeChange);
-        });
-
-        // Form submission
-        document
-          .getElementById("postItemForm")
-          .addEventListener("submit", handleFormSubmit);
-      });
-
-      function setupFileUpload() {
-        const fileUpload = document.getElementById("fileUpload");
-        const fileInput = document.getElementById("image");
-        const imagePreview = document.getElementById("imagePreview");
-
-        fileUpload.addEventListener("click", () => fileInput.click());
-
-        fileInput.addEventListener("change", function (e) {
-          if (e.target.files.length) {
-            const file = e.target.files[0];
-            if (file.size > 5 * 1024 * 1024) {
-              showToast("File size should be less than 5MB", "error");
-              return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function (event) {
-              imagePreview.src = event.target.result;
-              imagePreview.style.display = "block";
-              fileUpload.classList.add("active");
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-
-        // Drag and drop functionality
-        fileUpload.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          fileUpload.classList.add("active");
-        });
-
-        fileUpload.addEventListener("dragleave", () => {
-          fileUpload.classList.remove("active");
-        });
-
-        fileUpload.addEventListener("drop", (e) => {
-          e.preventDefault();
-          fileUpload.classList.remove("active");
-
-          if (e.dataTransfer.files.length) {
-            fileInput.files = e.dataTransfer.files;
-            const event = new Event("change");
-            fileInput.dispatchEvent(event);
-          }
-        });
       }
 
-      function handleTypeChange(e) {
-        const isFoundItem = e.target.value === "found";
-        document
-          .getElementById("validityQuestionContainer")
-          .classList.toggle("hidden", !isFoundItem);
-        document
-          .getElementById("validityAnswerContainer")
-          .classList.toggle("hidden", !isFoundItem);
+      // Load user data
+      async function loadUserData() {
+        try {
+          const response = await fetch("/api/users/me", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
 
-        if (isFoundItem) {
-          document.getElementById("validityQuestion").required = true;
-          document.getElementById("validityAnswer").required = true;
-        } else {
-          document.getElementById("validityQuestion").required = false;
-          document.getElementById("validityAnswer").required = false;
+          if (!response.ok) {
+            throw new Error("Failed to fetch user data");
+          }
+
+          const data = await response.json();
+          currentUser = data.user;
+
+          // Update UI with user data
+          if (data.user.profileImage) {
+            profileImage.src = data.user.profileImage.startsWith("/uploads/")
+              ? data.user.profileImage
+              : `/uploads/${data.user.profileImage}`;
+          }
+          userName.textContent = `${data.user.firstName} ${data.user.lastName}`;
+        } catch (error) {
+          console.error("Error loading user data:", error);
+          window.location.href = "login.html";
         }
       }
 
-      async function handleFormSubmit(e) {
-        e.preventDefault();
+      // Check if we're in edit mode (URL has item ID)
+      function checkEditMode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get("id");
 
-        const form = e.target;
-        const formData = new FormData(form);
-        const fileInput = document.getElementById("image");
+        if (itemId) {
+          isEditMode = true;
+          currentItemId = itemId;
+          loadItemForEdit(itemId);
+        }
+      }
 
-        // Validate form
-        if (
-          formData.get("type") === "found" &&
-          (!formData.get("validityQuestion") || !formData.get("validityAnswer"))
-        ) {
-          showToast(
-            "Please provide a validity question and answer for found items",
-            "error"
-          );
+      // Load item data for editing
+      async function loadItemForEdit(itemId) {
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i> Loading...';
+
+          const response = await fetch(`/api/items/${itemId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to load item");
+          }
+
+          const data = await response.json();
+          populateForm(data.item);
+        } catch (error) {
+          console.error("Error loading item:", error);
+          alert("Failed to load item. Please try again.");
+          window.location.href = "home.html";
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = isEditMode ? "Update Item" : "Post Item";
+        }
+      }
+
+      // Populate form with item data
+      function populateForm(item) {
+        document.getElementById("itemId").value = item._id;
+        document.querySelector(
+          `input[name="type"][value="${item.type}"]`
+        ).checked = true;
+        document.getElementById("title").value = item.title;
+        document.getElementById("description").value = item.description;
+        document.getElementById("location").value = item.location;
+
+        // Set image preview if exists
+        if (item.image) {
+          previewImage.src = item.image.startsWith("/uploads/")
+            ? item.image
+            : `/uploads/${item.image}`;
+          imagePreview.classList.remove("hidden");
+        }
+
+        // Clear existing questions
+        questionsContainer.innerHTML = "";
+        questionCount = 0;
+
+        // Add questions from the item
+        item.validityQuestions.forEach((question, index) => {
+          addQuestion(question.question, question.answer);
+        });
+
+        // Update UI for edit mode
+        document.querySelector("h2").textContent = "Edit Item";
+        submitBtn.textContent = "Update Item";
+      }
+
+      // Add a new question field
+      function addQuestion(question = "", answer = "") {
+        if (questionCount >= 10) {
+          alert("Maximum 10 questions allowed");
           return;
         }
 
-        try {
-          // Get JWT token from localStorage
-          const token = localStorage.getItem("token");
-          if (!token) {
-            window.location.href = "login.html";
+        questionCount++;
+
+        const questionDiv = document.createElement("div");
+        questionDiv.className =
+          "question-group mb-4 p-4 bg-slate-50 rounded-lg border border-slate-200";
+        questionDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-slate-700 font-medium">Question #${questionCount}</label>
+                    <button type="button" class="remove-question text-red-600 text-sm font-medium hover:text-red-800 transition">
+                        <i class="fas fa-trash mr-1"></i> Remove
+                    </button>
+                </div>
+                <input type="text" name="questions[${
+                  questionCount - 1
+                }][question]" required
+                    class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition mb-2"
+                    placeholder="Enter verification question" value="${question}">
+                <input type="text" name="questions[${
+                  questionCount - 1
+                }][answer]" required
+                    class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                    placeholder="Enter expected answer (only visible to you)" value="${answer}">
+            `;
+
+        questionsContainer.appendChild(questionDiv);
+
+        // Add event listener to remove button
+        questionDiv
+          .querySelector(".remove-question")
+          .addEventListener("click", () => {
+            if (questionCount <= 1) {
+              alert("At least one question is required");
+              return;
+            }
+
+            questionDiv.remove();
+            questionCount--;
+            reindexQuestions();
+          });
+      }
+
+      // Reindex questions after one is removed
+      function reindexQuestions() {
+        const questionGroups =
+          questionsContainer.querySelectorAll(".question-group");
+
+        questionGroups.forEach((group, index) => {
+          const label = group.querySelector("label");
+          const questionInput = group.querySelector(
+            'input[name^="questions["][name$="[question]"]'
+          );
+          const answerInput = group.querySelector(
+            'input[name^="questions["][name$="[answer]"]'
+          );
+
+          // Update question number in label
+          label.textContent = `Question #${index + 1}`;
+
+          // Update input names to maintain proper indexing
+          questionInput.name = `questions[${index}][question]`;
+          answerInput.name = `questions[${index}][answer]`;
+        });
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        // Add question button
+        addQuestionBtn.addEventListener("click", () => {
+          addQuestion();
+        });
+
+        // Image upload preview
+        imageInput.addEventListener("change", function () {
+          if (this.files && this.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              previewImage.src = e.target.result;
+              imagePreview.classList.remove("hidden");
+            };
+
+            reader.readAsDataURL(this.files[0]);
+          }
+        });
+
+        // Remove image button
+        removeImage.addEventListener("click", function () {
+          imageInput.value = "";
+          imagePreview.classList.add("hidden");
+          previewImage.src = "#";
+        });
+
+        // Cancel button
+        cancelBtn.addEventListener("click", function () {
+          if (
+            confirm(
+              "Are you sure you want to cancel? Any unsaved changes will be lost."
+            )
+          ) {
+            window.location.href = "home.html";
+          }
+        });
+
+        // Edit item button (in success message)
+        editItemBtn.addEventListener("click", function () {
+          successMessage.classList.add("hidden");
+          itemForm.classList.remove("hidden");
+        });
+
+        // Logout button
+        logoutBtn.addEventListener("click", function () {
+          localStorage.removeItem("token");
+          window.location.href = "login.html";
+        });
+
+        // Form submission
+        itemForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Validate at least one question exists
+          if (questionCount < 1) {
+            alert("Please add at least one verification question");
             return;
           }
 
-          // Create FormData for file upload
-          const apiFormData = new FormData();
-          apiFormData.append("title", formData.get("title"));
-          apiFormData.append("description", formData.get("description"));
-          apiFormData.append("location", formData.get("location"));
-          apiFormData.append("type", formData.get("type"));
+          if (
+            !confirm(
+              isEditMode
+                ? "Are you sure you want to update this item?"
+                : "Are you sure you want to post this item?"
+            )
+          ) {
+            return;
+          }
 
-          if (formData.get("type") === "found") {
-            apiFormData.append(
-              "validityQuestion",
-              formData.get("validityQuestion")
+          try {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML =
+              '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+
+            const formData = new FormData(itemForm);
+            const questions = [];
+
+            // Collect questions and answers
+            const questionInputs = itemForm.querySelectorAll(
+              'input[name^="questions["][name$="[question]"]'
             );
-            apiFormData.append(
-              "validityAnswer",
-              formData.get("validityAnswer")
+            const answerInputs = itemForm.querySelectorAll(
+              'input[name^="questions["][name$="[answer]"]'
             );
+
+            questionInputs.forEach((input, index) => {
+              questions.push({
+                question: input.value,
+                answer: answerInputs[index].value,
+              });
+            });
+
+            // Add questions to form data
+            formData.set("validityQuestions", JSON.stringify(questions));
+
+            const url = isEditMode
+              ? `/api/items/${currentItemId}`
+              : "/api/items";
+            const method = isEditMode ? "PUT" : "POST";
+
+            const response = await fetch(url, {
+              method: method,
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: formData,
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to submit item");
+            }
+
+            const data = await response.json();
+
+            // Show success message
+            itemForm.classList.add("hidden");
+            successMessage.classList.remove("hidden");
+
+            // Update edit button to point to this item
+            if (!isEditMode) {
+              currentItemId = data.item._id;
+              editItemBtn.textContent = "Edit This Item";
+            }
+
+            isEditMode = true;
+          } catch (error) {
+            console.error("Error submitting item:", error);
+            alert("Failed to submit item. Please try again.");
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = isEditMode ? "Update Item" : "Post Item";
           }
-
-          if (fileInput.files.length) {
-            apiFormData.append("image", fileInput.files[0]);
-          }
-
-          // Make API call
-          const response = await fetch("/api/items", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: apiFormData,
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.message || "Failed to post item");
-          }
-
-          showToast("Item posted successfully!", "success");
-          form.reset();
-          document.getElementById("imagePreview").style.display = "none";
-          document.getElementById("fileUpload").classList.remove("active");
-
-          // Redirect to item page or home after a delay
-          setTimeout(() => {
-            window.location.href = `item-details.html?id=${data.item._id}`;
-          }, 1500);
-        } catch (error) {
-          console.error("Error posting item:", error);
-          showToast(error.message || "Failed to post item", "error");
-        }
-      }
-
-      function showToast(message, type = "success") {
-        const toast = document.getElementById("toast");
-        const toastMessage = document.getElementById("toastMessage");
-
-        toastMessage.textContent = message;
-        toast.className = `fixed bottom-4 right-4 px-4 py-2 rounded-md shadow-lg flex items-center ${
-          type === "success" ? "bg-green-500" : "bg-red-500"
-        } text-white`;
-        toast.classList.remove("hidden");
-
-        setTimeout(hideToast, 5000);
-      }
-
-      function hideToast() {
-        document.getElementById("toast").classList.add("hidden");
+        });
       }
     </script>
   </body>

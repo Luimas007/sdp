@@ -87,14 +87,39 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+const ValidityQuestionSchema = new mongoose.Schema({
+  question: { type: String, required: true },
+  answer: { type: String, required: true },
+});
+
+const ClaimRequestSchema = new mongoose.Schema({
+  answers: [{ type: String }],
+  additionalInfo: { type: String },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  },
+  requestedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  reviewedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  reviewedAt: { type: Date },
+});
+
 const ItemSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: String, required: true },
   image: { type: String },
   type: { type: String, enum: ["lost", "found"], required: true },
-  validityQuestion: { type: String },
-  validityAnswer: { type: String },
+  validityQuestions: [ValidityQuestionSchema],
+  claimRequests: [ClaimRequestSchema],
   status: {
     type: String,
     enum: ["active", "claimed", "accepted", "rejected"],
@@ -222,7 +247,7 @@ app.post(
       const otp = generateOTP();
       const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-      // Create new user
+      // Create new user with idCardImage as initial profileImage
       const user = new User({
         firstName,
         lastName,
@@ -230,8 +255,8 @@ app.post(
         phone,
         department,
         password: hashedPassword,
-        idCardImage: req.file ? req.file.path : "",
-        profileImage: "",
+        idCardImage: req.file ? req.file.filename : "",
+        profileImage: req.file ? req.file.filename : "", // Set profileImage same as idCardImage initially
         otp,
         otpExpires,
       });
@@ -245,7 +270,9 @@ app.post(
         success: true,
         message: "User registered successfully. Please verify your email.",
         userId: user._id,
-        profileImage: user.profileImage, // Include profile image in response
+        profileImage: user.profileImage
+          ? `/uploads/${user.profileImage}`
+          : `/uploads/${user.idCardImage}`, // Return idCardImage if profileImage is empty
       });
     } catch (error) {
       console.error(error);
@@ -295,7 +322,9 @@ app.post("/api/auth/verify", async (req, res) => {
         email: user.email,
         phone: user.phone,
         department: user.department,
-        profileImage: user.profileImage, // Include profile image in response
+        profileImage: user.profileImage
+          ? `/uploads/${user.profileImage}`
+          : `/uploads/${user.idCardImage}`,
       },
     });
   } catch (error) {
@@ -372,7 +401,9 @@ app.post("/api/auth/login", async (req, res) => {
       success: true,
       message: "OTP sent to your email",
       userId: user._id,
-      profileImage: user.profileImage, // Include profile image in response
+      profileImage: user.profileImage
+        ? `/uploads/${user.profileImage}`
+        : `/uploads/${user.idCardImage}`,
     });
   } catch (error) {
     console.error(error);
@@ -414,7 +445,9 @@ app.post("/api/auth/verify-login", async (req, res) => {
         email: user.email,
         phone: user.phone,
         department: user.department,
-        profileImage: user.profileImage, // Include profile image in response
+        profileImage: user.profileImage
+          ? `/uploads/${user.profileImage}`
+          : `/uploads/${user.idCardImage}`,
       },
     });
   } catch (error) {
@@ -496,7 +529,19 @@ app.get("/api/users/me", authenticate, async (req, res) => {
     const user = await User.findById(req.user._id).select(
       "-password -otp -otpExpires"
     );
-    res.status(200).json({ success: true, user });
+
+    // Add full URL for profile image if it exists
+    const userObj = user.toObject();
+    if (userObj.profileImage) {
+      userObj.profileImage = `/uploads/${userObj.profileImage}`;
+    } else if (userObj.idCardImage) {
+      userObj.profileImage = `/uploads/${userObj.idCardImage}`;
+    }
+    if (userObj.idCardImage) {
+      userObj.idCardImage = `/uploads/${userObj.idCardImage}`;
+    }
+
+    res.status(200).json({ success: true, user: userObj });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -505,26 +550,30 @@ app.get("/api/users/me", authenticate, async (req, res) => {
 
 app.get("/api/users/:id/profile-image", authenticate, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("profileImage");
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
 
-    if (!user.profileImage) {
+    // Use idCardImage if profileImage is empty
+    const imageName = user.profileImage || user.idCardImage;
+    if (!imageName) {
       return res
         .status(404)
         .json({ success: false, message: "Profile image not found" });
     }
 
+    const imagePath = path.join(__dirname, "uploads", imageName);
+
     // Check if file exists
-    if (fs.existsSync(path.join(__dirname, user.profileImage))) {
-      return res.sendFile(path.join(__dirname, user.profileImage));
+    if (fs.existsSync(imagePath)) {
+      return res.sendFile(imagePath);
     } else {
       return res
         .status(404)
-        .json({ success: false, message: "Profile image file not found" });
+        .json({ success: false, message: "Image file not found" });
     }
   } catch (error) {
     console.error(error);
@@ -563,11 +612,18 @@ app.put(
       user.department = department || user.department;
 
       if (req.file) {
-        // Delete old profile image if it exists and is not the same as ID card image
+        // Delete old profile image if it exists and is different from idCardImage
         if (user.profileImage && user.profileImage !== user.idCardImage) {
-          fs.unlinkSync(path.join(__dirname, user.profileImage));
+          const oldImagePath = path.join(
+            __dirname,
+            "uploads",
+            user.profileImage
+          );
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
         }
-        user.profileImage = req.file.path;
+        user.profileImage = req.file.filename;
       }
 
       await user.save();
@@ -582,7 +638,9 @@ app.put(
           email: user.email,
           phone: user.phone,
           department: user.department,
-          profileImage: user.profileImage,
+          profileImage: user.profileImage
+            ? `/uploads/${user.profileImage}`
+            : `/uploads/${user.idCardImage}`,
         },
       });
     } catch (error) {
@@ -626,6 +684,8 @@ app.put("/api/users/change-password", authenticate, async (req, res) => {
   }
 });
 
+// ... [rest of your existing routes remain exactly the same] ...
+
 // Item Routes
 app.post(
   "/api/items",
@@ -638,24 +698,44 @@ app.post(
         description,
         location,
         type,
-        validityQuestion,
-        validityAnswer,
+        validityQuestions, // Now expecting an array of {question, answer} objects
       } = req.body;
+
+      // Parse validityQuestions if it's a string
+      let questions = [];
+      if (validityQuestions) {
+        try {
+          questions =
+            typeof validityQuestions === "string"
+              ? JSON.parse(validityQuestions)
+              : validityQuestions;
+        } catch (e) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid validity questions format",
+          });
+        }
+      }
 
       const item = new Item({
         title,
         description,
         location,
-        image: req.file ? req.file.path : null,
+        image: req.file ? req.file.filename : null,
         type,
-        validityQuestion,
-        validityAnswer,
+        validityQuestions: questions,
         postedBy: req.user._id,
       });
 
       await item.save();
 
-      res.status(201).json({ success: true, item });
+      res.status(201).json({
+        success: true,
+        item: {
+          ...item.toObject(),
+          image: item.image ? `/uploads/${item.image}` : null,
+        },
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: "Server error" });
@@ -691,7 +771,29 @@ app.get("/api/items", authenticate, async (req, res) => {
       .populate("claimedBy", "firstName lastName department profileImage")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({ success: true, items });
+    // Format image URLs and hide answers for non-owners
+    const formattedItems = items.map((item) => {
+      const itemObj = item.toObject();
+      if (itemObj.image) {
+        itemObj.image = `/uploads/${itemObj.image}`;
+      }
+
+      // Only show validity answers to the item owner or the claimant
+      if (
+        itemObj.postedBy._id.toString() !== req.user._id.toString() &&
+        (!itemObj.claimedBy ||
+          itemObj.claimedBy._id.toString() !== req.user._id.toString())
+      ) {
+        itemObj.validityQuestions = itemObj.validityQuestions.map((q) => ({
+          question: q.question,
+          answer: undefined, // Hide answers
+        }));
+      }
+
+      return itemObj;
+    });
+
+    res.status(200).json({ success: true, items: formattedItems });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -710,16 +812,24 @@ app.get("/api/items/:id", authenticate, async (req, res) => {
         .json({ success: false, message: "Item not found" });
     }
 
-    // Only show validity answer to the item owner or the claimant
-    if (
-      item.postedBy._id.toString() !== req.user._id.toString() &&
-      (!item.claimedBy ||
-        item.claimedBy._id.toString() !== req.user._id.toString())
-    ) {
-      item.validityAnswer = undefined;
+    const itemObj = item.toObject();
+    if (itemObj.image) {
+      itemObj.image = `/uploads/${itemObj.image}`;
     }
 
-    res.status(200).json({ success: true, item });
+    // Only show validity answers to the item owner or the claimant
+    if (
+      itemObj.postedBy._id.toString() !== req.user._id.toString() &&
+      (!itemObj.claimedBy ||
+        itemObj.claimedBy._id.toString() !== req.user._id.toString())
+    ) {
+      itemObj.validityQuestions = itemObj.validityQuestions.map((q) => ({
+        question: q.question,
+        answer: undefined, // Hide answers
+      }));
+    }
+
+    res.status(200).json({ success: true, item: itemObj });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -732,8 +842,7 @@ app.put(
   upload.single("image"),
   async (req, res) => {
     try {
-      const { title, description, location, validityQuestion, validityAnswer } =
-        req.body;
+      const { title, description, location, validityQuestions } = req.body;
 
       const item = await Item.findById(req.params.id);
       if (!item) {
@@ -750,25 +859,50 @@ app.put(
         });
       }
 
+      // Parse validityQuestions if it's a string
+      let questions = [];
+      if (validityQuestions) {
+        try {
+          questions =
+            typeof validityQuestions === "string"
+              ? JSON.parse(validityQuestions)
+              : validityQuestions;
+        } catch (e) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid validity questions format",
+          });
+        }
+      }
+
       // Update item details
       item.title = title || item.title;
       item.description = description || item.description;
       item.location = location || item.location;
-      item.validityQuestion = validityQuestion || item.validityQuestion;
-      item.validityAnswer = validityAnswer || item.validityAnswer;
+      item.validityQuestions =
+        questions.length > 0 ? questions : item.validityQuestions;
 
       if (req.file) {
         // Delete old image if exists
         if (item.image) {
-          fs.unlinkSync(path.join(__dirname, item.image));
+          const oldImagePath = path.join(__dirname, "uploads", item.image);
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
         }
-        item.image = req.file.path;
+        item.image = req.file.filename;
       }
 
       item.updatedAt = Date.now();
       await item.save();
 
-      res.status(200).json({ success: true, item });
+      res.status(200).json({
+        success: true,
+        item: {
+          ...item.toObject(),
+          image: item.image ? `/uploads/${item.image}` : null,
+        },
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: "Server error" });
@@ -795,7 +929,10 @@ app.delete("/api/items/:id", authenticate, async (req, res) => {
 
     // Delete image if exists
     if (item.image) {
-      fs.unlinkSync(path.join(__dirname, item.image));
+      const imagePath = path.join(__dirname, "uploads", item.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
     }
 
     // Delete all comments associated with this item
@@ -812,9 +949,10 @@ app.delete("/api/items/:id", authenticate, async (req, res) => {
   }
 });
 
-app.post("/api/items/:id/claim", authenticate, async (req, res) => {
+// New Claim Request Routes
+app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
   try {
-    const { validityAnswer } = req.body;
+    const { answers, additionalInfo } = req.body;
 
     const item = await Item.findById(req.params.id);
     if (!item) {
@@ -838,49 +976,62 @@ app.post("/api/items/:id/claim", authenticate, async (req, res) => {
         .json({ success: false, message: "You cannot claim your own item" });
     }
 
-    // For found items, verify validity answer
+    // For found items, check if answers are provided for all questions
     if (item.type === "found") {
-      if (!validityAnswer) {
+      if (!answers || answers.length !== item.validityQuestions.length) {
         return res.status(400).json({
           success: false,
-          message: "Please provide an answer to the validity question",
-          validityQuestion: item.validityQuestion,
-        });
-      }
-
-      if (item.validityAnswer !== validityAnswer) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid answer to the validity question",
-          validityQuestion: item.validityQuestion,
+          message: "Please provide answers to all validity questions",
+          validityQuestions: item.validityQuestions.map((q) => q.question),
         });
       }
     }
 
-    item.status = "claimed";
-    item.claimedBy = req.user._id;
+    // Create a new claim request
+    const claimRequest = {
+      answers: answers || [],
+      additionalInfo: additionalInfo || "",
+      status: "pending",
+      requestedBy: req.user._id,
+    };
+
+    item.claimRequests.push(claimRequest);
     await item.save();
 
     // Create a notification message for the item owner
     const message = new Message({
-      content: `${req.user.firstName} ${req.user.lastName} has claimed your ${item.type} item "${item.title}". Please review the claim.`,
+      content: `${req.user.firstName} ${req.user.lastName} has submitted a claim request for your ${item.type} item "${item.title}". Please review the request.`,
       sender: req.user._id,
       receiver: item.postedBy,
     });
     await message.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Item claimed successfully", item });
+    res.status(200).json({
+      success: true,
+      message: "Claim request submitted successfully",
+      item: {
+        ...item.toObject(),
+        image: item.image ? `/uploads/${item.image}` : null,
+      },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-app.post("/api/items/:id/accept-claim", authenticate, async (req, res) => {
+app.get("/api/items/:id/claim-requests", authenticate, async (req, res) => {
   try {
-    const item = await Item.findById(req.params.id);
+    const item = await Item.findById(req.params.id)
+      .populate(
+        "claimRequests.requestedBy",
+        "firstName lastName department profileImage"
+      )
+      .populate(
+        "claimRequests.reviewedBy",
+        "firstName lastName department profileImage"
+      );
+
     if (!item) {
       return res
         .status(404)
@@ -891,82 +1042,142 @@ app.post("/api/items/:id/accept-claim", authenticate, async (req, res) => {
     if (item.postedBy.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        message: "Not authorized to accept this claim",
+        message: "Not authorized to view claim requests for this item",
       });
     }
 
-    // Check if the item is claimed
-    if (item.status !== "claimed") {
-      return res
-        .status(400)
-        .json({ success: false, message: "Item is not claimed" });
+    const itemObj = item.toObject();
+    if (itemObj.image) {
+      itemObj.image = `/uploads/${itemObj.image}`;
     }
 
-    item.status = "accepted";
-    await item.save();
-
-    // Create a notification message for the claimant
-    const message = new Message({
-      content: `Your claim for the ${item.type} item "${item.title}" has been accepted. Please contact the owner to retrieve your item.`,
-      sender: req.user._id,
-      receiver: item.claimedBy,
+    res.status(200).json({
+      success: true,
+      claimRequests: itemObj.claimRequests,
     });
-    await message.save();
-
-    res
-      .status(200)
-      .json({ success: true, message: "Claim accepted successfully", item });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-app.post("/api/items/:id/reject-claim", authenticate, async (req, res) => {
-  try {
-    const item = await Item.findById(req.params.id);
-    if (!item) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Item not found" });
-    }
+app.post(
+  "/api/items/:id/claim-requests/:requestId/approve",
+  authenticate,
+  async (req, res) => {
+    try {
+      const item = await Item.findById(req.params.id);
+      if (!item) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Item not found" });
+      }
 
-    // Check if the user is the owner of the item
-    if (item.postedBy.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: "Not authorized to reject this claim",
+      // Check if the user is the owner of the item
+      if (item.postedBy.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+          success: false,
+          message: "Not authorized to approve claim requests for this item",
+        });
+      }
+
+      const claimRequest = item.claimRequests.id(req.params.requestId);
+      if (!claimRequest) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Claim request not found" });
+      }
+
+      // Update the claim request status
+      claimRequest.status = "approved";
+      claimRequest.reviewedBy = req.user._id;
+      claimRequest.reviewedAt = new Date();
+
+      // Update the item status
+      item.status = "claimed";
+      item.claimedBy = claimRequest.requestedBy;
+
+      await item.save();
+
+      // Create a notification message for the claimant
+      const message = new Message({
+        content: `Your claim request for the ${item.type} item "${item.title}" has been approved. Please contact the owner to retrieve your item.`,
+        sender: req.user._id,
+        receiver: claimRequest.requestedBy,
       });
+      await message.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Claim request approved successfully",
+        item: {
+          ...item.toObject(),
+          image: item.image ? `/uploads/${item.image}` : null,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
     }
-
-    // Check if the item is claimed
-    if (item.status !== "claimed") {
-      return res
-        .status(400)
-        .json({ success: false, message: "Item is not claimed" });
-    }
-
-    const claimantId = item.claimedBy;
-    item.status = "active";
-    item.claimedBy = undefined;
-    await item.save();
-
-    // Create a notification message for the claimant
-    const message = new Message({
-      content: `Your claim for the ${item.type} item "${item.title}" has been rejected.`,
-      sender: req.user._id,
-      receiver: claimantId,
-    });
-    await message.save();
-
-    res
-      .status(200)
-      .json({ success: true, message: "Claim rejected successfully", item });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Server error" });
   }
-});
+);
+
+app.post(
+  "/api/items/:id/claim-requests/:requestId/reject",
+  authenticate,
+  async (req, res) => {
+    try {
+      const item = await Item.findById(req.params.id);
+      if (!item) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Item not found" });
+      }
+
+      // Check if the user is the owner of the item
+      if (item.postedBy.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+          success: false,
+          message: "Not authorized to reject claim requests for this item",
+        });
+      }
+
+      const claimRequest = item.claimRequests.id(req.params.requestId);
+      if (!claimRequest) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Claim request not found" });
+      }
+
+      // Update the claim request status
+      claimRequest.status = "rejected";
+      claimRequest.reviewedBy = req.user._id;
+      claimRequest.reviewedAt = new Date();
+
+      await item.save();
+
+      // Create a notification message for the claimant
+      const message = new Message({
+        content: `Your claim request for the ${item.type} item "${item.title}" has been rejected.`,
+        sender: req.user._id,
+        receiver: claimRequest.requestedBy,
+      });
+      await message.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Claim request rejected successfully",
+        item: {
+          ...item.toObject(),
+          image: item.image ? `/uploads/${item.image}` : null,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+);
 
 // Comment Routes
 app.post("/api/items/:id/comments", authenticate, async (req, res) => {
@@ -1180,10 +1391,21 @@ app.get("/api/suggestions", authenticate, async (req, res) => {
     }
 
     const suggestions = await Suggestion.find(query)
-      .populate("postedBy", "firstName lastName department")
+      .populate("postedBy", "firstName lastName department profileImage") // Add profileImage
       .sort({ createdAt: -1 });
 
-    res.status(200).json({ success: true, suggestions });
+    // Format image URLs
+    const formattedSuggestions = suggestions.map((suggestion) => {
+      const suggestionObj = suggestion.toObject();
+      if (suggestionObj.postedBy.profileImage) {
+        suggestionObj.postedBy.profileImage = `/uploads/${suggestionObj.postedBy.profileImage}`;
+      } else if (suggestionObj.postedBy.idCardImage) {
+        suggestionObj.postedBy.profileImage = `/uploads/${suggestionObj.postedBy.idCardImage}`;
+      }
+      return suggestionObj;
+    });
+
+    res.status(200).json({ success: true, suggestions: formattedSuggestions });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -1284,5 +1506,5 @@ app.get("/", (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
