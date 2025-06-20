@@ -8,6 +8,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const crypto = require("crypto");
+const mongoURI =
+  process.env.MONGO_URL || "mongodb://mongo:27017/campus_lost_found";
 
 // Initialize Express app
 const app = express();
