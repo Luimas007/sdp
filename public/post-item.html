@@ -15,6 +15,7 @@
       body {
         font-family: "Poppins", sans-serif;
         background-color: #f8fafc;
+        transition: background-color 0.3s ease;
       }
 
       .nav-glass {
@@ -22,6 +23,11 @@
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .nav-hidden {
+        transform: translateY(-100%);
       }
 
       .card-hover {
@@ -379,7 +385,7 @@
         <p class="mb-2">
           Bangladesh University of Professionals (BUP) Lost & Found System
         </p>
-        <p class="text-gray-400 text-sm">© 2023 All Rights Reserved</p>
+        <p class="text-gray-400 text-sm">© 2025 All Rights Reserved</p>
       </div>
     </footer>
 
@@ -400,12 +406,15 @@
       const profileImage = document.getElementById("profileImage");
       const userName = document.getElementById("userName");
       const logoutBtn = document.getElementById("logoutBtn");
+      const navBar = document.querySelector("nav");
+      const typeInputs = document.querySelectorAll('input[name="type"]');
 
       // Global variables
       let currentUser = null;
       let questionCount = 1;
       let isEditMode = false;
       let currentItemId = null;
+      let lastScrollY = window.scrollY;
 
       // Initialize the page
       document.addEventListener("DOMContentLoaded", async () => {
@@ -420,6 +429,9 @@
 
         // Set up event listeners
         setupEventListeners();
+
+        // Set initial background color based on checked radio
+        updateBackgroundColor();
       });
 
       // Check authentication
@@ -531,6 +543,18 @@
         // Update UI for edit mode
         document.querySelector("h2").textContent = "Edit Item";
         submitBtn.textContent = "Update Item";
+
+        // Update background color based on item type
+        updateBackgroundColor();
+      }
+
+      // Update background color based on selected item type
+      function updateBackgroundColor() {
+        const selectedType = document.querySelector(
+          'input[name="type"]:checked'
+        ).value;
+        document.body.style.backgroundColor =
+          selectedType === "lost" ? "#dc2626" : "#2563eb";
       }
 
       // Add a new question field
@@ -738,6 +762,22 @@
             submitBtn.disabled = false;
             submitBtn.textContent = isEditMode ? "Update Item" : "Post Item";
           }
+        });
+
+        // Change background color on item type selection
+        typeInputs.forEach((input) => {
+          input.addEventListener("change", updateBackgroundColor);
+        });
+
+        // Handle navbar visibility on scroll
+        window.addEventListener("scroll", () => {
+          const currentScrollY = window.scrollY;
+          if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            navBar.classList.add("nav-hidden");
+          } else {
+            navBar.classList.remove("nav-hidden");
+          }
+          lastScrollY = currentScrollY;
         });
       }
     </script>
