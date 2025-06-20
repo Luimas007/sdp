@@ -84,6 +84,8 @@ const UserSchema = new mongoose.Schema({
   otp: { type: String },
   otpExpires: { type: Date },
   profileImage: { type: String, default: "" },
+  isBlocked: { type: Boolean, default: false }, // For user blocking functionality
+  blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Users blocked by this user
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -110,6 +112,15 @@ const ClaimRequestSchema = new mongoose.Schema({
     ref: "User",
   },
   reviewedAt: { type: Date },
+  // NEW: Contact information shared when approving
+  contactInfo: {
+    phone: { type: String },
+    alternatePhone: { type: String },
+    email: { type: String },
+    meetingLocation: { type: String },
+    meetingTime: { type: String },
+    additionalNotes: { type: String },
+  },
 });
 
 const ItemSchema = new mongoose.Schema({
@@ -131,6 +142,13 @@ const ItemSchema = new mongoose.Schema({
     required: true,
   },
   claimedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  priority: {
+    type: String,
+    enum: ["low", "medium", "high"],
+    default: "medium",
+  }, // For future priority system
+  tags: [{ type: String }], // For future tagging system
+  viewCount: { type: Number, default: 0 }, // For analytics
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
@@ -143,6 +161,8 @@ const CommentSchema = new mongoose.Schema({
     required: true,
   },
   item: { type: mongoose.Schema.Types.ObjectId, ref: "Item", required: true },
+  parentComment: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" }, // For nested comments
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // For comment likes
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
@@ -156,6 +176,12 @@ const MessageSchema = new mongoose.Schema({
     required: true,
   },
   read: { type: Boolean, default: false },
+  messageType: {
+    type: String,
+    enum: ["text", "system", "contact_share"],
+    default: "text",
+  }, // For different message types
+  attachments: [{ type: String }], // For future file attachments
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -166,6 +192,72 @@ const SuggestionSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  category: {
+    type: String,
+    enum: ["feature", "bug", "improvement", "other"],
+    default: "other",
+  }, // For categorizing suggestions
+  status: {
+    type: String,
+    enum: ["pending", "reviewed", "implemented", "rejected"],
+    default: "pending",
+  }, // For tracking suggestion status
+  votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // For voting on suggestions
+  adminResponse: { type: String }, // For admin responses
+  createdAt: { type: Date, default: Date.now },
+});
+
+// NEW: Report Schema for reporting inappropriate content or users
+const ReportSchema = new mongoose.Schema({
+  reportType: {
+    type: String,
+    enum: ["user", "item", "comment", "message"],
+    required: true,
+  },
+  reportedEntity: { type: mongoose.Schema.Types.ObjectId, required: true }, // Can reference User, Item, Comment, or Message
+  reportedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  reason: { type: String, required: true },
+  description: { type: String },
+  status: {
+    type: String,
+    enum: ["pending", "reviewed", "resolved", "dismissed"],
+    default: "pending",
+  },
+  reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  reviewedAt: { type: Date },
+  actionTaken: { type: String },
+  createdAt: { type: Date, default: Date.now },
+});
+
+// NEW: Notification Schema for system notifications
+const NotificationSchema = new mongoose.Schema({
+  recipient: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  title: { type: String, required: true },
+  message: { type: String, required: true },
+  type: {
+    type: String,
+    enum: [
+      "claim_request",
+      "claim_approved",
+      "claim_rejected",
+      "item_claimed",
+      "system",
+      "reminder",
+    ],
+    required: true,
+  },
+  relatedEntity: { type: mongoose.Schema.Types.ObjectId }, // Can reference Item, ClaimRequest, etc.
+  read: { type: Boolean, default: false },
+  actionRequired: { type: Boolean, default: false },
+  expiresAt: { type: Date },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -174,6 +266,8 @@ const Item = mongoose.model("Item", ItemSchema);
 const Comment = mongoose.model("Comment", CommentSchema);
 const Message = mongoose.model("Message", MessageSchema);
 const Suggestion = mongoose.model("Suggestion", SuggestionSchema);
+const Report = mongoose.model("Report", ReportSchema);
+const Notification = mongoose.model("Notification", NotificationSchema);
 
 // Helper Functions
 const generateOTP = () => {
@@ -684,8 +778,6 @@ app.put("/api/users/change-password", authenticate, async (req, res) => {
   }
 });
 
-// ... [rest of your existing routes remain exactly the same] ...
-
 // Item Routes
 app.post(
   "/api/items",
@@ -811,6 +903,10 @@ app.get("/api/items/:id", authenticate, async (req, res) => {
         .status(404)
         .json({ success: false, message: "Item not found" });
     }
+
+    // Increment view count
+    item.viewCount += 1;
+    await item.save();
 
     const itemObj = item.toObject();
     if (itemObj.image) {
@@ -949,7 +1045,7 @@ app.delete("/api/items/:id", authenticate, async (req, res) => {
   }
 });
 
-// New Claim Request Routes
+// Claim Request Routes (MODIFIED to include contact information)
 app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
   try {
     const { answers, additionalInfo } = req.body;
@@ -1061,11 +1157,23 @@ app.get("/api/items/:id/claim-requests", authenticate, async (req, res) => {
   }
 });
 
+// MODIFIED: Approve claim request with contact information
 app.post(
   "/api/items/:id/claim-requests/:requestId/approve",
   authenticate,
   async (req, res) => {
     try {
+      const { contactInfo } = req.body; // NEW: Expected contact information object
+
+      // Validate required contact information
+      if (!contactInfo || !contactInfo.phone) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Contact phone number is required when approving a claim request",
+        });
+      }
+
       const item = await Item.findById(req.params.id);
       if (!item) {
         return res
@@ -1088,10 +1196,18 @@ app.post(
           .json({ success: false, message: "Claim request not found" });
       }
 
-      // Update the claim request status
+      // Update the claim request status and add contact information
       claimRequest.status = "approved";
       claimRequest.reviewedBy = req.user._id;
       claimRequest.reviewedAt = new Date();
+      claimRequest.contactInfo = {
+        phone: contactInfo.phone,
+        alternatePhone: contactInfo.alternatePhone || "",
+        email: contactInfo.email || req.user.email,
+        meetingLocation: contactInfo.meetingLocation || "",
+        meetingTime: contactInfo.meetingTime || "",
+        additionalNotes: contactInfo.additionalNotes || "",
+      };
 
       // Update the item status
       item.status = "claimed";
@@ -1099,17 +1215,47 @@ app.post(
 
       await item.save();
 
-      // Create a notification message for the claimant
+      // Create a detailed notification message for the claimant with contact information
+      const contactMessage = `Your claim request for the ${item.type} item "${
+        item.title
+      }" has been approved! 
+
+Contact Information:
+📞 Phone: ${contactInfo.phone}
+${
+  contactInfo.alternatePhone
+    ? `📞 Alternate Phone: ${contactInfo.alternatePhone}\n`
+    : ""
+}
+📧 Email: ${contactInfo.email || req.user.email}
+${
+  contactInfo.meetingLocation
+    ? `📍 Meeting Location: ${contactInfo.meetingLocation}\n`
+    : ""
+}
+${
+  contactInfo.meetingTime ? `⏰ Meeting Time: ${contactInfo.meetingTime}\n` : ""
+}
+${
+  contactInfo.additionalNotes
+    ? `📝 Additional Notes: ${contactInfo.additionalNotes}\n`
+    : ""
+}
+
+Please contact the owner to arrange pickup/return of your item.`;
+
       const message = new Message({
-        content: `Your claim request for the ${item.type} item "${item.title}" has been approved. Please contact the owner to retrieve your item.`,
+        content: contactMessage,
         sender: req.user._id,
         receiver: claimRequest.requestedBy,
+        messageType: "contact_share",
       });
       await message.save();
 
       res.status(200).json({
         success: true,
-        message: "Claim request approved successfully",
+        message:
+          "Claim request approved successfully with contact information shared",
         item: {
           ...item.toObject(),
           image: item.image ? `/uploads/${item.image}` : null,
@@ -1178,6 +1324,57 @@ app.post(
     }
   }
 );
+
+// NEW: Get contact information for approved claim requests (only for claimant)
+app.get("/api/items/:id/contact-info", authenticate, async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id)
+      .populate("postedBy", "firstName lastName")
+      .populate("claimedBy", "firstName lastName");
+
+    if (!item) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Item not found" });
+    }
+
+    // Only the claimant can access contact information
+    if (
+      !item.claimedBy ||
+      item.claimedBy._id.toString() !== req.user._id.toString()
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to view contact information",
+      });
+    }
+
+    // Find the approved claim request for the current user
+    const approvedRequest = item.claimRequests.find(
+      (request) =>
+        request.requestedBy.toString() === req.user._id.toString() &&
+        request.status === "approved"
+    );
+
+    if (!approvedRequest || !approvedRequest.contactInfo) {
+      return res.status(404).json({
+        success: false,
+        message: "Contact information not available",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      contactInfo: approvedRequest.contactInfo,
+      itemOwner: {
+        name: `${item.postedBy.firstName} ${item.postedBy.lastName}`,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 
 // Comment Routes
 app.post("/api/items/:id/comments", authenticate, async (req, res) => {
@@ -1302,6 +1499,43 @@ app.delete("/api/comments/:id", authenticate, async (req, res) => {
   }
 });
 
+// NEW: Comment Like/Unlike functionality
+app.post("/api/comments/:id/like", authenticate, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Comment not found" });
+    }
+
+    const userId = req.user._id;
+    const hasLiked = comment.likes.includes(userId);
+
+    if (hasLiked) {
+      // Unlike the comment
+      comment.likes = comment.likes.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+    } else {
+      // Like the comment
+      comment.likes.push(userId);
+    }
+
+    await comment.save();
+
+    res.status(200).json({
+      success: true,
+      message: hasLiked ? "Comment unliked" : "Comment liked",
+      likesCount: comment.likes.length,
+      hasLiked: !hasLiked,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // Message Routes
 app.post("/api/messages", authenticate, async (req, res) => {
   try {
@@ -1356,6 +1590,47 @@ app.get("/api/messages", authenticate, async (req, res) => {
       .sort({ createdAt: 1 });
 
     res.status(200).json({ success: true, messages });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Mark messages as read
+app.put("/api/messages/mark-read", authenticate, async (req, res) => {
+  try {
+    const { messageIds } = req.body;
+
+    await Message.updateMany(
+      {
+        _id: { $in: messageIds },
+        receiver: req.user._id,
+      },
+      { read: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Messages marked as read",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Get unread message count
+app.get("/api/messages/unread-count", authenticate, async (req, res) => {
+  try {
+    const count = await Message.countDocuments({
+      receiver: req.user._id,
+      read: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      unreadCount: count,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -1469,27 +1744,467 @@ app.delete("/api/suggestions/:id", authenticate, async (req, res) => {
   }
 });
 
-// Stats Routes
+// NEW: Vote on suggestions
+app.post("/api/suggestions/:id/vote", authenticate, async (req, res) => {
+  try {
+    const suggestion = await Suggestion.findById(req.params.id);
+    if (!suggestion) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Suggestion not found" });
+    }
+
+    const userId = req.user._id;
+    const hasVoted = suggestion.votes.includes(userId);
+
+    if (hasVoted) {
+      // Remove vote
+      suggestion.votes = suggestion.votes.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+    } else {
+      // Add vote
+      suggestion.votes.push(userId);
+    }
+
+    await suggestion.save();
+
+    res.status(200).json({
+      success: true,
+      message: hasVoted ? "Vote removed" : "Vote added",
+      votesCount: suggestion.votes.length,
+      hasVoted: !hasVoted,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Stats Routes - FIXED TO HANDLE REUNITED COUNT PROPERLY
 app.get("/api/stats", authenticate, async (req, res) => {
   try {
+    // Count active lost items (items that haven't been claimed yet)
     const lostCount = await Item.countDocuments({
       type: "lost",
       status: "active",
     });
+
+    // Count active found items (items that haven't been claimed yet)
     const foundCount = await Item.countDocuments({
       type: "found",
       status: "active",
     });
-    const claimedCount = await Item.countDocuments({ status: "accepted" });
+
+    // Count successfully reunited items (items that have been claimed)
+    const reunitedCount = await Item.countDocuments({
+      status: "claimed",
+    });
 
     res.status(200).json({
       success: true,
       stats: {
         lostCount,
         foundCount,
-        claimedCount,
+        reunitedCount, // Changed from claimedCount to reunitedCount
       },
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Advanced analytics routes for future admin dashboard
+app.get("/api/analytics/overview", authenticate, async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalItems = await Item.countDocuments();
+    const totalComments = await Comment.countDocuments();
+    const totalMessages = await Message.countDocuments();
+
+    // Items by type
+    const itemsByType = await Item.aggregate([
+      { $group: { _id: "$type", count: { $sum: 1 } } },
+    ]);
+
+    // Items by status
+    const itemsByStatus = await Item.aggregate([
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+
+    // Monthly registration trend (last 6 months)
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+    const userRegistrationTrend = await User.aggregate([
+      { $match: { createdAt: { $gte: sixMonthsAgo } } },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      analytics: {
+        totalUsers,
+        totalItems,
+        totalComments,
+        totalMessages,
+        itemsByType,
+        itemsByStatus,
+        userRegistrationTrend,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: User blocking and reporting functionality
+app.post("/api/users/:id/block", authenticate, async (req, res) => {
+  try {
+    const userToBlock = req.params.id;
+
+    if (userToBlock === req.user._id.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot block yourself",
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user.blockedUsers.includes(userToBlock)) {
+      user.blockedUsers.push(userToBlock);
+      await user.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User blocked successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.post("/api/users/:id/unblock", authenticate, async (req, res) => {
+  try {
+    const userToUnblock = req.params.id;
+
+    const user = await User.findById(req.user._id);
+    user.blockedUsers = user.blockedUsers.filter(
+      (id) => id.toString() !== userToUnblock
+    );
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "User unblocked successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.get("/api/users/blocked", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate(
+      "blockedUsers",
+      "firstName lastName email department"
+    );
+
+    res.status(200).json({
+      success: true,
+      blockedUsers: user.blockedUsers,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Reporting system
+app.post("/api/reports", authenticate, async (req, res) => {
+  try {
+    const { reportType, reportedEntity, reason, description } = req.body;
+
+    const report = new Report({
+      reportType,
+      reportedEntity,
+      reportedBy: req.user._id,
+      reason,
+      description,
+    });
+
+    await report.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Report submitted successfully",
+      report,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.get("/api/reports", authenticate, async (req, res) => {
+  try {
+    const { status, reportType } = req.query;
+    let query = { reportedBy: req.user._id };
+
+    if (status) query.status = status;
+    if (reportType) query.reportType = reportType;
+
+    const reports = await Report.find(query)
+      .populate("reportedBy", "firstName lastName")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, reports });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Notification system
+app.post("/api/notifications", authenticate, async (req, res) => {
+  try {
+    const { recipient, title, message, type, relatedEntity } = req.body;
+
+    const notification = new Notification({
+      recipient,
+      title,
+      message,
+      type,
+      relatedEntity,
+    });
+
+    await notification.save();
+
+    res.status(201).json({
+      success: true,
+      notification,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.get("/api/notifications", authenticate, async (req, res) => {
+  try {
+    const { read, type } = req.query;
+    let query = { recipient: req.user._id };
+
+    if (read !== undefined) query.read = read === "true";
+    if (type) query.type = type;
+
+    const notifications = await Notification.find(query)
+      .sort({ createdAt: -1 })
+      .limit(50);
+
+    res.status(200).json({ success: true, notifications });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.put("/api/notifications/:id/read", authenticate, async (req, res) => {
+  try {
+    const notification = await Notification.findOneAndUpdate(
+      { _id: req.params.id, recipient: req.user._id },
+      { read: true },
+      { new: true }
+    );
+
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        message: "Notification not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      notification,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Bulk operations for future admin functionality
+app.post("/api/admin/bulk-delete-items", authenticate, async (req, res) => {
+  try {
+    const { itemIds } = req.body;
+
+    // Note: In a real application, you'd want to add admin role checking here
+    // For now, users can only delete their own items in bulk
+
+    await Item.deleteMany({
+      _id: { $in: itemIds },
+      postedBy: req.user._id,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Items deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.post("/api/admin/bulk-update-items", authenticate, async (req, res) => {
+  try {
+    const { itemIds, updateData } = req.body;
+
+    // Only allow updating certain fields and only for own items
+    const allowedUpdates = ["status", "priority", "tags"];
+    const updates = {};
+
+    Object.keys(updateData).forEach((key) => {
+      if (allowedUpdates.includes(key)) {
+        updates[key] = updateData[key];
+      }
+    });
+
+    await Item.updateMany(
+      {
+        _id: { $in: itemIds },
+        postedBy: req.user._id,
+      },
+      updates
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Items updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Search and filter enhancements for future use
+app.get("/api/search/advanced", authenticate, async (req, res) => {
+  try {
+    const {
+      query,
+      type,
+      location,
+      dateFrom,
+      dateTo,
+      status,
+      sortBy,
+      sortOrder,
+      page = 1,
+      limit = 20,
+    } = req.query;
+
+    let searchQuery = {};
+
+    if (query) {
+      searchQuery.$or = [
+        { title: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+        { tags: { $in: [new RegExp(query, "i")] } },
+      ];
+    }
+
+    if (type) searchQuery.type = type;
+    if (location) searchQuery.location = { $regex: location, $options: "i" };
+    if (status) searchQuery.status = status;
+
+    if (dateFrom || dateTo) {
+      searchQuery.createdAt = {};
+      if (dateFrom) searchQuery.createdAt.$gte = new Date(dateFrom);
+      if (dateTo) searchQuery.createdAt.$lte = new Date(dateTo);
+    }
+
+    const sortOptions = {};
+    if (sortBy) {
+      sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1;
+    } else {
+      sortOptions.createdAt = -1;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const items = await Item.find(searchQuery)
+      .populate("postedBy", "firstName lastName department")
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Item.countDocuments(searchQuery);
+
+    res.status(200).json({
+      success: true,
+      items,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Export data functionality for users
+app.get("/api/export/my-data", authenticate, async (req, res) => {
+  try {
+    const { format = "json" } = req.query;
+
+    const userData = await User.findById(req.user._id).select(
+      "-password -otp -otpExpires"
+    );
+    const userItems = await Item.find({ postedBy: req.user._id });
+    const userComments = await Comment.find({ postedBy: req.user._id });
+    const userMessages = await Message.find({
+      $or: [{ sender: req.user._id }, { receiver: req.user._id }],
+    });
+
+    const exportData = {
+      profile: userData,
+      items: userItems,
+      comments: userComments,
+      messages: userMessages,
+      exportDate: new Date().toISOString(),
+    };
+
+    if (format === "json") {
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Content-Disposition", "attachment; filename=my-data.json");
+      res.status(200).json(exportData);
+    } else {
+      // For future CSV export functionality
+      res.status(400).json({
+        success: false,
+        message: "Only JSON format is currently supported",
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });

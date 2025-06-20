@@ -3,2269 +3,2254 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Profile | BUP Lost & Found</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Profile - BUP Lost & Found</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              reddit: {
+                dark: "#0B1426",
+                darker: "#030712",
+                card: "#1A1A1B",
+                cardHover: "#272729",
+                orange: "#FF4500",
+                orangeHover: "#FF5722",
+                blue: "#0079D3",
+                blueHover: "#1484D6",
+                text: "#D7DADC",
+                textSecondary: "#818384",
+                border: "#343536",
+                accent: "#46D39C",
+              },
+            },
+            fontFamily: {
+              reddit: ["Inter", "system-ui", "sans-serif"],
+            },
+            animation: {
+              "fade-in": "fadeIn 0.6s ease-out",
+              "slide-up": "slideUp 0.4s ease-out",
+              "slide-down": "slideDown 0.4s ease-out",
+              "scale-in": "scaleIn 0.3s ease-out",
+              glow: "glow 2s ease-in-out infinite alternate",
+              shimmer: "shimmer 2s linear infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(100%)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              slideDown: {
+                "0%": { transform: "translateY(-100%)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              scaleIn: {
+                "0%": { transform: "scale(0.9)", opacity: "0" },
+                "100%": { transform: "scale(1)", opacity: "1" },
+              },
+              glow: {
+                "0%": { boxShadow: "0 0 5px rgba(255, 69, 0, 0.5)" },
+                "100%": { boxShadow: "0 0 20px rgba(255, 69, 0, 0.8)" },
+              },
+              shimmer: {
+                "0%": { backgroundPosition: "-200% 0" },
+                "100%": { backgroundPosition: "200% 0" },
+              },
+            },
+          },
+        },
+      };
+    </script>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-
       body {
-        font-family: "Poppins", sans-serif;
-        background-color: #f8fafc;
+        font-family: "Inter", system-ui, sans-serif;
+        background: linear-gradient(135deg, #0b1426 0%, #030712 100%);
+        min-height: 100vh;
+        color: #d7dadc;
       }
 
-      .fade-in {
-        animation: fadeIn 0.3s ease-in-out;
+      .reddit-card {
+        background: rgba(26, 26, 27, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid #343536;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      .reddit-card:hover {
+        background: rgba(39, 39, 41, 0.95);
+        border-color: #ff4500;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 69, 0, 0.15);
       }
 
-      .item-card {
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      }
-
-      .item-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      }
-
-      .tab-active {
-        color: #2563eb;
-        border-bottom: 3px solid #2563eb;
+      .reddit-button {
+        background: linear-gradient(135deg, #ff4500 0%, #ff5722 100%);
+        border: none;
+        color: white;
         font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
       }
 
-      .tab-inactive {
-        color: #64748b;
-        border-bottom: 3px solid transparent;
-        font-weight: 500;
-        transition: all 0.2s ease;
+      .reddit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 69, 0, 0.4);
       }
 
-      .tab-inactive:hover {
-        color: #334155;
+      .reddit-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .reddit-button:hover::before {
+        left: 100%;
+      }
+
+      .reddit-button-secondary {
+        background: linear-gradient(135deg, #0079d3 0%, #1484d6 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .reddit-button-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 121, 211, 0.4);
+      }
+
+      .reddit-button-danger {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .reddit-button-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+      }
+
+      .reddit-tab {
+        background: transparent;
+        border: 2px solid transparent;
+        color: #818384;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .reddit-tab.active {
+        background: rgba(255, 69, 0, 0.1);
+        border-color: #ff4500;
+        color: #ff4500;
+      }
+
+      .reddit-tab:hover:not(.active) {
+        background: rgba(255, 69, 0, 0.05);
+        color: #d7dadc;
       }
 
       .status-badge {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-        display: inline-block;
+        position: relative;
+        overflow: hidden;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
-      .comment-container {
-        border-left: 3px solid #3b82f6;
-        transition: all 0.2s ease;
-        background-color: white;
+      .status-lost {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
       }
 
-      .comment-container:hover {
-        border-left-color: #2563eb;
-        background-color: #f8fafc;
+      .status-found {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: white;
       }
 
-      .notification-dot {
-        position: absolute;
-        top: 8px;
-        right: -4px;
+      .status-active {
+        background: linear-gradient(135deg, #0079d3 0%, #1484d6 100%);
+        color: white;
+      }
+
+      .status-claimed {
+        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        color: white;
+      }
+
+      .header-hidden {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      .modal-backdrop {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .loading-shimmer {
+        background: linear-gradient(
+          90deg,
+          #1a1a1b 25%,
+          #272729 50%,
+          #1a1a1b 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+      }
+
+      .profile-glow {
+        box-shadow: 0 0 20px rgba(255, 69, 0, 0.3);
+      }
+
+      .interaction-card {
+        background: rgba(26, 26, 27, 0.9);
+        border: 1px solid #343536;
+        transition: all 0.3s ease;
+      }
+
+      .interaction-card:hover {
+        border-color: #ff4500;
+        background: rgba(39, 39, 41, 0.9);
+      }
+
+      .claim-request-card {
+        background: linear-gradient(
+          135deg,
+          rgba(26, 26, 27, 0.95) 0%,
+          rgba(39, 39, 41, 0.95) 100%
+        );
+        border: 1px solid #343536;
+        transition: all 0.3s ease;
+      }
+
+      .claim-request-card:hover {
+        border-color: #ff4500;
+        transform: translateY(-1px);
+      }
+
+      .message-bubble-sent {
+        background: linear-gradient(135deg, #ff4500 0%, #ff5722 100%);
+        color: white;
+      }
+
+      .message-bubble-received {
+        background: rgba(52, 53, 54, 0.8);
+        color: #d7dadc;
+        border: 1px solid #343536;
+      }
+
+      .contact-info-card {
+        background: linear-gradient(
+          135deg,
+          rgba(70, 211, 156, 0.1) 0%,
+          rgba(70, 211, 156, 0.05) 100%
+        );
+        border: 1px solid rgba(70, 211, 156, 0.3);
+      }
+
+      ::-webkit-scrollbar {
         width: 8px;
-        height: 8px;
-        background-color: #ef4444;
-        border-radius: 50%;
       }
 
-      .expandable {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
+      ::-webkit-scrollbar-track {
+        background: rgba(26, 26, 27, 0.5);
       }
 
-      .expanded {
-        max-height: 1000px;
-        transition: max-height 0.5s ease-in;
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #ff4500 0%, #ff5722 100%);
+        border-radius: 4px;
       }
 
-      .shadow-soft {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      }
-
-      .shadow-medium {
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-      }
-
-      .gradient-header {
-        background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
-      }
-
-      .gradient-btn-primary {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-      }
-
-      .gradient-btn-danger {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      }
-
-      .gradient-btn-success {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      }
-
-      .gradient-btn-warning {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      }
-
-      .line-clamp-3 {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .smooth-transition {
-        transition: all 0.2s ease-in-out;
-      }
-
-      .hover-scale {
-        transition: transform 0.2s ease;
-      }
-
-      .hover-scale:hover {
-        transform: scale(1.02);
-      }
-
-      .scrollbar-thin::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-
-      .scrollbar-thin::-webkit-scrollbar-track {
-        background: #f1f5f9;
-      }
-
-      .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: #cbd5e1;
-        border-radius: 20px;
-      }
-
-      .animate-pulse-slow {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #ff5722 0%, #ff6b35 100%);
       }
     </style>
   </head>
-  <body class="bg-gray-50">
+  <body class="bg-reddit-dark min-h-screen">
     <!-- Header -->
-    <header class="gradient-header text-white shadow-lg sticky top-0 z-50">
-      <div
-        class="container mx-auto px-4 py-3 flex justify-between items-center"
-      >
-        <div class="flex items-center space-x-3">
-          <div class="bg-white p-2 rounded-lg shadow-md hover-scale">
-            <i class="fas fa-user-circle text-blue-600 text-xl"></i>
+    <header
+      id="header"
+      class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+    >
+      <div class="reddit-card border-b border-reddit-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            <div
+              class="flex items-center cursor-pointer hover:scale-105 transition-transform"
+              onclick="goHome()"
+            >
+              <div
+                class="w-10 h-10 bg-gradient-to-r from-reddit-orange to-reddit-orangeHover rounded-xl flex items-center justify-center mr-3 shadow-lg profile-glow"
+              >
+                <span class="text-white font-bold text-lg">BUP</span>
+              </div>
+              <h1
+                class="text-xl font-bold bg-gradient-to-r from-reddit-text to-reddit-textSecondary bg-clip-text text-transparent"
+              >
+                Lost & Found
+              </h1>
+            </div>
+            <nav class="flex items-center space-x-4">
+              <button
+                onclick="exportMyData()"
+                class="reddit-button-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+              >
+                Export Data
+              </button>
+              <button
+                onclick="showUpdateProfile()"
+                class="reddit-button-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+              >
+                Update Profile
+              </button>
+              <button
+                onclick="logout()"
+                class="reddit-button px-6 py-2 rounded-lg font-medium transition-all duration-200"
+              >
+                Logout
+              </button>
+            </nav>
           </div>
-          <h1 class="text-xl font-bold">BUP Lost & Found - My Profile</h1>
-        </div>
-        <div class="flex items-center space-x-3">
-          <button
-            onclick="window.location.href='home.html'"
-            class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md smooth-transition"
-          >
-            <i class="fas fa-home"></i>
-            <span class="hidden md:inline">Home</span>
-          </button>
-          <button
-            id="logoutBtn"
-            class="gradient-btn-danger hover:opacity-90 px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md smooth-transition"
-          >
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="hidden md:inline">Logout</span>
-          </button>
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8 max-w-7xl">
-      <!-- Profile Section -->
-      <div class="bg-white rounded-xl shadow-medium p-6 mb-8">
-        <div class="flex flex-col md:flex-row gap-8">
-          <!-- Profile Picture and Basic Info -->
-          <div class="md:w-1/3 flex flex-col items-center px-4">
-            <div class="relative mb-4">
-              <img
-                id="profileImage"
-                src=""
-                alt="Profile"
-                class="w-40 h-40 rounded-full object-cover border-4 border-blue-100 shadow-md hover-scale"
-              />
+    <main class="pt-24 pb-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Profile Header -->
+        <div
+          id="profileHeader"
+          class="reddit-card rounded-2xl p-8 mb-8 animate-fade-in"
+        >
+          <div
+            class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8"
+          >
+            <div class="relative">
               <div
-                id="onlineStatus"
-                class="absolute bottom-3 right-3 w-4 h-4 bg-green-400 rounded-full border-2 border-white"
-              ></div>
-            </div>
-            <h2
-              id="userFullName"
-              class="text-2xl font-bold text-gray-800 text-center"
-            ></h2>
-            <p id="userDepartment" class="text-gray-600 text-center"></p>
-            <div class="mt-2 flex flex-col items-center space-y-1">
-              <p id="userEmail" class="text-gray-500 text-sm flex items-center">
-                <i class="fas fa-envelope mr-2 text-blue-500"></i>
-                <span class="truncate max-w-xs"></span>
-              </p>
-              <p id="userPhone" class="text-gray-500 text-sm flex items-center">
-                <i class="fas fa-phone-alt mr-2 text-blue-500"></i>
-                <span></span>
-              </p>
-            </div>
-
-            <button
-              id="toggleUpdateBtn"
-              class="mt-6 gradient-btn-primary hover:opacity-90 text-white px-6 py-2.5 rounded-lg shadow-md smooth-transition"
-            >
-              <i class="fas fa-edit mr-2"></i>Update Profile
-            </button>
-          </div>
-
-          <!-- Update Profile Form (Collapsed by default) -->
-          <div id="updateProfileForm" class="md:w-2/3 expandable">
-            <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3
-                class="text-lg font-semibold text-gray-800 mb-4 flex items-center"
+                class="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-reddit-orange to-reddit-orangeHover flex-shrink-0 shadow-2xl ring-4 ring-reddit-orange/30 profile-glow"
               >
-                <i class="fas fa-user-edit text-blue-500 mr-3 text-xl"></i>
-                <span>Update Profile Information</span>
-              </h3>
-
-              <form id="profileForm" class="space-y-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label
-                      for="firstName"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                      >First Name</label
-                    >
-                    <input
-                      type="text"
-                      id="firstName"
-                      class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      for="lastName"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                      >Last Name</label
-                    >
-                    <input
-                      type="text"
-                      id="lastName"
-                      class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Email</label
-                  >
-                  <input
-                    type="email"
-                    id="email"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 cursor-not-allowed"
-                    disabled
-                  />
-                </div>
-
-                <div>
-                  <label
-                    for="phone"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >Phone Number</label
-                  >
-                  <input
-                    type="tel"
-                    id="phone"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    for="department"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >Department</label
-                  >
-                  <input
-                    type="text"
-                    id="department"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Profile Image</label
-                  >
-                  <div class="flex items-center space-x-4">
-                    <input
-                      type="file"
-                      id="profileImageInput"
-                      accept="image/*"
-                      class="hidden"
-                    />
-                    <button
-                      type="button"
-                      onclick="document.getElementById('profileImageInput').click()"
-                      class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg smooth-transition border border-gray-200"
-                    >
-                      <i class="fas fa-upload mr-2"></i>Choose Image
-                    </button>
-                    <span id="profileImageName" class="text-sm text-gray-500"
-                      >No file chosen</span
-                    >
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    for="currentPassword"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >Current Password (Required for updates)</label
-                  >
-                  <input
-                    type="password"
-                    id="currentPassword"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div class="pt-2 flex justify-end space-x-4">
-                  <button
-                    type="button"
-                    id="cancelUpdateBtn"
-                    class="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 smooth-transition"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    id="saveProfileBtn"
-                    class="gradient-btn-primary hover:opacity-90 text-white px-5 py-2.5 rounded-lg shadow-md smooth-transition"
-                  >
-                    <i class="fas fa-save mr-2"></i>Save Changes
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Change Password Section -->
-            <div class="mt-6 bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3
-                class="text-lg font-semibold text-gray-800 mb-4 flex items-center"
+                <img
+                  id="profileImage"
+                  src=""
+                  alt="Profile"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div
+                class="absolute -bottom-2 -right-2 w-8 h-8 bg-reddit-accent rounded-full border-4 border-reddit-dark shadow-lg flex items-center justify-center animate-glow"
               >
-                <i class="fas fa-key text-blue-500 mr-3 text-xl"></i>
-                <span>Change Password</span>
-              </h3>
-
-              <form id="changePasswordForm" class="space-y-5">
-                <div>
-                  <label
-                    for="oldPassword"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >Current Password</label
-                  >
-                  <input
-                    type="password"
-                    id="oldPassword"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    for="newPassword"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >New Password</label
-                  >
-                  <input
-                    type="password"
-                    id="newPassword"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    for="confirmNewPassword"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                    >Confirm New Password</label
-                  >
-                  <input
-                    type="password"
-                    id="confirmNewPassword"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div class="pt-2 flex justify-end">
-                  <button
-                    type="submit"
-                    id="changePasswordBtn"
-                    class="gradient-btn-primary hover:opacity-90 text-white px-5 py-2.5 rounded-lg shadow-md smooth-transition"
-                  >
-                    <i class="fas fa-key mr-2"></i>Change Password
-                  </button>
-                </div>
-              </form>
+                <div class="w-3 h-3 bg-white rounded-full"></div>
+              </div>
+            </div>
+            <div class="flex-grow text-center md:text-left">
+              <h2
+                id="userName"
+                class="text-3xl font-bold bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent mb-2"
+              ></h2>
+              <p
+                id="userEmail"
+                class="text-reddit-textSecondary mb-2 text-lg"
+              ></p>
+              <p
+                id="userDepartment"
+                class="text-sm text-reddit-text font-medium px-4 py-2 bg-reddit-orange/20 rounded-full inline-block border border-reddit-orange/30"
+              ></p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button
+                onclick="showUpdateProfile()"
+                class="reddit-button-secondary px-8 py-3 rounded-xl font-semibold"
+              >
+                Update Profile
+              </button>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Tabs for Profile Sections -->
-      <div class="mb-6">
-        <div class="border-b border-gray-200">
-          <nav class="flex space-x-8 overflow-x-auto">
+        <!-- Navigation Tabs -->
+        <div class="reddit-card rounded-2xl mb-8">
+          <nav class="flex overflow-x-auto p-2 space-x-2">
             <button
-              id="myItemsTab"
-              class="px-4 py-3 tab-active text-sm md:text-base"
+              onclick="switchTab('posted')"
+              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              data-tab="posted"
             >
-              <i class="fas fa-boxes mr-2"></i>My Items
+              <span class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path
+                    fill-rule="evenodd"
+                    d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span>Posted Items</span>
+              </span>
             </button>
             <button
-              id="claimedItemsTab"
-              class="px-4 py-3 tab-inactive text-sm md:text-base"
+              onclick="switchTab('claimed')"
+              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              data-tab="claimed"
             >
-              <i class="fas fa-hand-holding-heart mr-2"></i>Claimed Items
+              <span class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span>Claimed Items</span>
+              </span>
             </button>
             <button
-              id="myCommentsTab"
-              class="px-4 py-3 tab-inactive text-sm md:text-base"
+              onclick="switchTab('comments')"
+              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              data-tab="comments"
             >
-              <i class="fas fa-comments mr-2"></i>My Comments
+              <span class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span>My Comments</span>
+              </span>
             </button>
             <button
-              id="mySuggestionsTab"
-              class="px-4 py-3 tab-inactive text-sm md:text-base"
+              onclick="switchTab('suggestions')"
+              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              data-tab="suggestions"
             >
-              <i class="fas fa-lightbulb mr-2"></i>My Suggestions
+              <span class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                  ></path>
+                </svg>
+                <span>My Suggestions</span>
+              </span>
             </button>
             <button
-              id="pendingClaimsTab"
-              class="px-4 py-3 tab-inactive relative text-sm md:text-base"
+              onclick="switchTab('messages')"
+              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              data-tab="messages"
             >
-              <i class="fas fa-bell mr-2"></i>Pending Claims
-              <span
-                id="pendingClaimsBadge"
-                class="notification-dot hidden"
-              ></span>
+              <span class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                  ></path>
+                  <path
+                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                  ></path>
+                </svg>
+                <span>Messages</span>
+              </span>
             </button>
           </nav>
         </div>
-      </div>
 
-      <!-- Content Sections -->
-      <div id="contentSections">
-        <!-- My Items Section -->
-        <div id="myItemsSection">
-          <div
-            class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
-          >
-            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-              <i class="fas fa-boxes text-blue-500 mr-3 text-xl"></i>My Lost &
-              Found Items
-            </h3>
-            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-              <button
-                id="postLostBtn"
-                class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition"
+        <!-- Tab Content -->
+        <div id="tabContent" class="animate-fade-in">
+          <!-- Loading State -->
+          <div id="loadingState" class="flex justify-center items-center py-20">
+            <div class="relative">
+              <div
+                class="animate-spin rounded-full h-16 w-16 border-b-4 border-reddit-orange"
+              ></div>
+              <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               >
-                <i class="fas fa-exclamation-circle"></i>
-                <span>Post Lost Item</span>
-              </button>
-              <button
-                id="postFoundBtn"
-                class="gradient-btn-success hover:opacity-90 text-white px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition"
-              >
-                <i class="fas fa-check-circle"></i>
-                <span>Post Found Item</span>
-              </button>
-            </div>
-          </div>
-
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
-          >
-            <!-- Items will be loaded here dynamically -->
-            <div class="col-span-full text-center py-10 text-gray-500">
-              <i
-                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
-              ></i>
-              <p>Loading your items...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Claimed Items Section -->
-        <div id="claimedItemsSection" class="hidden">
-          <h3
-            class="text-xl font-semibold text-gray-800 mb-6 flex items-center"
-          >
-            <i class="fas fa-hand-holding-heart text-blue-500 mr-3 text-xl"></i>
-            <span>Items You've Claimed</span>
-          </h3>
-
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
-          >
-            <!-- Claimed items will be loaded here dynamically -->
-            <div class="col-span-full text-center py-10 text-gray-500">
-              <i
-                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
-              ></i>
-              <p>Loading claimed items...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- My Comments Section -->
-        <div id="myCommentsSection" class="hidden">
-          <h3
-            class="text-xl font-semibold text-gray-800 mb-6 flex items-center"
-          >
-            <i class="fas fa-comments text-blue-500 mr-3 text-xl"></i>
-            <span>My Comments</span>
-          </h3>
-
-          <div id="commentsContainer" class="space-y-4 max-w-4xl mx-auto">
-            <!-- Comments will be loaded here dynamically -->
-            <div class="text-center py-10 text-gray-500">
-              <i
-                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
-              ></i>
-              <p>Loading your comments...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- My Suggestions Section -->
-        <div id="mySuggestionsSection" class="hidden">
-          <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
-          >
-            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-              <i class="fas fa-lightbulb text-yellow-500 mr-3 text-xl"></i>
-              <span>My Suggestions</span>
-            </h3>
-            <button
-              id="addSuggestionBtn"
-              class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2.5 rounded-lg flex items-center space-x-2 shadow-md smooth-transition w-full md:w-auto"
-            >
-              <i class="fas fa-plus"></i>
-              <span>Add Suggestion</span>
-            </button>
-          </div>
-
-          <div id="suggestionsContainer" class="space-y-4 max-w-4xl mx-auto">
-            <!-- Suggestions will be loaded here dynamically -->
-            <div class="text-center py-10 text-gray-500">
-              <i
-                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
-              ></i>
-              <p>Loading your suggestions...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pending Claims Section -->
-        <div id="pendingClaimsSection" class="hidden">
-          <h3
-            class="text-xl font-semibold text-gray-800 mb-6 flex items-center"
-          >
-            <i class="fas fa-bell text-blue-500 mr-3 text-xl"></i>
-            <span>Pending Claims on Your Items</span>
-          </h3>
-
-          <div id="pendingClaimsContainer" class="space-y-6 max-w-4xl mx-auto">
-            <!-- Pending claims will be loaded here dynamically -->
-            <div class="text-center py-10 text-gray-500">
-              <i
-                class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"
-              ></i>
-              <p>Loading pending claims...</p>
+                <div
+                  class="w-4 h-4 bg-reddit-orange rounded-full animate-glow"
+                ></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </main>
 
-    <!-- Modals -->
-    <!-- Add Suggestion Modal -->
+    <!-- Update Profile Modal -->
     <div
-      id="suggestionModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+      id="updateProfileModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 fade-in mx-4"
+        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
-        <div class="flex justify-between items-center mb-4">
-          <h3
-            class="text-xl font-bold text-gray-800 flex items-center space-x-3"
-          >
-            <i class="fas fa-lightbulb text-yellow-500 text-2xl"></i>
-            <span>Add Your Suggestion</span>
-          </h3>
+        <h3
+          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
+        >
+          Update Profile
+        </h3>
+        <p class="text-reddit-textSecondary mb-6 leading-relaxed">
+          You will be redirected to the update profile page where you can modify
+          your personal information.
+        </p>
+        <div class="flex gap-4">
           <button
-            id="closeSuggestionModal"
-            class="text-gray-500 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100"
+            onclick="window.location.href='update-profile.html'"
+            class="flex-1 reddit-button py-3 rounded-xl font-semibold"
           >
-            <i class="fas fa-times text-lg"></i>
+            Continue
           </button>
-        </div>
-        <textarea
-          id="suggestionText"
-          rows="4"
-          class="w-full px-4 py-3 border border-gray-200 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-          placeholder="Write your suggestion here..."
-        ></textarea>
-        <div class="flex justify-end space-x-3">
           <button
-            id="cancelSuggestionBtn"
-            class="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 smooth-transition"
+            onclick="hideUpdateProfile()"
+            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
           >
             Cancel
           </button>
-          <button
-            id="submitSuggestionBtn"
-            class="gradient-btn-primary hover:opacity-90 text-white px-5 py-2.5 rounded-lg shadow-md smooth-transition"
-          >
-            Submit
-          </button>
         </div>
       </div>
     </div>
 
-    <!-- Item Details Modal -->
+    <!-- Edit Item Modal -->
     <div
-      id="itemModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden overflow-y-auto py-8"
+      id="editItemModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 fade-in mx-4 my-8"
+        class="reddit-card rounded-2xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
       >
-        <div class="flex justify-between items-start mb-4">
-          <div>
-            <h3
-              id="itemModalTitle"
-              class="text-2xl font-bold text-gray-800"
-            ></h3>
-            <p id="itemModalType" class="text-sm text-gray-500"></p>
-          </div>
-          <button
-            id="closeItemModal"
-            class="text-gray-500 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100"
-          >
-            <i class="fas fa-times text-lg"></i>
-          </button>
-        </div>
-
-        <div class="flex flex-col lg:flex-row gap-8 mb-6">
-          <div class="lg:w-1/2">
-            <div
-              class="relative h-64 bg-gray-100 rounded-xl overflow-hidden mb-4"
-            >
-              <img
-                id="itemModalImage"
-                src=""
-                alt="Item"
-                class="w-full h-full object-cover hover-scale"
-              />
-              <div
-                id="itemImagePlaceholder"
-                class="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-50"
+        <h3
+          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
+        >
+          Edit Item
+        </h3>
+        <form id="editItemForm" enctype="multipart/form-data">
+          <input type="hidden" id="editItemId" />
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Title</label
               >
-                <i class="fas fa-image text-5xl opacity-30"></i>
-              </div>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
-                <span>Location Details</span>
-              </h4>
-              <p id="itemModalLocation" class="text-gray-700 pl-6"></p>
-            </div>
-          </div>
-          <div class="lg:w-1/2">
-            <div class="mb-5">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-align-left mr-2 text-blue-500"></i>
-                <span>Description</span>
-              </h4>
-              <p id="itemModalDescription" class="text-gray-700 pl-6"></p>
-            </div>
-
-            <div
-              id="validityQuestionContainer"
-              class="mb-5 hidden bg-blue-50 p-4 rounded-lg border border-blue-100"
-            >
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-question-circle mr-2 text-blue-500"></i>
-                <span>Validity Question</span>
-              </h4>
-              <p
-                id="itemModalQuestion"
-                class="text-gray-700 pl-6 font-medium"
-              ></p>
-            </div>
-
-            <div class="mb-5">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-user mr-2 text-blue-500"></i>
-                <span>Posted By</span>
-              </h4>
-              <div class="flex items-center space-x-3 pl-6">
-                <img
-                  id="itemModalPosterImage"
-                  src=""
-                  alt="User"
-                  class="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
-                />
-                <div>
-                  <p id="itemModalPosterName" class="font-medium"></p>
-                  <p id="itemModalPosterDept" class="text-sm text-gray-500"></p>
-                </div>
-              </div>
-            </div>
-
-            <div id="itemStatusContainer" class="mb-5 pl-6">
-              <span id="itemModalStatus" class="status-badge"></span>
-            </div>
-
-            <div id="claimedByContainer" class="mb-5 hidden">
-              <h4 class="font-semibold mb-2 text-gray-700 flex items-center">
-                <i class="fas fa-user-tag mr-2 text-blue-500"></i>
-                <span>Claimed By</span>
-              </h4>
-              <div class="flex items-center space-x-3 pl-6">
-                <img
-                  id="itemModalClaimedByImage"
-                  src=""
-                  alt="User"
-                  class="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
-                />
-                <div>
-                  <p id="itemModalClaimedByName" class="font-medium"></p>
-                  <p
-                    id="itemModalClaimedByDept"
-                    class="text-sm text-gray-500"
-                  ></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          id="claimActionsContainer"
-          class="hidden bg-blue-50 p-5 rounded-xl border border-blue-100 mb-6"
-        >
-          <h4 class="font-semibold mb-3 text-gray-800">Claim Actions</h4>
-          <div class="flex flex-col sm:flex-row gap-3">
-            <button
-              id="acceptClaimBtn"
-              class="gradient-btn-success hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
-            >
-              <i class="fas fa-check mr-2"></i>Accept Claim
-            </button>
-            <button
-              id="rejectClaimBtn"
-              class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
-            >
-              <i class="fas fa-times mr-2"></i>Reject Claim
-            </button>
-          </div>
-        </div>
-
-        <div
-          id="contactInfoContainer"
-          class="hidden bg-green-50 p-5 rounded-xl border border-green-100 mb-6"
-        >
-          <h4 class="font-semibold mb-3 text-gray-800 flex items-center">
-            <i class="fas fa-address-card mr-2 text-green-500"></i>
-            <span>Contact Information</span>
-          </h4>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white p-3 rounded-lg border border-gray-100">
-              <p class="text-sm text-gray-600 mb-1">Email:</p>
-              <p
-                id="contactEmail"
-                class="font-medium text-blue-600 break-all"
-              ></p>
-            </div>
-            <div class="bg-white p-3 rounded-lg border border-gray-100">
-              <p class="text-sm text-gray-600 mb-1">Phone:</p>
-              <p id="contactPhone" class="font-medium"></p>
-            </div>
-          </div>
-        </div>
-
-        <div
-          id="itemActionsContainer"
-          class="flex flex-col sm:flex-row gap-3 mb-6"
-        >
-          <button
-            id="editItemBtn"
-            class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
-          >
-            <i class="fas fa-edit mr-2"></i>Edit Item
-          </button>
-          <button
-            id="deleteItemBtn"
-            class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1"
-          >
-            <i class="fas fa-trash mr-2"></i>Delete Item
-          </button>
-        </div>
-
-        <div id="commentsSection" class="mt-6">
-          <h4 class="font-semibold mb-4 text-gray-800 flex items-center">
-            <i class="fas fa-comments mr-2 text-blue-500"></i>
-            <span>Comments</span>
-          </h4>
-          <div
-            id="commentsContainer"
-            class="space-y-3 mb-4 max-h-60 overflow-y-auto pr-2 scrollbar-thin"
-          >
-            <!-- Comments will be loaded here -->
-          </div>
-
-          <div id="addCommentContainer" class="mt-4">
-            <div class="flex items-start space-x-3">
-              <img
-                id="commentUserImage"
-                src=""
-                alt="User"
-                class="w-10 h-10 rounded-full object-cover border border-gray-200 mt-1"
+              <input
+                type="text"
+                id="editTitle"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                required
               />
-              <div class="flex-1">
-                <textarea
-                  id="commentText"
-                  rows="3"
-                  class="w-full px-4 py-3 border border-gray-200 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
-                  placeholder="Add a comment..."
-                ></textarea>
-                <button
-                  id="submitCommentBtn"
-                  class="gradient-btn-primary hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition w-full"
-                >
-                  Post Comment
-                </button>
-              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Description</label
+              >
+              <textarea
+                id="editDescription"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-32 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+                required
+              ></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Location</label
+              >
+              <input
+                type="text"
+                id="editLocation"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Image (optional)</label
+              >
+              <input
+                type="file"
+                id="editImage"
+                accept="image/*"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+              />
             </div>
           </div>
+          <div class="flex gap-4 mt-8">
+            <button
+              type="submit"
+              class="flex-1 reddit-button py-3 rounded-xl font-semibold"
+            >
+              Update Item
+            </button>
+            <button
+              type="button"
+              onclick="hideEditItem()"
+              class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Claim Requests Modal -->
+    <div
+      id="claimRequestsModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="reddit-card rounded-2xl max-w-5xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
+      >
+        <h3
+          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
+        >
+          Claim Requests
+        </h3>
+        <div id="claimRequestsContent"></div>
+        <button
+          onclick="hideClaimRequests()"
+          class="mt-6 reddit-button-secondary px-8 py-3 rounded-xl font-semibold"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact Info Modal -->
+    <div
+      id="contactInfoModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+      >
+        <h3
+          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
+        >
+          Provide Contact Information
+        </h3>
+        <form id="contactInfoForm">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Phone Number *</label
+              >
+              <input
+                type="tel"
+                id="contactPhone"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                required
+                placeholder="01XXXXXXXXX"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Alternate Phone</label
+              >
+              <input
+                type="tel"
+                id="contactAlternatePhone"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                placeholder="01XXXXXXXXX"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="contactEmail"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                placeholder="your.email@example.com"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Meeting Location</label
+              >
+              <input
+                type="text"
+                id="contactLocation"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                placeholder="e.g., Library entrance, Cafeteria"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Preferred Meeting Time</label
+              >
+              <input
+                type="text"
+                id="contactTime"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                placeholder="e.g., Tomorrow 2 PM, After 5 PM"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+                >Additional Notes</label
+              >
+              <textarea
+                id="contactNotes"
+                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-24 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+                placeholder="Any additional information..."
+              ></textarea>
+            </div>
+          </div>
+          <div class="flex gap-4 mt-6">
+            <button
+              type="submit"
+              class="flex-1 reddit-button py-3 rounded-xl font-semibold"
+            >
+              Approve & Share Contact
+            </button>
+            <button
+              type="button"
+              onclick="hideContactInfo()"
+              class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Block User Modal -->
+    <div
+      id="blockUserModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+      >
+        <div
+          class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full"
+        >
+          <svg
+            class="w-8 h-8 text-red-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-center mb-4 text-reddit-text">
+          Block User
+        </h3>
+        <p
+          id="blockUserMessage"
+          class="text-reddit-textSecondary text-center mb-6"
+        ></p>
+        <div class="flex gap-4">
+          <button
+            id="confirmBlockButton"
+            class="flex-1 reddit-button-danger py-3 rounded-xl font-semibold"
+          >
+            Block User
+          </button>
+          <button
+            onclick="hideBlockUser()"
+            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
 
+    <!-- Confirm Delete Modal -->
+    <div
+      id="deleteConfirmModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+      >
+        <div
+          class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full"
+        >
+          <svg
+            class="w-8 h-8 text-red-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-center mb-4 text-reddit-text">
+          Confirm Delete
+        </h3>
+        <p
+          id="deleteConfirmMessage"
+          class="text-reddit-textSecondary text-center mb-6"
+        ></p>
+        <div class="flex gap-4">
+          <button
+            id="confirmDeleteButton"
+            class="flex-1 reddit-button-danger py-3 rounded-xl font-semibold"
+          >
+            Delete
+          </button>
+          <button
+            onclick="hideDeleteConfirm()"
+            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Comment/Suggestion Modal -->
+    <div
+      id="editModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+      >
+        <h3
+          id="editModalTitle"
+          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
+        >
+          Edit
+        </h3>
+        <textarea
+          id="editContent"
+          class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-32 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+          required
+          placeholder="Enter your content here..."
+        ></textarea>
+        <div class="flex gap-4 mt-6">
+          <button
+            onclick="saveEdit()"
+            class="flex-1 reddit-button py-3 rounded-xl font-semibold"
+          >
+            Save Changes
+          </button>
+          <button
+            onclick="hideEditModal()"
+            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rejection Reason Modal -->
+    <div
+      id="rejectionModal"
+      class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+      >
+        <h3
+          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
+        >
+          Reject Claim Request
+        </h3>
+        <textarea
+          id="rejectionReason"
+          class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-32 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+          required
+          placeholder="Please provide a reason for rejection..."
+        ></textarea>
+        <div class="flex gap-4 mt-6">
+          <button
+            onclick="submitRejection()"
+            class="flex-1 reddit-button-danger py-3 rounded-xl font-semibold"
+          >
+            Reject Request
+          </button>
+          <button
+            onclick="hideRejectionModal()"
+            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
     <script>
-      // Global variables
       let currentUser = null;
-      let currentItems = [];
-      let currentComments = [];
-      let currentSuggestions = [];
-      let pendingClaims = [];
-      let selectedItemId = null;
-      let selectedClaimId = null;
-      let activeTab = "myItems";
+      let currentTab = "posted";
+      let editingType = null;
+      let editingId = null;
+      let lastScrollY = 0;
+      let deleteCallback = null;
+      let pendingRejection = null;
+      let pendingApproval = null;
+      let pendingBlock = null;
 
-      // DOM Elements
-      const profileImage = document.getElementById("profileImage");
-      const userFullName = document.getElementById("userFullName");
-      const userDepartment = document.getElementById("userDepartment");
-      const userEmail = document.getElementById("userEmail");
-      const userPhone = document.getElementById("userPhone");
-      const toggleUpdateBtn = document.getElementById("toggleUpdateBtn");
-      const updateProfileForm = document.getElementById("updateProfileForm");
-      const profileForm = document.getElementById("profileForm");
-      const firstNameInput = document.getElementById("firstName");
-      const lastNameInput = document.getElementById("lastName");
-      const emailInput = document.getElementById("email");
-      const phoneInput = document.getElementById("phone");
-      const departmentInput = document.getElementById("department");
-      const profileImageInput = document.getElementById("profileImageInput");
-      const profileImageName = document.getElementById("profileImageName");
-      const currentPasswordInput = document.getElementById("currentPassword");
-      const cancelUpdateBtn = document.getElementById("cancelUpdateBtn");
-      const saveProfileBtn = document.getElementById("saveProfileBtn");
-      const changePasswordForm = document.getElementById("changePasswordForm");
-      const oldPasswordInput = document.getElementById("oldPassword");
-      const newPasswordInput = document.getElementById("newPassword");
-      const confirmNewPasswordInput =
-        document.getElementById("confirmNewPassword");
-      const changePasswordBtn = document.getElementById("changePasswordBtn");
-      const logoutBtn = document.getElementById("logoutBtn");
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        checkAuth();
+        setupScrollListener();
+      });
 
-      // Tab buttons
-      const myItemsTab = document.getElementById("myItemsTab");
-      const claimedItemsTab = document.getElementById("claimedItemsTab");
-      const myCommentsTab = document.getElementById("myCommentsTab");
-      const mySuggestionsTab = document.getElementById("mySuggestionsTab");
-      const pendingClaimsTab = document.getElementById("pendingClaimsTab");
-      const pendingClaimsBadge = document.getElementById("pendingClaimsBadge");
-
-      // Content sections
-      const myItemsSection = document.getElementById("myItemsSection");
-      const claimedItemsSection = document.getElementById(
-        "claimedItemsSection"
-      );
-      const myCommentsSection = document.getElementById("myCommentsSection");
-      const mySuggestionsSection = document.getElementById(
-        "mySuggestionsSection"
-      );
-      const pendingClaimsSection = document.getElementById(
-        "pendingClaimsSection"
-      );
-
-      // Item related elements
-      const postLostBtn = document.getElementById("postLostBtn");
-      const postFoundBtn = document.getElementById("postFoundBtn");
-      const itemsContainer = document
-        .getElementById("myItemsSection")
-        .querySelector(".grid");
-      const claimedItemsContainer = document
-        .getElementById("claimedItemsSection")
-        .querySelector(".grid");
-      const commentsContainer = document.getElementById("commentsContainer");
-      const suggestionsContainer = document.getElementById(
-        "suggestionsContainer"
-      );
-      const pendingClaimsContainer = document.getElementById(
-        "pendingClaimsContainer"
-      );
-
-      // Modals
-      const suggestionModal = document.getElementById("suggestionModal");
-      const closeSuggestionModal = document.getElementById(
-        "closeSuggestionModal"
-      );
-      const cancelSuggestionBtn = document.getElementById(
-        "cancelSuggestionBtn"
-      );
-      const suggestionText = document.getElementById("suggestionText");
-      const submitSuggestionBtn = document.getElementById(
-        "submitSuggestionBtn"
-      );
-      const addSuggestionBtn = document.getElementById("addSuggestionBtn");
-
-      const itemModal = document.getElementById("itemModal");
-      const closeItemModal = document.getElementById("closeItemModal");
-      const itemModalTitle = document.getElementById("itemModalTitle");
-      const itemModalType = document.getElementById("itemModalType");
-      const itemModalImage = document.getElementById("itemModalImage");
-      const itemImagePlaceholder = document.getElementById(
-        "itemImagePlaceholder"
-      );
-      const itemModalDescription = document.getElementById(
-        "itemModalDescription"
-      );
-      const itemModalLocation = document.getElementById("itemModalLocation");
-      const itemModalQuestion = document.getElementById("itemModalQuestion");
-      const itemModalPosterImage = document.getElementById(
-        "itemModalPosterImage"
-      );
-      const itemModalPosterName = document.getElementById(
-        "itemModalPosterName"
-      );
-      const itemModalPosterDept = document.getElementById(
-        "itemModalPosterDept"
-      );
-      const itemModalStatus = document.getElementById("itemModalStatus");
-      const itemStatusContainer = document.getElementById(
-        "itemStatusContainer"
-      );
-      const validityQuestionContainer = document.getElementById(
-        "validityQuestionContainer"
-      );
-      const claimedByContainer = document.getElementById("claimedByContainer");
-      const itemModalClaimedByImage = document.getElementById(
-        "itemModalClaimedByImage"
-      );
-      const itemModalClaimedByName = document.getElementById(
-        "itemModalClaimedByName"
-      );
-      const itemModalClaimedByDept = document.getElementById(
-        "itemModalClaimedByDept"
-      );
-      const claimActionsContainer = document.getElementById(
-        "claimActionsContainer"
-      );
-      const acceptClaimBtn = document.getElementById("acceptClaimBtn");
-      const rejectClaimBtn = document.getElementById("rejectClaimBtn");
-      const contactInfoContainer = document.getElementById(
-        "contactInfoContainer"
-      );
-      const contactEmail = document.getElementById("contactEmail");
-      const contactPhone = document.getElementById("contactPhone");
-      const itemActionsContainer = document.getElementById(
-        "itemActionsContainer"
-      );
-      const editItemBtn = document.getElementById("editItemBtn");
-      const deleteItemBtn = document.getElementById("deleteItemBtn");
-      const modalCommentsContainer =
-        document.getElementById("commentsContainer");
-      const commentText = document.getElementById("commentText");
-      const submitCommentBtn = document.getElementById("submitCommentBtn");
-      const addCommentContainer = document.getElementById(
-        "addCommentContainer"
-      );
-      const commentUserImage = document.getElementById("commentUserImage");
-
-      // Check authentication and load user data
-      document.addEventListener("DOMContentLoaded", async () => {
+      // Check authentication
+      function checkAuth() {
         const token = localStorage.getItem("token");
-
         if (!token) {
           window.location.href = "login.html";
           return;
         }
+        loadUserProfile();
+      }
 
+      // Setup scroll listener for header
+      function setupScrollListener() {
+        window.addEventListener("scroll", () => {
+          const currentScrollY = window.scrollY;
+          const header = document.getElementById("header");
+
+          if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            header.classList.add("header-hidden");
+          } else {
+            header.classList.remove("header-hidden");
+          }
+          lastScrollY = currentScrollY;
+        });
+      }
+
+      // Load user profile
+      async function loadUserProfile() {
         try {
-          // Get current user
+          showToast("Loading profile...", "info");
           const response = await fetch("/api/users/me", {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
 
-          if (!response.ok) {
-            throw new Error("Failed to fetch user data");
+          if (response.ok) {
+            const data = await response.json();
+            currentUser = data.user;
+            displayUserProfile(data.user);
+            switchTab("posted");
+          } else {
+            throw new Error("Failed to load profile");
           }
-
-          const data = await response.json();
-          currentUser = data.user;
-          loadUserData(currentUser);
-          loadMyItems();
-          loadClaimedItems();
-          loadMyComments();
-          loadMySuggestions();
-          loadPendingClaims();
-
-          // Set up profile image change handler
-          profileImageInput.addEventListener("change", (e) => {
-            if (e.target.files.length > 0) {
-              profileImageName.textContent = e.target.files[0].name;
-            } else {
-              profileImageName.textContent = "No file chosen";
-            }
-          });
         } catch (error) {
-          console.error("Error:", error);
-          localStorage.removeItem("token");
-          window.location.href = "login.html";
-        }
-      });
-
-      // Load user data into the form
-      function loadUserData(user) {
-        userFullName.textContent = `${user.firstName} ${user.lastName}`;
-        userDepartment.textContent = user.department;
-        userEmail.textContent = user.email;
-        userPhone.textContent = user.phone;
-
-        // Set form values
-        firstNameInput.value = user.firstName;
-        lastNameInput.value = user.lastName;
-        emailInput.value = user.email;
-        phoneInput.value = user.phone;
-        departmentInput.value = user.department;
-
-        // Set profile image
-        if (user.profileImage) {
-          profileImage.src = user.profileImage;
-          profileImage.onerror = () => {
-            profileImage.src =
-              "https://ui-avatars.com/api/?name=" +
-              encodeURIComponent(user.firstName + " " + user.lastName) +
-              "&background=random";
-          };
-          commentUserImage.src = user.profileImage;
-          commentUserImage.onerror = () => {
-            commentUserImage.src =
-              "https://ui-avatars.com/api/?name=" +
-              encodeURIComponent(user.firstName + " " + user.lastName) +
-              "&background=random";
-          };
-        } else {
-          profileImage.src =
-            "https://ui-avatars.com/api/?name=" +
-            encodeURIComponent(user.firstName + " " + user.lastName) +
-            "&background=random";
-          commentUserImage.src =
-            "https://ui-avatars.com/api/?name=" +
-            encodeURIComponent(user.firstName + " " + user.lastName) +
-            "&background=random";
+          showToast("Error loading profile. Please try again.", "error");
+          console.error(error);
         }
       }
 
-      // Toggle update profile form
-      toggleUpdateBtn.addEventListener("click", () => {
-        updateProfileForm.classList.toggle("expanded");
-        if (updateProfileForm.classList.contains("expanded")) {
-          toggleUpdateBtn.innerHTML =
-            '<i class="fas fa-times mr-2"></i>Cancel Update';
+      // Display user profile
+      function displayUserProfile(user) {
+        document.getElementById(
+          "userName"
+        ).textContent = `${user.firstName} ${user.lastName}`;
+        document.getElementById("userEmail").textContent = user.email;
+        document.getElementById("userDepartment").textContent = user.department;
+
+        const profileImg = document.getElementById("profileImage");
+        if (user.profileImage) {
+          profileImg.src = user.profileImage.startsWith("http")
+            ? user.profileImage
+            : `${window.location.origin}${user.profileImage}`;
+          profileImg.onerror = function () {
+            this.src = generateProfileInitials(user.firstName, user.lastName);
+          };
         } else {
-          toggleUpdateBtn.innerHTML =
-            '<i class="fas fa-edit mr-2"></i>Update Profile';
-        }
-      });
-
-      // Cancel update
-      cancelUpdateBtn.addEventListener("click", () => {
-        updateProfileForm.classList.remove("expanded");
-        toggleUpdateBtn.innerHTML =
-          '<i class="fas fa-edit mr-2"></i>Update Profile';
-        loadUserData(currentUser);
-      });
-
-      // Update profile
-      profileForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData();
-        formData.append("firstName", firstNameInput.value);
-        formData.append("lastName", lastNameInput.value);
-        formData.append("phone", phoneInput.value);
-        formData.append("department", departmentInput.value);
-        formData.append("currentPassword", currentPasswordInput.value);
-
-        if (profileImageInput.files[0]) {
-          formData.append("profileImage", profileImageInput.files[0]);
-        }
-
-        try {
-          saveProfileBtn.disabled = true;
-          saveProfileBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
-
-          const response = await fetch("/api/users/me", {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: formData,
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to update profile");
-          }
-
-          const { user } = await response.json();
-          currentUser = user;
-          loadUserData(user);
-
-          alert("Profile updated successfully");
-          updateProfileForm.classList.remove("expanded");
-          toggleUpdateBtn.innerHTML =
-            '<i class="fas fa-edit mr-2"></i>Update Profile';
-        } catch (error) {
-          console.error("Error updating profile:", error);
-          alert(error.message || "Failed to update profile. Please try again.");
-        } finally {
-          saveProfileBtn.disabled = false;
-          saveProfileBtn.innerHTML =
-            '<i class="fas fa-save mr-2"></i>Save Changes';
-        }
-      });
-
-      // Change password
-      changePasswordForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (newPasswordInput.value !== confirmNewPasswordInput.value) {
-          alert("New passwords do not match");
-          return;
-        }
-
-        try {
-          changePasswordBtn.disabled = true;
-          changePasswordBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i>Changing...';
-
-          const response = await fetch("/api/users/change-password", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({
-              currentPassword: oldPasswordInput.value,
-              newPassword: newPasswordInput.value,
-            }),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to change password");
-          }
-
-          alert("Password changed successfully");
-          changePasswordForm.reset();
-        } catch (error) {
-          console.error("Error changing password:", error);
-          alert(
-            error.message || "Failed to change password. Please try again."
+          profileImg.src = generateProfileInitials(
+            user.firstName,
+            user.lastName
           );
-        } finally {
-          changePasswordBtn.disabled = false;
-          changePasswordBtn.innerHTML =
-            '<i class="fas fa-key mr-2"></i>Change Password';
         }
-      });
+      }
 
-      // Load user's items
-      async function loadMyItems() {
+      // Generate profile initials as fallback
+      function generateProfileInitials(firstName, lastName) {
+        const canvas = document.createElement("canvas");
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext("2d");
+
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 128, 128);
+        gradient.addColorStop(0, "#FF4500");
+        gradient.addColorStop(1, "#FF5722");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 128, 128);
+
+        // Text
+        ctx.fillStyle = "white";
+        ctx.font = "bold 48px Inter";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${firstName.charAt(0)}${lastName.charAt(0)}`, 64, 64);
+
+        return canvas.toDataURL();
+      }
+
+      // Get full image URL
+      function getFullImageUrl(imagePath) {
+        if (!imagePath) return null;
+        if (imagePath.startsWith("http")) return imagePath;
+        return `${window.location.origin}${imagePath}`;
+      }
+
+      // Switch tabs
+      function switchTab(tab) {
+        currentTab = tab;
+
+        // Update tab buttons
+        document.querySelectorAll(".reddit-tab").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+
+        const activeBtn = document.querySelector(`[data-tab="${tab}"]`);
+        if (activeBtn) {
+          activeBtn.classList.add("active");
+        }
+
+        // Load tab content
+        loadTabContent(tab);
+      }
+
+      // Load tab content
+      async function loadTabContent(tab) {
+        const container = document.getElementById("tabContent");
+        container.innerHTML = `
+          <div class="flex justify-center items-center py-20">
+            <div class="relative">
+              <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-reddit-orange"></div>
+              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div class="w-4 h-4 bg-reddit-orange rounded-full animate-glow"></div>
+              </div>
+            </div>
+          </div>
+        `;
+
         try {
-          itemsContainer.innerHTML = `
-            <div class="col-span-full text-center py-10 text-gray-500">
-              <i class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"></i>
-              <p>Loading your items...</p>
+          switch (tab) {
+            case "posted":
+              await loadPostedItems();
+              break;
+            case "claimed":
+              await loadClaimedItems();
+              break;
+            case "comments":
+              await loadComments();
+              break;
+            case "suggestions":
+              await loadSuggestions();
+              break;
+            case "messages":
+              await loadMessages();
+              break;
+          }
+        } catch (error) {
+          container.innerHTML = `
+            <div class="text-center py-20">
+              <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-red-500 mb-2">Error Loading Content</h3>
+              <p class="text-reddit-textSecondary">Please try refreshing the page</p>
             </div>
           `;
+          showToast("Error loading content. Please try again.", "error");
+        }
+      }
 
-          const response = await fetch("/api/items?postedBy=me", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
+      // Load posted items
+      async function loadPostedItems() {
+        const response = await fetch("/api/items?postedBy=me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-          if (!response.ok) throw new Error("Failed to load items");
+        const data = await response.json();
+        const container = document.getElementById("tabContent");
 
-          const data = await response.json();
-          currentItems = data.items;
-          renderMyItems(currentItems);
-        } catch (error) {
-          console.error("Error loading items:", error);
-          itemsContainer.innerHTML = `
-            <div class="col-span-full text-center py-10 text-red-500">
-              <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
-              <p>Failed to load items. Please try again.</p>
-              <button onclick="loadMyItems()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
-                <i class="fas fa-sync-alt mr-1"></i> Retry
+        if (data.items && data.items.length > 0) {
+          container.innerHTML = `
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              ${data.items
+                .map(
+                  (item) => `
+                  <div class="reddit-card rounded-2xl overflow-hidden">
+                    <div class="relative">
+                      ${
+                        item.image
+                          ? `<img src="${getFullImageUrl(item.image)}" alt="${
+                              item.title
+                            }" class="w-full h-56 object-cover">`
+                          : `<div class="w-full h-56 bg-gradient-to-br from-reddit-card to-reddit-cardHover flex items-center justify-center">
+                              <svg class="w-16 h-16 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                              </svg>
+                            </div>`
+                      }
+                      <div class="absolute top-4 left-4 flex space-x-2">
+                        <span class="status-badge px-3 py-1 text-xs font-bold rounded-full ${
+                          item.type === "lost" ? "status-lost" : "status-found"
+                        }">${item.type.toUpperCase()}</span>
+                        <span class="status-badge px-3 py-1 text-xs font-bold rounded-full ${getStatusClass(
+                          item.status
+                        )}">${item.status.toUpperCase()}</span>
+                      </div>
+                    </div>
+                    <div class="p-6">
+                      <h3 class="font-bold text-xl mb-3 text-reddit-text">${
+                        item.title
+                      }</h3>
+                      <p class="text-reddit-textSecondary text-sm mb-3 line-clamp-2">${
+                        item.description
+                      }</p>
+                      <div class="flex items-center text-reddit-textSecondary text-sm mb-4">
+                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        ${item.location}
+                      </div>
+                      <div class="flex gap-2">
+                        <button onclick="editItem('${
+                          item._id
+                        }')" class="flex-1 reddit-button-secondary text-white py-2 px-4 rounded-lg text-sm font-medium">
+                          Edit
+                        </button>
+                        ${
+                          item.claimRequests && item.claimRequests.length > 0
+                            ? `<button onclick="viewClaimRequests('${item._id}')" class="flex-1 reddit-button text-white py-2 px-4 rounded-lg text-sm font-medium">
+                                Claims (${item.claimRequests.length})
+                              </button>`
+                            : ""
+                        }
+                        <button onclick="confirmDelete('item', '${
+                          item._id
+                        }', '${
+                    item.title
+                  }')" class="reddit-button-danger py-2 px-4 rounded-lg text-sm font-medium">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                `
+                )
+                .join("")}
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="text-center py-20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-orange/20 rounded-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-reddit-orange" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Items Posted Yet</h3>
+              <p class="text-reddit-textSecondary mb-6">Start by posting your first lost or found item</p>
+              <button onclick="window.location.href='post-item.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+                Post an Item
               </button>
             </div>
           `;
         }
-      }
-
-      // Render user's items
-      function renderMyItems(items) {
-        if (items.length === 0) {
-          itemsContainer.innerHTML = `
-            <div class="col-span-full text-center py-10 text-gray-500">
-              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
-                <i class="fas fa-box-open text-4xl text-blue-400 mb-3"></i>
-                <h3 class="text-lg font-medium mb-2">No Items Posted Yet</h3>
-                <p class="text-gray-600 mb-4">You haven't posted any lost or found items yet.</p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                  <button id="postLostBtn" class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>Post Lost Item</span>
-                  </button>
-                  <button id="postFoundBtn" class="gradient-btn-success hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 shadow-md smooth-transition">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Post Found Item</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          `;
-
-          // Re-attach event listeners to buttons
-          document
-            .getElementById("postLostBtn")
-            .addEventListener("click", () => {
-              window.location.href = "post-item.html?type=lost";
-            });
-          document
-            .getElementById("postFoundBtn")
-            .addEventListener("click", () => {
-              window.location.href = "post-item.html?type=found";
-            });
-
-          return;
-        }
-
-        itemsContainer.innerHTML = items
-          .map(
-            (item) => `
-            <div class="bg-white rounded-xl shadow-soft overflow-hidden item-card hover:shadow-medium" data-id="${
-              item._id
-            }">
-              <div class="relative h-48 overflow-hidden">
-                ${
-                  item.image
-                    ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">`
-                    : `<div class="w-full h-full bg-gray-50 flex items-center justify-center">
-                        <i class="fas fa-image text-4xl text-gray-300"></i>
-                      </div>`
-                }
-                <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium
-                    ${
-                      item.type === "lost"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-green-100 text-green-800"
-                    }">
-                    ${item.type === "lost" ? "Lost" : "Found"}
-                </div>
-              </div>
-              <div class="p-4">
-                <h3 class="font-bold text-gray-800 mb-1 truncate">${
-                  item.title
-                }</h3>
-                <p class="text-gray-600 text-sm mb-2 line-clamp-2">${
-                  item.description
-                }</p>
-                <div class="flex items-center justify-between">
-                  <span class="text-xs text-gray-500 flex items-center">
-                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
-                    <span class="truncate max-w-[120px]">${item.location}</span>
-                  </span>
-                  <span class="text-xs text-gray-500">
-                    ${new Date(item.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-                <div class="mt-3 flex justify-between items-center">
-                  <span class="text-xs ${
-                    item.status === "active"
-                      ? "bg-blue-100 text-blue-800"
-                      : item.status === "claimed"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : item.status === "accepted"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  } px-2 py-1 rounded-full">
-                    ${
-                      item.status === "active"
-                        ? "Active"
-                        : item.status === "claimed"
-                        ? "Claimed"
-                        : item.status === "accepted"
-                        ? "Reunited"
-                        : "Rejected"
-                    }
-                  </span>
-                  ${
-                    item.claimedBy
-                      ? `<span class="text-xs text-gray-500 truncate max-w-[100px]">Claimed by ${item.claimedBy.firstName}</span>`
-                      : ""
-                  }
-                </div>
-              </div>
-            </div>
-          `
-          )
-          .join("");
-
-        // Add click event to items
-        document.querySelectorAll("[data-id]").forEach((el) => {
-          el.addEventListener("click", () => openItemModal(el.dataset.id));
-        });
       }
 
       // Load claimed items
       async function loadClaimedItems() {
-        try {
-          claimedItemsContainer.innerHTML = `
-            <div class="col-span-full text-center py-10 text-gray-500">
-              <i class="fas fa-spinner fa-spin text-2xl mb-2 animate-pulse-slow"></i>
-              <p>Loading claimed items...</p>
-            </div>
-          `;
+        const response = await fetch("/api/items?claimedBy=me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-          const response = await fetch("/api/items?claimedBy=me", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
+        const data = await response.json();
+        const container = document.getElementById("tabContent");
 
-          if (!response.ok) throw new Error("Failed to load claimed items");
-
-          const data = await response.json();
-          renderClaimedItems(data.items);
-        } catch (error) {
-          console.error("Error loading claimed items:", error);
-          claimedItemsContainer.innerHTML = `
-            <div class="col-span-full text-center py-10 text-red-500">
-              <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
-              <p>Failed to load claimed items. Please try again.</p>
-              <button onclick="loadClaimedItems()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
-                <i class="fas fa-sync-alt mr-1"></i> Retry
-              </button>
-            </div>
-          `;
-        }
-      }
-
-      // Render claimed items
-      function renderClaimedItems(items) {
-        if (items.length === 0) {
-          claimedItemsContainer.innerHTML = `
-            <div class="col-span-full text-center py-10 text-gray-500">
-              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
-                <i class="fas fa-hand-holding-heart text-4xl text-blue-400 mb-3"></i>
-                <h3 class="text-lg font-medium mb-2">No Claimed Items</h3>
-                <p class="text-gray-600">You haven't claimed any items yet.</p>
-              </div>
-            </div>
-          `;
-          return;
-        }
-
-        claimedItemsContainer.innerHTML = items
-          .map(
-            (item) => `
-            <div class="bg-white rounded-xl shadow-soft overflow-hidden item-card hover:shadow-medium" data-id="${
-              item._id
-            }">
-              <div class="relative h-48 overflow-hidden">
-                ${
-                  item.image
-                    ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">`
-                    : `<div class="w-full h-full bg-gray-50 flex items-center justify-center">
-                        <i class="fas fa-image text-4xl text-gray-300"></i>
-                      </div>`
-                }
-                <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium
-                    ${
-                      item.type === "lost"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-green-100 text-green-800"
-                    }">
-                    ${item.type === "lost" ? "Lost" : "Found"}
-                </div>
-              </div>
-              <div class="p-4">
-                <h3 class="font-bold text-gray-800 mb-1 truncate">${
-                  item.title
-                }</h3>
-                <p class="text-gray-600 text-sm mb-2 line-clamp-2">${
-                  item.description
-                }</p>
-                <div class="flex items-center justify-between">
-                  <span class="text-xs text-gray-500 flex items-center">
-                    <i class="fas fa-map-marker-alt mr-1 text-gray-400"></i>
-                    <span class="truncate max-w-[120px]">${item.location}</span>
-                  </span>
-                  <span class="text-xs text-gray-500">
-                    ${new Date(item.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-                <div class="mt-3">
-                  <span class="text-xs ${
-                    item.status === "accepted"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  } px-2 py-1 rounded-full">
-                    ${
-                      item.status === "accepted"
-                        ? "Claim Accepted"
-                        : "Claim Pending"
-                    }
-                  </span>
-                </div>
-                ${
-                  item.status === "accepted"
-                    ? `<div class="mt-3 bg-green-50 p-2 rounded-lg border border-green-100">
-                        <p class="text-xs text-green-700 flex items-center">
-                          <i class="fas fa-info-circle mr-1"></i>
-                          <span>Contact the owner to retrieve your item</span>
-                        </p>
-                      </div>`
-                    : ""
-                }
-              </div>
-            </div>
-          `
-          )
-          .join("");
-
-        // Add click event to claimed items
-        document
-          .querySelectorAll("#claimedItemsSection [data-id]")
-          .forEach((el) => {
-            el.addEventListener("click", () => openItemModal(el.dataset.id));
-          });
-      }
-
-      // Load user's comments
-      async function loadMyComments() {
-        try {
-          commentsContainer.innerHTML = `
-            <div class="text-center py-10 text-gray-500">
-              <i class="fas fa-spinner fa-spin text-xl mb-2 animate-pulse-slow"></i>
-              <p>Loading your comments...</p>
-            </div>
-          `;
-
-          const response = await fetch("/api/comments?postedBy=me", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-
-          if (!response.ok) throw new Error("Failed to load comments");
-
-          const data = await response.json();
-          currentComments = data.comments;
-          renderMyComments(currentComments);
-        } catch (error) {
-          console.error("Error loading comments:", error);
-          commentsContainer.innerHTML = `
-            <div class="text-center py-10 text-red-500">
-              <i class="fas fa-exclamation-circle text-xl mb-2"></i>
-              <p>Failed to load comments. Please try again.</p>
-              <button onclick="loadMyComments()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
-                <i class="fas fa-sync-alt mr-1"></i> Retry
-              </button>
-            </div>
-          `;
-        }
-      }
-
-      // Render user's comments
-      function renderMyComments(comments) {
-        if (comments.length === 0) {
-          commentsContainer.innerHTML = `
-            <div class="text-center py-10 text-gray-500">
-              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
-                <i class="fas fa-comment-slash text-4xl text-blue-400 mb-3"></i>
-                <h3 class="text-lg font-medium mb-2">No Comments Yet</h3>
-                <p class="text-gray-600">You haven't posted any comments yet.</p>
-              </div>
-            </div>
-          `;
-          return;
-        }
-
-        commentsContainer.innerHTML = comments
-          .map(
-            (comment) => `
-            <div class="bg-white p-5 rounded-xl shadow-soft border border-gray-100 comment-container hover-scale">
-              <div class="flex justify-between items-start mb-3">
-                <div class="flex items-center space-x-3">
-                  <img src="${
-                    comment.postedBy.profileImage ||
-                    "https://ui-avatars.com/api/?name=" +
-                      encodeURIComponent(
-                        comment.postedBy.firstName +
-                          " " +
-                          comment.postedBy.lastName
-                      ) +
-                      "&background=random"
-                  }"
-                       alt="${comment.postedBy.firstName}"
-                       class="w-10 h-10 rounded-full object-cover border border-gray-200">
-                  <div>
-                    <p class="font-medium text-gray-800">${
-                      comment.postedBy.firstName
-                    } ${comment.postedBy.lastName}</p>
-                    <p class="text-xs text-gray-500">${
-                      comment.postedBy.department
-                    }</p>
-                  </div>
-                </div>
-                <span class="text-xs text-gray-400">
-                  ${new Date(comment.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-              <div class="pl-13">
-                <p class="text-gray-700 mb-4">${comment.content}</p>
-                <div class="flex justify-between items-center">
-                  <span class="text-xs text-gray-500">
-                    On item: <span class="font-medium text-blue-600">${
-                      comment.item.title
-                    }</span>
-                  </span>
-                  <div class="flex space-x-3">
-                    <button onclick="editComment('${
-                      comment._id
-                    }')" class="text-blue-500 hover:text-blue-700 text-xs smooth-transition">
-                      <i class="fas fa-edit mr-1"></i> Edit
-                    </button>
-                    <button onclick="deleteComment('${
-                      comment._id
-                    }')" class="text-red-500 hover:text-red-700 text-xs smooth-transition">
-                      <i class="fas fa-trash mr-1"></i> Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `
-          )
-          .join("");
-      }
-
-      // Load user's suggestions
-      async function loadMySuggestions() {
-        try {
-          suggestionsContainer.innerHTML = `
-            <div class="text-center py-10 text-gray-500">
-              <i class="fas fa-spinner fa-spin text-xl mb-2 animate-pulse-slow"></i>
-              <p>Loading your suggestions...</p>
-            </div>
-          `;
-
-          const response = await fetch("/api/suggestions?postedBy=me", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-
-          if (!response.ok) throw new Error("Failed to load suggestions");
-
-          const data = await response.json();
-          currentSuggestions = data.suggestions;
-          renderMySuggestions(currentSuggestions);
-        } catch (error) {
-          console.error("Error loading suggestions:", error);
-          suggestionsContainer.innerHTML = `
-            <div class="text-center py-10 text-red-500">
-              <i class="fas fa-exclamation-circle text-xl mb-2"></i>
-              <p>Failed to load suggestions. Please try again.</p>
-              <button onclick="loadMySuggestions()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
-                <i class="fas fa-sync-alt mr-1"></i> Retry
-              </button>
-            </div>
-          `;
-        }
-      }
-
-      // Render user's suggestions
-      function renderMySuggestions(suggestions) {
-        if (suggestions.length === 0) {
-          suggestionsContainer.innerHTML = `
-            <div class="text-center py-10 text-gray-500">
-              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
-                <i class="fas fa-lightbulb text-4xl text-yellow-400 mb-3"></i>
-                <h3 class="text-lg font-medium mb-2">No Suggestions Yet</h3>
-                <p class="text-gray-600">You haven't posted any suggestions yet.</p>
-              </div>
-            </div>
-          `;
-          return;
-        }
-
-        suggestionsContainer.innerHTML = suggestions
-          .map(
-            (suggestion) => `
-            <div class="bg-white p-5 rounded-xl shadow-soft border border-gray-100 hover-scale">
-              <div class="flex justify-between items-start mb-3">
-                <div class="flex items-center space-x-3">
-                  <div class="bg-blue-100 p-3 rounded-full">
-                    <i class="fas fa-lightbulb text-blue-500"></i>
-                  </div>
-                  <div>
-                    <p class="font-medium text-gray-800">${
-                      suggestion.postedBy.firstName
-                    } ${suggestion.postedBy.lastName}</p>
-                    <p class="text-xs text-gray-500">${
-                      suggestion.postedBy.department
-                    }</p>
-                  </div>
-                </div>
-                <span class="text-xs text-gray-400">
-                  ${new Date(suggestion.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-              <div class="pl-16">
-                <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400 mb-4">
-                  <p class="text-gray-700 italic">"${suggestion.content}"</p>
-                </div>
-                <div class="flex justify-end space-x-3">
-                  <button onclick="editSuggestion('${
-                    suggestion._id
-                  }')" class="text-blue-500 hover:text-blue-700 text-xs smooth-transition">
-                    <i class="fas fa-edit mr-1"></i> Edit
-                  </button>
-                  <button onclick="deleteSuggestion('${
-                    suggestion._id
-                  }')" class="text-red-500 hover:text-red-700 text-xs smooth-transition">
-                    <i class="fas fa-trash mr-1"></i> Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          `
-          )
-          .join("");
-      }
-
-      // Load pending claims
-      async function loadPendingClaims() {
-        try {
-          pendingClaimsContainer.innerHTML = `
-            <div class="text-center py-10 text-gray-500">
-              <i class="fas fa-spinner fa-spin text-xl mb-2 animate-pulse-slow"></i>
-              <p>Loading pending claims...</p>
-            </div>
-          `;
-
-          const response = await fetch(
-            "/api/items?status=claimed&postedBy=me",
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-
-          if (!response.ok) throw new Error("Failed to load pending claims");
-
-          const data = await response.json();
-          pendingClaims = data.items;
-          renderPendingClaims(pendingClaims);
-
-          // Update notification badge
-          if (pendingClaims.length > 0) {
-            pendingClaimsBadge.classList.remove("hidden");
-          } else {
-            pendingClaimsBadge.classList.add("hidden");
-          }
-        } catch (error) {
-          console.error("Error loading pending claims:", error);
-          pendingClaimsContainer.innerHTML = `
-            <div class="text-center py-10 text-red-500">
-              <i class="fas fa-exclamation-circle text-xl mb-2"></i>
-              <p>Failed to load pending claims. Please try again.</p>
-              <button onclick="loadPendingClaims()" class="mt-2 text-blue-500 hover:text-blue-700 smooth-transition">
-                <i class="fas fa-sync-alt mr-1"></i> Retry
-              </button>
-            </div>
-          `;
-        }
-      }
-
-      // Render pending claims
-      function renderPendingClaims(claims) {
-        if (claims.length === 0) {
-          pendingClaimsContainer.innerHTML = `
-            <div class="text-center py-10 text-gray-500">
-              <div class="bg-blue-50 p-6 rounded-xl max-w-md mx-auto">
-                <i class="fas fa-check-circle text-4xl text-green-400 mb-3"></i>
-                <h3 class="text-lg font-medium mb-2">No Pending Claims</h3>
-                <p class="text-gray-600">No one has claimed your items yet.</p>
-              </div>
-            </div>
-          `;
-          return;
-        }
-
-        pendingClaimsContainer.innerHTML = claims
-          .map(
-            (claim) => `
-            <div class="bg-white rounded-xl shadow-soft overflow-hidden hover-scale" data-id="${
-              claim._id
-            }">
-              <div class="p-5">
-                <div class="flex justify-between items-start mb-3">
-                  <h3 class="font-bold text-gray-800 text-lg">${
-                    claim.title
-                  }</h3>
-                  <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                    Pending Claim
-                  </span>
-                </div>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-2">${
-                  claim.description
-                }</p>
-
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-4">
-                  <h4 class="font-medium text-sm mb-2 text-gray-700">Claimed By:</h4>
-                  <div class="flex items-center space-x-3">
-                    <img src="${
-                      claim.claimedBy.profileImage ||
-                      "https://ui-avatars.com/api/?name=" +
-                        encodeURIComponent(
-                          claim.claimedBy.firstName +
-                            " " +
-                            claim.claimedBy.lastName
-                        ) +
-                        "&background=random"
-                    }"
-                         alt="${claim.claimedBy.firstName}"
-                         class="w-10 h-10 rounded-full object-cover border border-gray-200">
-                    <div>
-                      <p class="text-sm font-medium text-gray-800">${
-                        claim.claimedBy.firstName
-                      } ${claim.claimedBy.lastName}</p>
-                      <p class="text-xs text-gray-500">${
-                        claim.claimedBy.department
+        if (data.items && data.items.length > 0) {
+          container.innerHTML = `
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              ${data.items
+                .map(
+                  (item) => `
+                  <div class="reddit-card rounded-2xl overflow-hidden">
+                    <div class="relative">
+                      ${
+                        item.image
+                          ? `<img src="${getFullImageUrl(item.image)}" alt="${
+                              item.title
+                            }" class="w-full h-56 object-cover">`
+                          : `<div class="w-full h-56 bg-gradient-to-br from-reddit-card to-reddit-cardHover flex items-center justify-center">
+                              <svg class="w-16 h-16 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                              </svg>
+                            </div>`
+                      }
+                      <div class="absolute top-4 left-4 flex space-x-2">
+                        <span class="status-badge px-3 py-1 text-xs font-bold rounded-full ${
+                          item.type === "lost" ? "status-lost" : "status-found"
+                        }">${item.type.toUpperCase()}</span>
+                        <span class="status-badge px-3 py-1 text-xs font-bold rounded-full status-claimed">CLAIMED</span>
+                      </div>
+                    </div>
+                    <div class="p-6">
+                      <h3 class="font-bold text-xl mb-3 text-reddit-text">${
+                        item.title
+                      }</h3>
+                      <p class="text-reddit-textSecondary text-sm mb-3 line-clamp-2">${
+                        item.description
                       }</p>
+                      <div class="flex items-center text-reddit-textSecondary text-sm mb-3">
+                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        ${item.location}
+                      </div>
+                      <div class="flex items-center space-x-2 text-sm text-reddit-textSecondary mb-4">
+                        <div class="w-6 h-6 rounded-full overflow-hidden bg-reddit-orange">
+                          <img src="${
+                            getFullImageUrl(item.postedBy.profileImage) ||
+                            generateProfileInitials(
+                              item.postedBy.firstName,
+                              item.postedBy.lastName
+                            )
+                          }" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                        <span>Posted by: ${item.postedBy.firstName} ${
+                    item.postedBy.lastName
+                  }</span>
+                      </div>
+                      <button onclick="viewContactInfo('${
+                        item._id
+                      }')" class="w-full reddit-button py-2 px-4 rounded-lg text-sm font-medium">
+                        View Contact Info
+                      </button>
                     </div>
                   </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3">
-                  <button onclick="acceptClaim('${
-                    claim._id
-                  }')" class="gradient-btn-success hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1">
-                    <i class="fas fa-check mr-2"></i>Accept
-                  </button>
-                  <button onclick="rejectClaim('${
-                    claim._id
-                  }')" class="gradient-btn-danger hover:opacity-90 text-white px-4 py-2.5 rounded-lg shadow-md smooth-transition flex-1">
-                    <i class="fas fa-times mr-2"></i>Reject
-                  </button>
-                </div>
-              </div>
+                `
+                )
+                .join("")}
             </div>
-          `
-          )
-          .join("");
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="text-center py-20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-accent/20 rounded-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Items Claimed Yet</h3>
+              <p class="text-reddit-textSecondary mb-6">Items you've successfully claimed will appear here</p>
+              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+                Browse Items
+              </button>
+            </div>
+          `;
+        }
       }
 
-      // Open item modal
-      async function openItemModal(itemId) {
+      // Load comments
+      async function loadComments() {
+        const response = await fetch("/api/comments?postedBy=me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const data = await response.json();
+        const container = document.getElementById("tabContent");
+
+        if (data.comments && data.comments.length > 0) {
+          container.innerHTML = `
+            <div class="space-y-6">
+              ${data.comments
+                .map(
+                  (comment) => `
+                  <div class="interaction-card rounded-2xl p-6">
+                    <div class="flex items-start justify-between">
+                      <div class="flex-1">
+                        <div class="flex items-center space-x-3 mb-3">
+                          <div class="w-10 h-10 rounded-full overflow-hidden bg-reddit-orange">
+                            <img src="${
+                              getFullImageUrl(comment.postedBy.profileImage) ||
+                              generateProfileInitials(
+                                comment.postedBy.firstName,
+                                comment.postedBy.lastName
+                              )
+                            }" alt="Profile" class="w-full h-full object-cover">
+                          </div>
+                          <div>
+                            <p class="font-semibold text-reddit-text">${
+                              comment.postedBy.firstName
+                            } ${comment.postedBy.lastName}</p>
+                            <p class="text-xs text-reddit-textSecondary">${new Date(
+                              comment.createdAt
+                            ).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}</p>
+                          </div>
+                        </div>
+                        <p class="text-reddit-text mb-3 leading-relaxed">${
+                          comment.content
+                        }</p>
+                        <div class="inline-flex items-center px-3 py-1 bg-reddit-blue/20 text-reddit-blue text-sm rounded-full border border-reddit-blue/30">
+                          <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
+                          </svg>
+                          On item: ${comment.item.title}
+                        </div>
+                      </div>
+                      <div class="flex gap-3 ml-4">
+                        <button onclick="editComment('${
+                          comment._id
+                        }', '${comment.content.replace(
+                    /'/g,
+                    "\\'"
+                  )}')" class="text-reddit-blue hover:text-reddit-blueHover hover:bg-reddit-blue/10 p-2 rounded-lg transition-all duration-200">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                          </svg>
+                        </button>
+                        <button onclick="confirmDelete('comment', '${
+                          comment._id
+                        }', 'this comment')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                `
+                )
+                .join("")}
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="text-center py-20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-blue/20 rounded-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Comments Yet</h3>
+              <p class="text-reddit-textSecondary mb-6">Your comments on items will appear here</p>
+              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+                Browse Items
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Load suggestions
+      async function loadSuggestions() {
+        const response = await fetch("/api/suggestions?postedBy=me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const data = await response.json();
+        const container = document.getElementById("tabContent");
+
+        if (data.suggestions && data.suggestions.length > 0) {
+          container.innerHTML = `
+            <div class="space-y-6">
+              ${data.suggestions
+                .map(
+                  (suggestion) => `
+                  <div class="interaction-card rounded-2xl p-6">
+                    <div class="flex items-start justify-between">
+                      <div class="flex-1">
+                        <div class="flex items-center space-x-3 mb-3">
+                          <div class="w-10 h-10 rounded-full overflow-hidden bg-reddit-orange">
+                            <img src="${
+                              getFullImageUrl(
+                                suggestion.postedBy.profileImage
+                              ) ||
+                              generateProfileInitials(
+                                suggestion.postedBy.firstName,
+                                suggestion.postedBy.lastName
+                              )
+                            }" alt="Profile" class="w-full h-full object-cover">
+                          </div>
+                          <div>
+                            <p class="font-semibold text-reddit-text">${
+                              suggestion.postedBy.firstName
+                            } ${suggestion.postedBy.lastName}</p>
+                            <p class="text-xs text-reddit-textSecondary">${new Date(
+                              suggestion.createdAt
+                            ).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}</p>
+                          </div>
+                        </div>
+                        <p class="text-reddit-text leading-relaxed">${
+                          suggestion.content
+                        }</p>
+                      </div>
+                      <div class="flex gap-3 ml-4">
+                        <button onclick="editSuggestion('${
+                          suggestion._id
+                        }', '${suggestion.content.replace(
+                    /'/g,
+                    "\\'"
+                  )}')" class="text-reddit-blue hover:text-reddit-blueHover hover:bg-reddit-blue/10 p-2 rounded-lg transition-all duration-200">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                          </svg>
+                        </button>
+                        <button onclick="confirmDelete('suggestion', '${
+                          suggestion._id
+                        }', 'this suggestion')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                `
+                )
+                .join("")}
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="text-center py-20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-orange/20 rounded-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-reddit-orange" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Suggestions Yet</h3>
+              <p class="text-reddit-textSecondary mb-6">Your suggestions for improving the platform will appear here</p>
+              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+                Go to Home
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Load messages
+      async function loadMessages() {
+        const response = await fetch("/api/messages", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const data = await response.json();
+        const container = document.getElementById("tabContent");
+
+        if (data.messages && data.messages.length > 0) {
+          // Group messages by conversation
+          const conversations = {};
+          data.messages.forEach((message) => {
+            const otherUserId =
+              message.sender._id === currentUser._id
+                ? message.receiver._id
+                : message.sender._id;
+            const otherUser =
+              message.sender._id === currentUser._id
+                ? message.receiver
+                : message.sender;
+
+            if (!conversations[otherUserId]) {
+              conversations[otherUserId] = {
+                user: otherUser,
+                messages: [],
+              };
+            }
+            conversations[otherUserId].messages.push(message);
+          });
+
+          container.innerHTML = `
+            <div class="space-y-8">
+              ${Object.values(conversations)
+                .map(
+                  (conversation) => `
+                  <div class="interaction-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                      <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden bg-reddit-orange mr-4">
+                          <img src="${
+                            getFullImageUrl(conversation.user.profileImage) ||
+                            generateProfileInitials(
+                              conversation.user.firstName,
+                              conversation.user.lastName
+                            )
+                          }" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                          <h4 class="font-bold text-lg text-reddit-text">${
+                            conversation.user.firstName
+                          } ${conversation.user.lastName}</h4>
+                          <p class="text-sm text-reddit-textSecondary">${
+                            conversation.user.department
+                          }</p>
+                        </div>
+                      </div>
+                      <button onclick="confirmBlockUser('${
+                        conversation.user._id
+                      }', '${conversation.user.firstName} ${
+                    conversation.user.lastName
+                  }')" class="reddit-button-danger px-4 py-2 rounded-lg text-sm font-medium">
+                        Block User
+                      </button>
+                    </div>
+                    <div class="space-y-4 max-h-80 overflow-y-auto">
+                      ${conversation.messages
+                        .slice(-5)
+                        .map(
+                          (message) => `
+                          <div class="flex ${
+                            message.sender._id === currentUser._id
+                              ? "justify-end"
+                              : "justify-start"
+                          }">
+                            <div class="max-w-sm px-4 py-3 rounded-2xl ${
+                              message.sender._id === currentUser._id
+                                ? "message-bubble-sent"
+                                : "message-bubble-received"
+                            }">
+                              <p class="text-sm leading-relaxed">${
+                                message.content
+                              }</p>
+                              <p class="text-xs opacity-75 mt-2">${new Date(
+                                message.createdAt
+                              ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}</p>
+                            </div>
+                          </div>
+                        `
+                        )
+                        .join("")}
+                    </div>
+                  </div>
+                `
+                )
+                .join("")}
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="text-center py-20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-blue/20 rounded-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Messages Yet</h3>
+              <p class="text-reddit-textSecondary mb-6">Your conversations will appear here</p>
+              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+                Browse Items
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      // Helper function to get status class
+      function getStatusClass(status) {
+        switch (status) {
+          case "active":
+            return "status-active";
+          case "claimed":
+            return "status-claimed";
+          default:
+            return "status-active";
+        }
+      }
+
+      // Edit item
+      async function editItem(itemId) {
         try {
-          itemModal.classList.remove("hidden");
-          document.body.style.overflow = "hidden";
-
-          // Show loading state
-          itemModalTitle.textContent = "Loading...";
-          itemModalDescription.textContent = "";
-          itemModalLocation.textContent = "";
-          itemModalQuestion.textContent = "";
-          modalCommentsContainer.innerHTML =
-            '<div class="text-center py-5"><i class="fas fa-spinner fa-spin animate-pulse-slow"></i></div>';
-
+          showToast("Loading item details...", "info");
           const response = await fetch(`/api/items/${itemId}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
 
-          if (!response.ok) throw new Error("Failed to load item details");
+          if (response.ok) {
+            const data = await response.json();
+            const item = data.item;
 
-          const { item } = await response.json();
-          selectedItemId = itemId;
+            document.getElementById("editItemId").value = item._id;
+            document.getElementById("editTitle").value = item.title;
+            document.getElementById("editDescription").value = item.description;
+            document.getElementById("editLocation").value = item.location;
 
-          // Populate modal
-          itemModalTitle.textContent = item.title;
-          itemModalType.textContent =
-            item.type === "lost" ? "Lost Item" : "Found Item";
-          itemModalDescription.textContent = item.description;
-          itemModalLocation.textContent = item.location;
-
-          if (item.image) {
-            itemModalImage.src = item.image;
-            itemModalImage.alt = item.title;
-            itemModalImage.classList.remove("hidden");
-            itemImagePlaceholder.classList.add("hidden");
+            document.getElementById("editItemModal").classList.remove("hidden");
           } else {
-            itemModalImage.classList.add("hidden");
-            itemImagePlaceholder.classList.remove("hidden");
+            throw new Error("Failed to load item details");
           }
-
-          // Set poster info
-          itemModalPosterName.textContent = `${item.postedBy.firstName} ${item.postedBy.lastName}`;
-          itemModalPosterDept.textContent = item.postedBy.department;
-          if (item.postedBy.profileImage) {
-            itemModalPosterImage.src = item.postedBy.profileImage;
-            itemModalPosterImage.onerror = () => {
-              itemModalPosterImage.src =
-                "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(
-                  item.postedBy.firstName + " " + item.postedBy.lastName
-                ) +
-                "&background=random";
-            };
-          } else {
-            itemModalPosterImage.src =
-              "https://ui-avatars.com/api/?name=" +
-              encodeURIComponent(
-                item.postedBy.firstName + " " + item.postedBy.lastName
-              ) +
-              "&background=random";
-          }
-
-          // Set status
-          let statusText = "";
-          let statusClass = "";
-          switch (item.status) {
-            case "active":
-              statusText = "Active";
-              statusClass = "bg-blue-100 text-blue-800";
-              break;
-            case "claimed":
-              statusText = "Claimed";
-              statusClass = "bg-yellow-100 text-yellow-800";
-              break;
-            case "accepted":
-              statusText = "Reunited";
-              statusClass = "bg-green-100 text-green-800";
-              break;
-            case "rejected":
-              statusText = "Rejected";
-              statusClass = "bg-red-100 text-red-800";
-              break;
-          }
-          itemModalStatus.textContent = statusText;
-          itemModalStatus.className = `status-badge ${statusClass}`;
-
-          // Show validity question if it's a found item
-          if (item.type === "found" && item.validityQuestion) {
-            validityQuestionContainer.classList.remove("hidden");
-            itemModalQuestion.textContent = item.validityQuestion;
-          } else {
-            validityQuestionContainer.classList.add("hidden");
-          }
-
-          // Show claimed by info if claimed
-          if (item.claimedBy) {
-            claimedByContainer.classList.remove("hidden");
-            itemModalClaimedByName.textContent = `${item.claimedBy.firstName} ${item.claimedBy.lastName}`;
-            itemModalClaimedByDept.textContent = item.claimedBy.department;
-            if (item.claimedBy.profileImage) {
-              itemModalClaimedByImage.src = item.claimedBy.profileImage;
-              itemModalClaimedByImage.onerror = () => {
-                itemModalClaimedByImage.src =
-                  "https://ui-avatars.com/api/?name=" +
-                  encodeURIComponent(
-                    item.claimedBy.firstName + " " + item.claimedBy.lastName
-                  ) +
-                  "&background=random";
-              };
-            } else {
-              itemModalClaimedByImage.src =
-                "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(
-                  item.claimedBy.firstName + " " + item.claimedBy.lastName
-                ) +
-                "&background=random";
-            }
-          } else {
-            claimedByContainer.classList.add("hidden");
-          }
-
-          // Show claim actions if it's the owner and status is claimed
-          if (
-            item.postedBy._id === currentUser._id &&
-            item.status === "claimed"
-          ) {
-            claimActionsContainer.classList.remove("hidden");
-          } else {
-            claimActionsContainer.classList.add("hidden");
-          }
-
-          // Show contact info if status is accepted and current user is either owner or claimant
-          if (
-            item.status === "accepted" &&
-            (item.postedBy._id === currentUser._id ||
-              (item.claimedBy && item.claimedBy._id === currentUser._id))
-          ) {
-            contactInfoContainer.classList.remove("hidden");
-            if (item.postedBy._id === currentUser._id) {
-              // Show claimant's contact info to owner
-              contactEmail.textContent = item.claimedBy.email;
-              contactPhone.textContent = item.claimedBy.phone;
-            } else {
-              // Show owner's contact info to claimant
-              contactEmail.textContent = item.postedBy.email;
-              contactPhone.textContent = item.postedBy.phone;
-            }
-          } else {
-            contactInfoContainer.classList.add("hidden");
-          }
-
-          // Show item actions if it's the owner and status is active or rejected
-          if (
-            item.postedBy._id === currentUser._id &&
-            (item.status === "active" || item.status === "rejected")
-          ) {
-            itemActionsContainer.classList.remove("hidden");
-          } else {
-            itemActionsContainer.classList.add("hidden");
-          }
-
-          // Load comments
-          loadItemComments(itemId);
         } catch (error) {
-          console.error("Error loading item details:", error);
-          itemModalTitle.textContent = "Error";
-          itemModalDescription.innerHTML = `
-            <div class="text-red-500 bg-red-50 p-3 rounded-lg">
-              <i class="fas fa-exclamation-circle mr-2"></i>
-              Failed to load item details. Please try again.
-            </div>
-          `;
+          showToast("Error loading item details. Please try again.", "error");
         }
       }
 
-      // Load comments for an item
-      async function loadItemComments(itemId) {
-        try {
-          modalCommentsContainer.innerHTML =
-            '<div class="text-center py-5"><i class="fas fa-spinner fa-spin animate-pulse-slow"></i></div>';
+      // Handle edit item form submission
+      document
+        .getElementById("editItemForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
 
-          const response = await fetch(`/api/items/${itemId}/comments`, {
+          const itemId = document.getElementById("editItemId").value;
+          const formData = new FormData();
+
+          formData.append("title", document.getElementById("editTitle").value);
+          formData.append(
+            "description",
+            document.getElementById("editDescription").value
+          );
+          formData.append(
+            "location",
+            document.getElementById("editLocation").value
+          );
+
+          const imageFile = document.getElementById("editImage").files[0];
+          if (imageFile) {
+            formData.append("image", imageFile);
+          }
+
+          try {
+            showToast("Updating item...", "info");
+            const response = await fetch(`/api/items/${itemId}`, {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: formData,
+            });
+
+            if (response.ok) {
+              hideEditItem();
+              showToast("Item updated successfully!", "success");
+              switchTab("posted");
+            } else {
+              throw new Error("Failed to update item");
+            }
+          } catch (error) {
+            showToast("Error updating item. Please try again.", "error");
+          }
+        });
+
+      // View claim requests
+      async function viewClaimRequests(itemId) {
+        try {
+          showToast("Loading claim requests...", "info");
+          const response = await fetch(`/api/items/${itemId}/claim-requests`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
 
-          if (!response.ok) throw new Error("Failed to load comments");
+          if (response.ok) {
+            const data = await response.json();
+            const content = document.getElementById("claimRequestsContent");
 
-          const data = await response.json();
-          renderItemComments(data.comments);
+            if (data.claimRequests && data.claimRequests.length > 0) {
+              content.innerHTML = `
+                <div class="space-y-6">
+                  ${data.claimRequests
+                    .map(
+                      (request) => `
+                      <div class="claim-request-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-6">
+                          <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-full overflow-hidden bg-reddit-orange">
+                              <img src="${
+                                getFullImageUrl(
+                                  request.requestedBy.profileImage
+                                ) ||
+                                generateProfileInitials(
+                                  request.requestedBy.firstName,
+                                  request.requestedBy.lastName
+                                )
+                              }" alt="Profile" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                              <h4 class="font-bold text-lg text-reddit-text">${
+                                request.requestedBy.firstName
+                              } ${request.requestedBy.lastName}</h4>
+                              <p class="text-sm text-reddit-textSecondary">${
+                                request.requestedBy.department
+                              }</p>
+                            </div>
+                          </div>
+                          <span class="status-badge px-4 py-2 text-sm font-bold rounded-full ${
+                            request.status === "pending"
+                              ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                              : request.status === "approved"
+                              ? "status-found"
+                              : "bg-red-500/20 text-red-400 border border-red-500/30"
+                          }">${request.status.toUpperCase()}</span>
+                        </div>
+                        
+                        ${
+                          request.answers && request.answers.length > 0
+                            ? `
+                            <div class="mb-4">
+                              <h5 class="font-semibold mb-3 text-reddit-text">Answers:</h5>
+                              <ul class="space-y-2">
+                                ${request.answers
+                                  .map(
+                                    (answer, index) =>
+                                      `<li class="text-sm text-reddit-textSecondary bg-reddit-card p-3 rounded-lg border border-reddit-border">• ${answer}</li>`
+                                  )
+                                  .join("")}
+                              </ul>
+                            </div>
+                        `
+                            : ""
+                        }
+                        
+                        ${
+                          request.additionalInfo
+                            ? `
+                            <div class="mb-4">
+                              <h5 class="font-semibold mb-2 text-reddit-text">Additional Info:</h5>
+                              <p class="text-sm text-reddit-textSecondary bg-reddit-card p-3 rounded-lg border border-reddit-border">${request.additionalInfo}</p>
+                            </div>
+                        `
+                            : ""
+                        }
 
-          // Enable/disable comment form based on item status
-          const item =
-            currentItems.find((i) => i._id === itemId) ||
-            pendingClaims.find((i) => i._id === itemId);
-          if (item && item.status !== "active") {
-            addCommentContainer.classList.add("hidden");
+                        ${
+                          request.status === "approved" && request.contactInfo
+                            ? `
+                            <div class="contact-info-card p-4 rounded-lg mb-4">
+                              <h5 class="font-semibold mb-3 text-reddit-accent">Contact Information Shared:</h5>
+                              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                ${
+                                  request.contactInfo.phone
+                                    ? `<div><span class="font-medium">Phone:</span> ${request.contactInfo.phone}</div>`
+                                    : ""
+                                }
+                                ${
+                                  request.contactInfo.alternatePhone
+                                    ? `<div><span class="font-medium">Alt Phone:</span> ${request.contactInfo.alternatePhone}</div>`
+                                    : ""
+                                }
+                                ${
+                                  request.contactInfo.email
+                                    ? `<div><span class="font-medium">Email:</span> ${request.contactInfo.email}</div>`
+                                    : ""
+                                }
+                                ${
+                                  request.contactInfo.meetingLocation
+                                    ? `<div><span class="font-medium">Location:</span> ${request.contactInfo.meetingLocation}</div>`
+                                    : ""
+                                }
+                                ${
+                                  request.contactInfo.meetingTime
+                                    ? `<div><span class="font-medium">Time:</span> ${request.contactInfo.meetingTime}</div>`
+                                    : ""
+                                }
+                                ${
+                                  request.contactInfo.additionalNotes
+                                    ? `<div class="md:col-span-2"><span class="font-medium">Notes:</span> ${request.contactInfo.additionalNotes}</div>`
+                                    : ""
+                                }
+                              </div>
+                            </div>
+                        `
+                            : ""
+                        }
+                        
+                        ${
+                          request.status === "pending"
+                            ? `
+                            <div class="flex gap-4 mt-6">
+                              <button onclick="showContactInfo('${itemId}', '${request._id}')" class="flex-1 reddit-button py-3 rounded-xl text-sm font-semibold">
+                                Approve Request
+                              </button>
+                              <button onclick="showRejectionModal('${itemId}', '${request._id}')" class="flex-1 reddit-button-danger py-3 rounded-xl text-sm font-semibold">
+                                Reject Request
+                              </button>
+                            </div>
+                        `
+                            : ""
+                        }
+                      </div>
+                    `
+                    )
+                    .join("")}
+                </div>
+              `;
+            } else {
+              content.innerHTML = `
+                <div class="text-center py-12">
+                  <div class="w-16 h-16 mx-auto mb-4 bg-reddit-textSecondary/20 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <p class="text-reddit-textSecondary text-lg">No claim requests yet</p>
+                </div>
+              `;
+            }
+
+            document
+              .getElementById("claimRequestsModal")
+              .classList.remove("hidden");
           } else {
-            addCommentContainer.classList.remove("hidden");
+            throw new Error("Failed to load claim requests");
           }
         } catch (error) {
-          console.error("Error loading comments:", error);
-          modalCommentsContainer.innerHTML = `
-            <div class="text-center py-3 text-red-500 bg-red-50 rounded-lg">
-              <i class="fas fa-exclamation-circle mr-2"></i>
-              Failed to load comments
-            </div>
-          `;
+          showToast("Error loading claim requests. Please try again.", "error");
         }
       }
 
-      // Render comments in item modal
-      function renderItemComments(comments) {
-        if (comments.length === 0) {
-          modalCommentsContainer.innerHTML = `
-            <div class="text-center py-3 text-gray-500 bg-gray-50 rounded-lg">
-              No comments yet. Be the first to comment!
-            </div>
-          `;
-          return;
-        }
+      // Show contact info modal
+      function showContactInfo(itemId, requestId) {
+        pendingApproval = { itemId, requestId };
+        document.getElementById("contactInfoModal").classList.remove("hidden");
+        document.getElementById("contactPhone").focus();
+      }
 
-        modalCommentsContainer.innerHTML = comments
-          .map(
-            (comment) => `
-            <div class="bg-white p-4 rounded-lg comment-container mb-3 hover-scale">
-              <div class="flex items-start space-x-3">
-                <div class="flex-shrink-0">
-                  <img src="${
-                    comment.postedBy.profileImage ||
-                    "https://ui-avatars.com/api/?name=" +
-                      encodeURIComponent(
-                        comment.postedBy.firstName +
-                          " " +
-                          comment.postedBy.lastName
-                      ) +
-                      "&background=random"
-                  }"
-                       alt="${comment.postedBy.firstName}"
-                       class="w-10 h-10 rounded-full object-cover border border-gray-200">
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between mb-1">
-                    <div>
-                      <span class="font-medium text-gray-900">${
-                        comment.postedBy.firstName
-                      } ${comment.postedBy.lastName}</span>
-                      <span class="text-xs text-gray-500 ml-2">${
-                        comment.postedBy.department
-                      }</span>
-                    </div>
-                    <span class="text-xs text-gray-400">
-                      ${formatCommentTime(comment.createdAt)}
-                    </span>
-                  </div>
-                  <div class="comment-content pl-4">
-                    <p class="text-gray-700">${comment.content}</p>
+      // Hide contact info modal
+      function hideContactInfo() {
+        document.getElementById("contactInfoModal").classList.add("hidden");
+        document.getElementById("contactInfoForm").reset();
+        pendingApproval = null;
+      }
+
+      // Handle contact info form submission
+      document
+        .getElementById("contactInfoForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          if (!pendingApproval) return;
+
+          const contactInfo = {
+            phone: document.getElementById("contactPhone").value.trim(),
+            alternatePhone: document
+              .getElementById("contactAlternatePhone")
+              .value.trim(),
+            email: document.getElementById("contactEmail").value.trim(),
+            meetingLocation: document
+              .getElementById("contactLocation")
+              .value.trim(),
+            meetingTime: document.getElementById("contactTime").value.trim(),
+            additionalNotes: document
+              .getElementById("contactNotes")
+              .value.trim(),
+          };
+
+          if (!contactInfo.phone) {
+            showToast("Phone number is required", "warning");
+            return;
+          }
+
+          try {
+            showToast("Approving claim request...", "info");
+            const response = await fetch(
+              `/api/items/${pendingApproval.itemId}/claim-requests/${pendingApproval.requestId}/approve`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ contactInfo }),
+              }
+            );
+
+            if (response.ok) {
+              hideContactInfo();
+              showToast("Claim request approved successfully!", "success");
+              hideClaimRequests();
+              switchTab("posted");
+            } else {
+              throw new Error("Failed to approve claim request");
+            }
+          } catch (error) {
+            showToast(
+              "Error approving claim request. Please try again.",
+              "error"
+            );
+          }
+        });
+
+      // View contact info for claimed items
+      async function viewContactInfo(itemId) {
+        try {
+          showToast("Loading contact information...", "info");
+          const response = await fetch(`/api/items/${itemId}/contact-info`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const contactInfo = data.contactInfo;
+
+            // Create a modal to display contact info
+            const modal = document.createElement("div");
+            modal.className =
+              "fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
+            modal.innerHTML = `
+              <div class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in">
+                <h3 class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-accent bg-clip-text text-transparent">
+                  Contact Information
+                </h3>
+                <div class="contact-info-card p-4 rounded-lg mb-6">
+                  <div class="space-y-3 text-sm">
                     ${
-                      comment.postedBy._id === currentUser._id
-                        ? `<div class="mt-2 flex justify-end space-x-2">
-                            <button onclick="editComment('${comment._id}')" class="text-blue-500 hover:text-blue-700 text-xs smooth-transition">
-                              <i class="fas fa-edit mr-1"></i> Edit
-                            </button>
-                            <button onclick="deleteComment('${comment._id}')" class="text-red-500 hover:text-red-700 text-xs smooth-transition">
-                              <i class="fas fa-trash mr-1"></i> Delete
-                            </button>
-                          </div>`
+                      contactInfo.phone
+                        ? `<div><span class="font-medium text-reddit-text">Phone:</span> <span class="text-reddit-accent">${contactInfo.phone}</span></div>`
+                        : ""
+                    }
+                    ${
+                      contactInfo.alternatePhone
+                        ? `<div><span class="font-medium text-reddit-text">Alt Phone:</span> <span class="text-reddit-accent">${contactInfo.alternatePhone}</span></div>`
+                        : ""
+                    }
+                    ${
+                      contactInfo.email
+                        ? `<div><span class="font-medium text-reddit-text">Email:</span> <span class="text-reddit-accent">${contactInfo.email}</span></div>`
+                        : ""
+                    }
+                    ${
+                      contactInfo.meetingLocation
+                        ? `<div><span class="font-medium text-reddit-text">Meeting Location:</span> <span class="text-reddit-textSecondary">${contactInfo.meetingLocation}</span></div>`
+                        : ""
+                    }
+                    ${
+                      contactInfo.meetingTime
+                        ? `<div><span class="font-medium text-reddit-text">Meeting Time:</span> <span class="text-reddit-textSecondary">${contactInfo.meetingTime}</span></div>`
+                        : ""
+                    }
+                    ${
+                      contactInfo.additionalNotes
+                        ? `<div><span class="font-medium text-reddit-text">Notes:</span> <span class="text-reddit-textSecondary">${contactInfo.additionalNotes}</span></div>`
                         : ""
                     }
                   </div>
                 </div>
+                <button onclick="this.closest('.modal-backdrop').remove()" class="w-full reddit-button py-3 rounded-xl font-semibold">
+                  Close
+                </button>
               </div>
-            </div>
-          `
-          )
-          .join("");
-
-        // Scroll to bottom of comments
-        modalCommentsContainer.scrollTop = modalCommentsContainer.scrollHeight;
-      }
-
-      // Format comment time
-      function formatCommentTime(dateString) {
-        const now = new Date();
-        const commentDate = new Date(dateString);
-        const diffInSeconds = Math.floor((now - commentDate) / 1000);
-
-        if (diffInSeconds < 60) {
-          return "Just now";
-        } else if (diffInSeconds < 3600) {
-          const minutes = Math.floor(diffInSeconds / 60);
-          return `${minutes} ${minutes === 1 ? "min" : "mins"} ago`;
-        } else if (diffInSeconds < 86400) {
-          const hours = Math.floor(diffInSeconds / 3600);
-          return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
-        } else if (diffInSeconds < 604800) {
-          const days = Math.floor(diffInSeconds / 86400);
-          return `${days} ${days === 1 ? "day" : "days"} ago`;
-        } else {
-          return commentDate.toLocaleDateString();
+            `;
+            document.body.appendChild(modal);
+          } else {
+            throw new Error("Failed to load contact information");
+          }
+        } catch (error) {
+          showToast(
+            "Error loading contact information. Please try again.",
+            "error"
+          );
         }
       }
 
-      // Close modal and reset body overflow
-      function closeModal() {
-        itemModal.classList.add("hidden");
-        document.body.style.overflow = "auto";
+      // Show rejection modal
+      function showRejectionModal(itemId, requestId) {
+        pendingRejection = { itemId, requestId };
+        document.getElementById("rejectionModal").classList.remove("hidden");
+        document.getElementById("rejectionReason").focus();
       }
 
-      // Accept claim
-      async function acceptClaim(itemId) {
-        if (!confirm("Are you sure you want to accept this claim?")) return;
+      // Hide rejection modal
+      function hideRejectionModal() {
+        document.getElementById("rejectionModal").classList.add("hidden");
+        document.getElementById("rejectionReason").value = "";
+        pendingRejection = null;
+      }
+
+      // Submit rejection
+      async function submitRejection() {
+        const reason = document.getElementById("rejectionReason").value.trim();
+        if (!reason) {
+          showToast("Please provide a reason for rejection", "warning");
+          return;
+        }
+
+        if (!pendingRejection) return;
 
         try {
-          const response = await fetch(`/api/items/${itemId}/accept-claim`, {
+          showToast("Rejecting claim request...", "info");
+          const response = await fetch(
+            `/api/items/${pendingRejection.itemId}/claim-requests/${pendingRejection.requestId}/reject`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ rejectionReason: reason }),
+            }
+          );
+
+          if (response.ok) {
+            hideRejectionModal();
+            showToast("Claim request rejected successfully!", "success");
+            hideClaimRequests();
+            switchTab("posted");
+          } else {
+            throw new Error("Failed to reject claim request");
+          }
+        } catch (error) {
+          showToast(
+            "Error rejecting claim request. Please try again.",
+            "error"
+          );
+        }
+      }
+
+      // Confirm block user
+      function confirmBlockUser(userId, userName) {
+        pendingBlock = userId;
+        document.getElementById(
+          "blockUserMessage"
+        ).textContent = `Are you sure you want to block ${userName}? They will no longer be able to claim your items or contact you.`;
+        document.getElementById("confirmBlockButton").onclick = () => {
+          blockUser(userId);
+          hideBlockUser();
+        };
+        document.getElementById("blockUserModal").classList.remove("hidden");
+      }
+
+      // Block user
+      async function blockUser(userId) {
+        try {
+          showToast("Blocking user...", "info");
+          const response = await fetch(`/api/users/${userId}/block`, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to accept claim");
+          if (response.ok) {
+            showToast("User blocked successfully!", "success");
+            switchTab("messages"); // Refresh messages
+          } else {
+            throw new Error("Failed to block user");
           }
-
-          const { item } = await response.json();
-          alert("Claim accepted successfully");
-          closeModal();
-          loadMyItems();
-          loadPendingClaims();
         } catch (error) {
-          console.error("Error accepting claim:", error);
-          alert(error.message || "Failed to accept claim. Please try again.");
+          showToast("Error blocking user. Please try again.", "error");
         }
       }
 
-      // Reject claim
-      async function rejectClaim(itemId) {
-        if (!confirm("Are you sure you want to reject this claim?")) return;
+      // Hide block user modal
+      function hideBlockUser() {
+        document.getElementById("blockUserModal").classList.add("hidden");
+        pendingBlock = null;
+      }
 
+      // Export user data
+      async function exportMyData() {
         try {
-          const response = await fetch(`/api/items/${itemId}/reject-claim`, {
-            method: "POST",
+          showToast("Preparing your data export...", "info");
+          const response = await fetch("/api/export/my-data", {
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to reject claim");
-          }
+          if (response.ok) {
+            const data = await response.json();
 
-          const { item } = await response.json();
-          alert("Claim rejected successfully");
-          closeModal();
-          loadMyItems();
-          loadPendingClaims();
+            // Create and download the file
+            const blob = new Blob([JSON.stringify(data.data, null, 2)], {
+              type: "application/json",
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `bup-lost-found-data-${
+              new Date().toISOString().split("T")[0]
+            }.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast("Data exported successfully!", "success");
+          } else {
+            throw new Error("Failed to export data");
+          }
         } catch (error) {
-          console.error("Error rejecting claim:", error);
-          alert(error.message || "Failed to reject claim. Please try again.");
+          showToast("Error exporting data. Please try again.", "error");
+        }
+      }
+
+      // Confirm delete function
+      function confirmDelete(type, id, name) {
+        deleteCallback = () => {
+          switch (type) {
+            case "item":
+              deleteItem(id);
+              break;
+            case "comment":
+              deleteComment(id);
+              break;
+            case "suggestion":
+              deleteSuggestion(id);
+              break;
+          }
+        };
+
+        document.getElementById(
+          "deleteConfirmMessage"
+        ).textContent = `Are you sure you want to delete ${name}? This action cannot be undone.`;
+        document.getElementById("confirmDeleteButton").onclick = () => {
+          if (deleteCallback) deleteCallback();
+          hideDeleteConfirm();
+        };
+        document
+          .getElementById("deleteConfirmModal")
+          .classList.remove("hidden");
+      }
+
+      // Delete item
+      async function deleteItem(itemId) {
+        try {
+          showToast("Deleting item...", "info");
+          const response = await fetch(`/api/items/${itemId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          if (response.ok) {
+            showToast("Item deleted successfully!", "success");
+            switchTab("posted");
+          } else {
+            throw new Error("Failed to delete item");
+          }
+        } catch (error) {
+          showToast("Error deleting item. Please try again.", "error");
         }
       }
 
       // Edit comment
-      async function editComment(commentId) {
-        const comment = currentComments.find((c) => c._id === commentId);
-        if (!comment) return;
+      function editComment(commentId, content) {
+        editingType = "comment";
+        editingId = commentId;
+        document.getElementById("editModalTitle").textContent = "Edit Comment";
+        document.getElementById("editContent").value = content;
+        document.getElementById("editModal").classList.remove("hidden");
+      }
 
-        const newContent = prompt("Edit your comment:", comment.content);
-        if (newContent === null || newContent.trim() === comment.content)
+      // Edit suggestion
+      function editSuggestion(suggestionId, content) {
+        editingType = "suggestion";
+        editingId = suggestionId;
+        document.getElementById("editModalTitle").textContent =
+          "Edit Suggestion";
+        document.getElementById("editContent").value = content;
+        document.getElementById("editModal").classList.remove("hidden");
+      }
+
+      // Save edit
+      async function saveEdit() {
+        const content = document.getElementById("editContent").value.trim();
+        if (!content) {
+          showToast("Content cannot be empty", "warning");
           return;
+        }
 
         try {
-          const response = await fetch(`/api/comments/${commentId}`, {
+          showToast(`Updating ${editingType}...`, "info");
+          const endpoint =
+            editingType === "comment"
+              ? `/api/comments/${editingId}`
+              : `/api/suggestions/${editingId}`;
+          const response = await fetch(endpoint, {
             method: "PUT",
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
             },
-            body: JSON.stringify({ content: newContent.trim() }),
+            body: JSON.stringify({ content }),
           });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to update comment");
-          }
-
-          alert("Comment updated successfully");
-          loadMyComments();
-          if (selectedItemId) {
-            loadItemComments(selectedItemId);
+          if (response.ok) {
+            hideEditModal();
+            showToast(
+              `${
+                editingType === "comment" ? "Comment" : "Suggestion"
+              } updated successfully!`,
+              "success"
+            );
+            switchTab(editingType === "comment" ? "comments" : "suggestions");
+          } else {
+            throw new Error(`Failed to update ${editingType}`);
           }
         } catch (error) {
-          console.error("Error updating comment:", error);
-          alert(error.message || "Failed to update comment. Please try again.");
+          showToast(
+            `Error updating ${editingType}. Please try again.`,
+            "error"
+          );
         }
       }
 
       // Delete comment
       async function deleteComment(commentId) {
-        if (!confirm("Are you sure you want to delete this comment?")) return;
-
         try {
+          showToast("Deleting comment...", "info");
           const response = await fetch(`/api/comments/${commentId}`, {
             method: "DELETE",
             headers: {
@@ -2273,64 +2258,21 @@
             },
           });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to delete comment");
-          }
-
-          alert("Comment deleted successfully");
-          loadMyComments();
-          if (selectedItemId) {
-            loadItemComments(selectedItemId);
+          if (response.ok) {
+            showToast("Comment deleted successfully!", "success");
+            switchTab("comments");
+          } else {
+            throw new Error("Failed to delete comment");
           }
         } catch (error) {
-          console.error("Error deleting comment:", error);
-          alert(error.message || "Failed to delete comment. Please try again.");
-        }
-      }
-
-      // Edit suggestion
-      async function editSuggestion(suggestionId) {
-        const suggestion = currentSuggestions.find(
-          (s) => s._id === suggestionId
-        );
-        if (!suggestion) return;
-
-        const newContent = prompt("Edit your suggestion:", suggestion.content);
-        if (newContent === null || newContent.trim() === suggestion.content)
-          return;
-
-        try {
-          const response = await fetch(`/api/suggestions/${suggestionId}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({ content: newContent.trim() }),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to update suggestion");
-          }
-
-          alert("Suggestion updated successfully");
-          loadMySuggestions();
-        } catch (error) {
-          console.error("Error updating suggestion:", error);
-          alert(
-            error.message || "Failed to update suggestion. Please try again."
-          );
+          showToast("Error deleting comment. Please try again.", "error");
         }
       }
 
       // Delete suggestion
       async function deleteSuggestion(suggestionId) {
-        if (!confirm("Are you sure you want to delete this suggestion?"))
-          return;
-
         try {
+          showToast("Deleting suggestion...", "info");
           const response = await fetch(`/api/suggestions/${suggestionId}`, {
             method: "DELETE",
             headers: {
@@ -2338,288 +2280,96 @@
             },
           });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to delete suggestion");
+          if (response.ok) {
+            showToast("Suggestion deleted successfully!", "success");
+            switchTab("suggestions");
+          } else {
+            throw new Error("Failed to delete suggestion");
           }
-
-          alert("Suggestion deleted successfully");
-          loadMySuggestions();
         } catch (error) {
-          console.error("Error deleting suggestion:", error);
-          alert(
-            error.message || "Failed to delete suggestion. Please try again."
-          );
+          showToast("Error deleting suggestion. Please try again.", "error");
         }
       }
 
-      // Edit item
-      editItemBtn.addEventListener("click", () => {
-        window.location.href = `post-item.html?edit=${selectedItemId}`;
-      });
+      // Modal functions
+      function showUpdateProfile() {
+        document
+          .getElementById("updateProfileModal")
+          .classList.remove("hidden");
+      }
 
-      // Delete item
-      deleteItemBtn.addEventListener("click", async () => {
-        if (!confirm("Are you sure you want to delete this item?")) return;
+      function hideUpdateProfile() {
+        document.getElementById("updateProfileModal").classList.add("hidden");
+      }
 
-        try {
-          const response = await fetch(`/api/items/${selectedItemId}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
+      function hideEditItem() {
+        document.getElementById("editItemModal").classList.add("hidden");
+      }
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to delete item");
-          }
+      function hideClaimRequests() {
+        document.getElementById("claimRequestsModal").classList.add("hidden");
+      }
 
-          alert("Item deleted successfully");
-          closeModal();
-          loadMyItems();
-        } catch (error) {
-          console.error("Error deleting item:", error);
-          alert(error.message || "Failed to delete item. Please try again.");
-        }
-      });
+      function hideEditModal() {
+        document.getElementById("editModal").classList.add("hidden");
+        editingType = null;
+        editingId = null;
+      }
 
-      // Accept claim from modal
-      acceptClaimBtn.addEventListener("click", () => {
-        acceptClaim(selectedItemId);
-      });
+      function hideDeleteConfirm() {
+        document.getElementById("deleteConfirmModal").classList.add("hidden");
+        deleteCallback = null;
+      }
 
-      // Reject claim from modal
-      rejectClaimBtn.addEventListener("click", () => {
-        rejectClaim(selectedItemId);
-      });
+      // Navigation functions
+      function goHome() {
+        window.location.href = "home.html";
+      }
 
-      // Submit comment
-      submitCommentBtn.addEventListener("click", async () => {
-        const content = commentText.value.trim();
-        if (!content) {
-          alert("Please enter your comment");
-          return;
-        }
-
-        try {
-          submitCommentBtn.disabled = true;
-          submitCommentBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i> Posting...';
-
-          const response = await fetch(
-            `/api/items/${selectedItemId}/comments`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-              body: JSON.stringify({ content }),
-            }
-          );
-
-          if (!response.ok) throw new Error("Failed to submit comment");
-
-          commentText.value = "";
-          loadItemComments(selectedItemId);
-          loadMyComments();
-        } catch (error) {
-          console.error("Error submitting comment:", error);
-          alert("Failed to submit comment. Please try again.");
-        } finally {
-          submitCommentBtn.disabled = false;
-          submitCommentBtn.innerHTML = "Post Comment";
-        }
-      });
-
-      // Add suggestion
-      addSuggestionBtn.addEventListener("click", () => {
-        suggestionText.value = "";
-        suggestionModal.classList.remove("hidden");
-      });
-
-      closeSuggestionModal.addEventListener("click", () => {
-        suggestionModal.classList.add("hidden");
-      });
-
-      cancelSuggestionBtn.addEventListener("click", () => {
-        suggestionModal.classList.add("hidden");
-      });
-
-      submitSuggestionBtn.addEventListener("click", async () => {
-        const content = suggestionText.value.trim();
-        if (!content) {
-          alert("Please enter your suggestion");
-          return;
-        }
-
-        try {
-          submitSuggestionBtn.disabled = true;
-          submitSuggestionBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
-
-          const response = await fetch("/api/suggestions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({ content }),
-          });
-
-          if (!response.ok) throw new Error("Failed to submit suggestion");
-
-          suggestionModal.classList.add("hidden");
-          loadMySuggestions();
-        } catch (error) {
-          console.error("Error submitting suggestion:", error);
-          alert("Failed to submit suggestion. Please try again.");
-        } finally {
-          submitSuggestionBtn.disabled = false;
-          submitSuggestionBtn.innerHTML = "Submit";
-        }
-      });
-
-      // Item modal
-      closeItemModal.addEventListener("click", closeModal);
-
-      // Close modal when clicking outside
-      itemModal.addEventListener("click", (e) => {
-        if (e.target === itemModal) {
-          closeModal();
-        }
-      });
-
-      // Tab switching
-      myItemsTab.addEventListener("click", () => {
-        activeTab = "myItems";
-        myItemsTab.classList.remove("tab-inactive");
-        myItemsTab.classList.add("tab-active");
-        claimedItemsTab.classList.remove("tab-active");
-        claimedItemsTab.classList.add("tab-inactive");
-        myCommentsTab.classList.remove("tab-active");
-        myCommentsTab.classList.add("tab-inactive");
-        mySuggestionsTab.classList.remove("tab-active");
-        mySuggestionsTab.classList.add("tab-inactive");
-        pendingClaimsTab.classList.remove("tab-active");
-        pendingClaimsTab.classList.add("tab-inactive");
-
-        myItemsSection.classList.remove("hidden");
-        claimedItemsSection.classList.add("hidden");
-        myCommentsSection.classList.add("hidden");
-        mySuggestionsSection.classList.add("hidden");
-        pendingClaimsSection.classList.add("hidden");
-      });
-
-      claimedItemsTab.addEventListener("click", () => {
-        activeTab = "claimedItems";
-        claimedItemsTab.classList.remove("tab-inactive");
-        claimedItemsTab.classList.add("tab-active");
-        myItemsTab.classList.remove("tab-active");
-        myItemsTab.classList.add("tab-inactive");
-        myCommentsTab.classList.remove("tab-active");
-        myCommentsTab.classList.add("tab-inactive");
-        mySuggestionsTab.classList.remove("tab-active");
-        mySuggestionsTab.classList.add("tab-inactive");
-        pendingClaimsTab.classList.remove("tab-active");
-        pendingClaimsTab.classList.add("tab-inactive");
-
-        claimedItemsSection.classList.remove("hidden");
-        myItemsSection.classList.add("hidden");
-        myCommentsSection.classList.add("hidden");
-        mySuggestionsSection.classList.add("hidden");
-        pendingClaimsSection.classList.add("hidden");
-      });
-
-      myCommentsTab.addEventListener("click", () => {
-        activeTab = "myComments";
-        myCommentsTab.classList.remove("tab-inactive");
-        myCommentsTab.classList.add("tab-active");
-        myItemsTab.classList.remove("tab-active");
-        myItemsTab.classList.add("tab-inactive");
-        claimedItemsTab.classList.remove("tab-active");
-        claimedItemsTab.classList.add("tab-inactive");
-        mySuggestionsTab.classList.remove("tab-active");
-        mySuggestionsTab.classList.add("tab-inactive");
-        pendingClaimsTab.classList.remove("tab-active");
-        pendingClaimsTab.classList.add("tab-inactive");
-
-        myCommentsSection.classList.remove("hidden");
-        myItemsSection.classList.add("hidden");
-        claimedItemsSection.classList.add("hidden");
-        mySuggestionsSection.classList.add("hidden");
-        pendingClaimsSection.classList.add("hidden");
-      });
-
-      mySuggestionsTab.addEventListener("click", () => {
-        activeTab = "mySuggestions";
-        mySuggestionsTab.classList.remove("tab-inactive");
-        mySuggestionsTab.classList.add("tab-active");
-        myItemsTab.classList.remove("tab-active");
-        myItemsTab.classList.add("tab-inactive");
-        claimedItemsTab.classList.remove("tab-active");
-        claimedItemsTab.classList.add("tab-inactive");
-        myCommentsTab.classList.remove("tab-active");
-        myCommentsTab.classList.add("tab-inactive");
-        pendingClaimsTab.classList.remove("tab-active");
-        pendingClaimsTab.classList.add("tab-inactive");
-
-        mySuggestionsSection.classList.remove("hidden");
-        myItemsSection.classList.add("hidden");
-        claimedItemsSection.classList.add("hidden");
-        myCommentsSection.classList.add("hidden");
-        pendingClaimsSection.classList.add("hidden");
-      });
-
-      pendingClaimsTab.addEventListener("click", () => {
-        activeTab = "pendingClaims";
-        pendingClaimsTab.classList.remove("tab-inactive");
-        pendingClaimsTab.classList.add("tab-active");
-        myItemsTab.classList.remove("tab-active");
-        myItemsTab.classList.add("tab-inactive");
-        claimedItemsTab.classList.remove("tab-active");
-        claimedItemsTab.classList.add("tab-inactive");
-        myCommentsTab.classList.remove("tab-active");
-        myCommentsTab.classList.add("tab-inactive");
-        mySuggestionsTab.classList.remove("tab-active");
-        mySuggestionsTab.classList.add("tab-inactive");
-
-        pendingClaimsSection.classList.remove("hidden");
-        myItemsSection.classList.add("hidden");
-        claimedItemsSection.classList.add("hidden");
-        myCommentsSection.classList.add("hidden");
-        mySuggestionsSection.classList.add("hidden");
-
-        // Clear notification badge when viewing pending claims
-        pendingClaimsBadge.classList.add("hidden");
-      });
-
-      // Navigation
-      postLostBtn.addEventListener("click", () => {
-        window.location.href = "post-item.html?type=lost";
-      });
-
-      postFoundBtn.addEventListener("click", () => {
-        window.location.href = "post-item.html?type=found";
-      });
-
-      logoutBtn.addEventListener("click", () => {
+      function logout() {
         localStorage.removeItem("token");
-        window.location.href = "login.html";
-      });
+        showToast("Logged out successfully", "success");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1000);
+      }
 
-      // Press Escape to close modals
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          if (!itemModal.classList.contains("hidden")) {
-            closeModal();
-          }
-          if (!suggestionModal.classList.contains("hidden")) {
-            suggestionModal.classList.add("hidden");
-          }
-        }
-      });
+      // Show toast function
+      function showToast(message, type = "info") {
+        const container = document.getElementById("toastContainer");
+        const toastDiv = document.createElement("div");
+
+        const colors = {
+          success: "bg-gradient-to-r from-reddit-accent to-green-500",
+          error: "bg-gradient-to-r from-red-500 to-red-600",
+          warning: "bg-gradient-to-r from-yellow-500 to-yellow-600",
+          info: "bg-gradient-to-r from-reddit-blue to-reddit-blueHover",
+        };
+
+        const icons = {
+          success: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>`,
+          error: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>`,
+          warning: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>`,
+          info: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>`,
+        };
+
+        toastDiv.className = `${colors[type]} text-white px-6 py-4 rounded-2xl shadow-2xl transform transition-all duration-300 flex items-center space-x-3 max-w-md animate-slide-down`;
+        toastDiv.innerHTML = `
+          ${icons[type]}
+          <span class="font-medium">${message}</span>
+        `;
+
+        container.appendChild(toastDiv);
+
+        setTimeout(() => {
+          toastDiv.style.transform = "translateX(120%)";
+          setTimeout(() => {
+            if (container.contains(toastDiv)) {
+              container.removeChild(toastDiv);
+            }
+          }, 300);
+        }, 4000);
+      }
     </script>
   </body>
 </html>
