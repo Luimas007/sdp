@@ -19,6 +19,7 @@
         --danger: #ef4444;
         --dark: #1e293b;
         --light: #f8fafc;
+        --deep-blue: #1e3a8a; /* Added deep blue color */
       }
 
       body {
@@ -32,6 +33,11 @@
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease; /* Added transition for smooth hide/show */
+      }
+
+      .nav-hidden {
+        transform: translateY(-100%); /* Hides the nav bar */
       }
 
       .card-hover {
@@ -113,13 +119,19 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
+
+      /* Update section heading colors */
+      h2.text-2xl,
+      h2.text-4xl {
+        color: var(--deep-blue);
+      }
     </style>
   </head>
   <body
     class="bg-[url('home.jpg')] bg-cover bg-center bg-no-repeat min-h-screen"
   >
     <!-- Navigation Bar -->
-    <nav class="nav-glass fixed w-full z-50">
+    <nav id="navbar" class="nav-glass fixed w-full z-50">
       <div
         class="container mx-auto px-4 py-3 flex justify-between items-center"
       >
@@ -439,6 +451,7 @@
       const postItemBtn = document.getElementById("postItemBtn");
       const viewAllItemsBtn = document.getElementById("viewAllItemsBtn");
       const logoutBtn = document.getElementById("logoutBtn");
+      const navbar = document.getElementById("navbar"); // Added navbar reference
 
       // Initialize the page
       document.addEventListener("DOMContentLoaded", async () => {
@@ -459,6 +472,9 @@
 
         // Set up event listeners
         setupEventListeners();
+
+        // Setup scroll listener for navbar
+        setupNavbarScroll();
       });
 
       // Check authentication
@@ -1051,6 +1067,27 @@
 
         // Logout button
         logoutBtn.addEventListener("click", logout);
+      }
+
+      // Setup navbar scroll behavior
+      function setupNavbarScroll() {
+        let lastScrollTop = 0;
+        window.addEventListener(
+          "scroll",
+          () => {
+            let currentScrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
+            if (currentScrollTop > lastScrollTop) {
+              // Scrolling down
+              navbar.classList.add("nav-hidden");
+            } else {
+              // Scrolling up
+              navbar.classList.remove("nav-hidden");
+            }
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+          },
+          { passive: false }
+        );
       }
 
       // Update filter buttons active state
