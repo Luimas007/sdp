@@ -1014,6 +1014,21 @@
         padding: 24px;
         margin-bottom: 20px;
         transition: var(--transition-normal);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .log-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gradient-purple);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
       }
 
       .log-item:hover {
@@ -1022,32 +1037,52 @@
         border-color: var(--reddit-orange);
       }
 
+      .log-item:hover::before {
+        transform: scaleX(1);
+      }
+
       .log-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
       }
 
       .log-title {
-        font-size: 18px;
-        font-weight: 600;
+        font-size: 20px;
+        font-weight: 700;
         color: var(--reddit-text);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 200px;
       }
 
       .log-date {
         font-size: 14px;
         color: var(--reddit-text-secondary);
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px 12px;
+        border-radius: 8px;
+        white-space: nowrap;
       }
 
       .log-details {
         color: var(--reddit-text-secondary);
         line-height: 1.6;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 16px;
+        border-radius: 12px;
+        border-left: 4px solid var(--reddit-orange);
       }
 
       .log-participants {
         display: flex;
+        flex-wrap: wrap;
         gap: 16px;
         font-size: 14px;
       }
@@ -1056,9 +1091,32 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        border: 1px solid var(--reddit-border);
+        transition: var(--transition-normal);
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .participant:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: var(--reddit-orange);
+      }
+
+      .participant i {
+        color: var(--reddit-orange);
+        font-size: 16px;
+      }
+
+      .participant-role {
+        font-weight: 600;
+        color: var(--reddit-text);
+      }
+
+      .participant-name {
+        color: var(--reddit-text-secondary);
       }
 
       /* Enhanced Loading States */
@@ -1165,6 +1223,19 @@
         .profile-info {
           display: none;
         }
+
+        .log-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .log-participants {
+          flex-direction: column;
+        }
+
+        .participant {
+          min-width: auto;
+        }
       }
 
       /* Container */
@@ -1245,6 +1316,136 @@
         background: rgba(255, 255, 255, 0.1);
         color: var(--reddit-text);
       }
+
+      /* Suggestions Section */
+      .suggestions-section {
+        background: var(--gradient-card);
+        border: 1px solid var(--reddit-border);
+        border-radius: 24px;
+        padding: 40px;
+        margin-bottom: 48px;
+        backdrop-filter: blur(10px);
+        display: none;
+      }
+
+      .suggestions-section.active {
+        display: block;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      .suggestion-form {
+        margin-bottom: 32px;
+      }
+
+      .suggestion-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid var(--reddit-border);
+        border-radius: 12px;
+        padding: 16px 20px;
+        color: var(--reddit-text);
+        font-size: 16px;
+        resize: vertical;
+        min-height: 120px;
+        transition: var(--transition-normal);
+        font-family: inherit;
+      }
+
+      .suggestion-input:focus {
+        outline: none;
+        border-color: var(--reddit-orange);
+        box-shadow: 0 0 0 4px rgba(255, 69, 0, 0.1);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .suggestion-input::placeholder {
+        color: var(--reddit-text-secondary);
+      }
+
+      .user-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid var(--reddit-border);
+      }
+
+      .suggestion-card {
+        background: var(--gradient-glass);
+        border: 1px solid var(--reddit-border);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        transition: var(--transition-normal);
+      }
+
+      .suggestion-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--reddit-orange);
+      }
+
+      .suggestion-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .suggestion-author {
+        flex: 1;
+      }
+
+      .suggestion-author-name {
+        color: var(--reddit-text);
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .suggestion-time {
+        color: var(--reddit-text-secondary);
+        font-size: 14px;
+      }
+
+      .suggestion-content {
+        color: var(--reddit-text);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .suggestion-actions {
+        display: flex;
+        gap: 16px;
+      }
+
+      .suggestion-action-btn {
+        background: none;
+        border: none;
+        color: var(--reddit-text-secondary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: var(--transition-normal);
+        padding: 6px 12px;
+        border-radius: 8px;
+      }
+
+      .suggestion-action-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--reddit-text);
+      }
+
+      .suggestion-action-btn.edit:hover {
+        color: var(--reddit-blue);
+      }
+
+      .suggestion-action-btn.delete:hover {
+        color: var(--reddit-red);
+      }
     </style>
   </head>
   <body>
@@ -1255,7 +1456,7 @@
     <nav id="navbar" class="nav-container">
       <div class="container">
         <div class="flex items-center justify-between" style="padding: 16px 0">
-          <a href="#" class="nav-brand">
+          <a href="home.html" class="nav-brand">
             <div class="nav-logo">
               <i class="fas fa-search-location"></i>
             </div>
@@ -1461,31 +1662,12 @@
                 src="https://ui-avatars.com/api/?name=User&background=ff4500&color=fff&size=100"
                 alt="You"
                 class="user-avatar"
-                style="
-                  width: 48px;
-                  height: 48px;
-                  border-radius: 50%;
-                  object-fit: cover;
-                  flex-shrink: 0;
-                "
               />
               <div style="flex: 1">
                 <textarea
                   id="suggestionInput"
                   class="suggestion-input"
                   placeholder="Share your suggestions to improve our service..."
-                  style="
-                    width: 100%;
-                    background: rgba(255, 255, 255, 0.05);
-                    border: 2px solid var(--reddit-border);
-                    border-radius: 12px;
-                    padding: 16px 20px;
-                    color: var(--reddit-text);
-                    font-size: 16px;
-                    resize: vertical;
-                    min-height: 120px;
-                    transition: var(--transition-normal);
-                  "
                 ></textarea>
                 <div
                   style="
@@ -1727,10 +1909,8 @@
         try {
           showLoading(reunitedLogsContainer, "Loading reunited logs...");
 
-          // Fixed: Use the correct query parameters for reunited items
-          const response = await apiCall(
-            "/api/items?status=claimed&includeReunited=true"
-          );
+          // Use the new dedicated reunited endpoint
+          const response = await apiCall("/api/items/reunited");
           renderReunitedLogs(response.items);
         } catch (error) {
           console.error("Error loading reunited logs:", error);
@@ -1741,17 +1921,20 @@
         }
       }
 
-      // Render reunited logs
+      // Render reunited logs with enhanced design
       function renderReunitedLogs(items) {
         if (items.length === 0) {
           reunitedLogsContainer.innerHTML = `
             <div class="loading">
-              <div style="color: var(--reddit-text-secondary); font-size: 48px; margin-bottom: 16px;">
+              <div style="color: var(--reddit-purple); font-size: 64px; margin-bottom: 24px;">
                 <i class="fas fa-heart"></i>
               </div>
-              <p>No reunited items yet</p>
-              <p style="color: var(--reddit-text-secondary); font-size: 14px; margin-top: 8px;">
-                When items are successfully reunited, they'll appear here
+              <h3 style="color: var(--reddit-text); margin-bottom: 12px; font-size: 24px; font-weight: 600;">No reunited items yet</h3>
+              <p style="color: var(--reddit-text-secondary); font-size: 16px; margin-bottom: 8px;">
+                When items are successfully reunited, they'll appear here as success stories
+              </p>
+              <p style="color: var(--reddit-text-secondary); font-size: 14px;">
+                Help make the first reunion happen! 🎉
               </p>
             </div>
           `;
@@ -1761,44 +1944,84 @@
         reunitedLogsContainer.innerHTML = items
           .map(
             (item) => `
-          <div class="log-item">
+          <div class="log-item" onclick="viewItem('${item._id}')">
             <div class="log-header">
               <div class="log-title">
-                <i class="fas fa-check-circle" style="color: var(--reddit-green); margin-right: 8px;"></i>
+                <i class="fas fa-check-circle" style="color: var(--reddit-green);"></i>
                 ${item.title}
               </div>
-              <div class="log-date">${formatDate(item.updatedAt)}</div>
+              <div class="log-date">
+                <i class="fas fa-calendar-alt" style="margin-right: 6px;"></i>
+                ${formatDate(item.updatedAt)}
+              </div>
             </div>
+            
             <div class="log-details">
-              <strong>Type:</strong> ${
-                item.type === "lost" ? "Lost Item" : "Found Item"
-              } | 
-              <strong>Location:</strong> ${item.location}
-              <br>
-              <strong>Description:</strong> ${item.description}
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="background: ${
+                  item.type === "lost"
+                    ? "var(--gradient-danger)"
+                    : "var(--gradient-success)"
+                }; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                  ${item.type === "lost" ? "Lost Item" : "Found Item"}
+                </span>
+                <span style="color: var(--reddit-text-secondary);">•</span>
+                <span style="color: var(--reddit-text-secondary);">
+                  <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i>
+                  ${item.location}
+                </span>
+              </div>
+              <p style="margin-bottom: 0; line-height: 1.5;">
+                <strong style="color: var(--reddit-text);">Description:</strong> ${
+                  item.description
+                }
+              </p>
             </div>
+            
             <div class="log-participants">
               <div class="participant">
-                <i class="fas fa-user"></i>
-                <span>Posted by: ${item.postedBy.firstName} ${
+                <i class="fas fa-user-plus"></i>
+                <div>
+                  <div class="participant-role">Posted by</div>
+                  <div class="participant-name">${item.postedBy.firstName} ${
               item.postedBy.lastName
-            }</span>
+            }</div>
+                </div>
               </div>
               ${
                 item.claimedBy
                   ? `
                 <div class="participant">
                   <i class="fas fa-handshake"></i>
-                  <span>Reunited with: ${item.claimedBy.firstName} ${item.claimedBy.lastName}</span>
+                  <div>
+                    <div class="participant-role">Reunited with</div>
+                    <div class="participant-name">${item.claimedBy.firstName} ${item.claimedBy.lastName}</div>
+                  </div>
                 </div>
               `
                   : ""
               }
             </div>
+            
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--reddit-border); display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--reddit-text-secondary);">
+              <span>
+                <i class="fas fa-eye" style="margin-right: 6px;"></i>
+                Click to view details
+              </span>
+              <span style="background: var(--gradient-purple); color: white; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">
+                <i class="fas fa-trophy" style="margin-right: 4px;"></i>
+                SUCCESS STORY
+              </span>
+            </div>
           </div>
         `
           )
           .join("");
+      }
+
+      // View item details
+      function viewItem(itemId) {
+        window.location.href = `item.html?id=${itemId}`;
       }
 
       // Update section title
@@ -1955,10 +2178,8 @@
         suggestionsContainer.innerHTML = suggestions
           .map(
             (suggestion) => `
-          <div class="card" style="padding: 24px; margin-bottom: 20px;" data-id="${
-            suggestion._id
-          }">
-            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+          <div class="suggestion-card" data-id="${suggestion._id}">
+            <div class="suggestion-header">
               <img src="${
                 suggestion.postedBy.profileImage
                   ? `${API_BASE}${suggestion.postedBy.profileImage}`
@@ -1969,37 +2190,35 @@
                     )}&background=ff4500&color=fff&size=100`
               }" 
                    alt="${suggestion.postedBy.firstName}" 
-                   style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--reddit-border);"
+                   class="user-avatar"
                    onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(
                      suggestion.postedBy.firstName +
                        " " +
                        suggestion.postedBy.lastName
                    )}&background=ff4500&color=fff&size=100'">
-              <div>
-                <h4 style="color: var(--reddit-text); font-weight: 600; margin-bottom: 4px;">
+              <div class="suggestion-author">
+                <div class="suggestion-author-name">
                   ${suggestion.postedBy.firstName} ${
               suggestion.postedBy.lastName
             }
-                </h4>
-                <span style="color: var(--reddit-text-secondary); font-size: 14px;">
+                </div>
+                <div class="suggestion-time">
                   ${formatTimeAgo(new Date(suggestion.createdAt))}
-                </span>
+                </div>
               </div>
             </div>
-            <div style="color: var(--reddit-text); line-height: 1.6; margin-bottom: 16px;">
+            <div class="suggestion-content">
               ${suggestion.content}
             </div>
             ${
               suggestion.postedBy._id === currentUser._id
                 ? `
-              <div style="display: flex; gap: 16px;">
-                <button class="edit-suggestion-btn" data-id="${suggestion._id}" 
-                        style="background: none; border: none; color: var(--reddit-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; transition: var(--transition-normal);">
+              <div class="suggestion-actions">
+                <button class="suggestion-action-btn edit" onclick="editSuggestion('${suggestion._id}')">
                   <i class="fas fa-edit"></i>
                   Edit
                 </button>
-                <button class="delete-suggestion-btn" data-id="${suggestion._id}"
-                        style="background: none; border: none; color: var(--reddit-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; transition: var(--transition-normal);">
+                <button class="suggestion-action-btn delete" onclick="deleteSuggestion('${suggestion._id}')">
                   <i class="fas fa-trash"></i>
                   Delete
                 </button>
@@ -2011,23 +2230,6 @@
         `
           )
           .join("");
-
-        // Add event listeners for edit/delete buttons
-        document.querySelectorAll(".edit-suggestion-btn").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const suggestionId = btn.getAttribute("data-id");
-            editSuggestion(suggestionId);
-          });
-        });
-
-        document.querySelectorAll(".delete-suggestion-btn").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const suggestionId = btn.getAttribute("data-id");
-            deleteSuggestion(suggestionId);
-          });
-        });
       }
 
       // Format time ago
@@ -2102,11 +2304,13 @@
         const suggestionCard = document.querySelector(
           `[data-id="${suggestionId}"]`
         );
-        const contentElement = suggestionCard.querySelector("div:nth-child(2)");
-        const originalContent = contentElement.textContent;
+        const contentElement = suggestionCard.querySelector(
+          ".suggestion-content"
+        );
+        const originalContent = contentElement.textContent.trim();
 
         contentElement.innerHTML = `
-          <textarea style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 2px solid var(--reddit-border); border-radius: 12px; padding: 16px 20px; color: var(--reddit-text); font-size: 16px; resize: vertical; min-height: 80px; margin-bottom: 16px;" rows="3">${originalContent}</textarea>
+          <textarea style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 2px solid var(--reddit-border); border-radius: 12px; padding: 16px 20px; color: var(--reddit-text); font-size: 16px; resize: vertical; min-height: 80px; margin-bottom: 16px; font-family: inherit;" rows="3">${originalContent}</textarea>
           <div style="display: flex; justify-content: flex-end; gap: 12px;">
             <button class="save-edit-btn btn btn-primary" style="padding: 8px 16px; font-size: 14px;">
               <i class="fas fa-save"></i> Save
@@ -2245,11 +2449,15 @@
           case "reunited":
             tabReunited.classList.add("active");
             reunitedTab.classList.remove("hidden");
+            document.querySelector(".reunited-logs").classList.add("active");
             loadReunitedLogs();
             break;
           case "suggestions":
             tabSuggestions.classList.add("active");
             suggestionsTab.classList.remove("hidden");
+            document
+              .querySelector(".suggestions-section")
+              .classList.add("active");
             break;
         }
       }

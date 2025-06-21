@@ -906,6 +906,14 @@ app.get("/api/items", authenticate, async (req, res) => {
         itemObj.image = `/uploads/${itemObj.image}`;
       }
 
+      // Format profile images
+      if (itemObj.postedBy && itemObj.postedBy.profileImage) {
+        itemObj.postedBy.profileImage = `/uploads/${itemObj.postedBy.profileImage}`;
+      }
+      if (itemObj.claimedBy && itemObj.claimedBy.profileImage) {
+        itemObj.claimedBy.profileImage = `/uploads/${itemObj.claimedBy.profileImage}`;
+      }
+
       // Only show validity answers to the item owner or the claimant
       if (
         itemObj.postedBy._id.toString() !== req.user._id.toString() &&
@@ -922,6 +930,106 @@ app.get("/api/items", authenticate, async (req, res) => {
     });
 
     res.status(200).json({ success: true, items: formattedItems });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Specific route for reunited log
+app.get("/api/items/reunited", authenticate, async (req, res) => {
+  try {
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+
+    // Query for reunited items only (status: "claimed")
+    const reunitedItems = await Item.find({ status: "claimed" })
+      .populate("postedBy", "firstName lastName department profileImage")
+      .populate("claimedBy", "firstName lastName department profileImage")
+      .populate({
+        path: "claimRequests.requestedBy",
+        select: "firstName lastName department profileImage",
+      })
+      .populate({
+        path: "informRequests.informedBy",
+        select: "firstName lastName department profileImage",
+      })
+      .sort({ updatedAt: -1 }) // Sort by when they were reunited (updatedAt)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Item.countDocuments({ status: "claimed" });
+
+    // Format the items with additional reunion information
+    const formattedItems = reunitedItems.map((item) => {
+      const itemObj = item.toObject();
+
+      // Format image URLs
+      if (itemObj.image) {
+        itemObj.image = `/uploads/${itemObj.image}`;
+      }
+
+      // Format profile images
+      if (itemObj.postedBy && itemObj.postedBy.profileImage) {
+        itemObj.postedBy.profileImage = `/uploads/${itemObj.postedBy.profileImage}`;
+      }
+      if (itemObj.claimedBy && itemObj.claimedBy.profileImage) {
+        itemObj.claimedBy.profileImage = `/uploads/${itemObj.claimedBy.profileImage}`;
+      }
+
+      // Add reunion details
+      let reunionDetails = {};
+
+      if (itemObj.type === "found") {
+        // For found items, find the approved claim request
+        const approvedClaim = itemObj.claimRequests.find(
+          (req) => req.status === "approved"
+        );
+        if (approvedClaim) {
+          reunionDetails = {
+            reunionDate: approvedClaim.reviewedAt,
+            reunionType: "claim_approved",
+            finder: itemObj.postedBy,
+            claimer: itemObj.claimedBy,
+          };
+        }
+      } else if (itemObj.type === "lost") {
+        // For lost items, find the approved inform request
+        const approvedInform = itemObj.informRequests.find(
+          (req) => req.status === "approved"
+        );
+        if (approvedInform) {
+          reunionDetails = {
+            reunionDate: approvedInform.reviewedAt,
+            reunionType: "inform_approved",
+            owner: itemObj.postedBy,
+            finder: itemObj.claimedBy,
+          };
+        }
+      }
+
+      // Hide sensitive validity question answers for reunited items
+      itemObj.validityQuestions = itemObj.validityQuestions.map((q) => ({
+        question: q.question,
+        answer: undefined,
+      }));
+
+      return {
+        ...itemObj,
+        reunionDetails,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      items: formattedItems,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -947,6 +1055,14 @@ app.get("/api/items/:id", authenticate, async (req, res) => {
     const itemObj = item.toObject();
     if (itemObj.image) {
       itemObj.image = `/uploads/${itemObj.image}`;
+    }
+
+    // Format profile images
+    if (itemObj.postedBy && itemObj.postedBy.profileImage) {
+      itemObj.postedBy.profileImage = `/uploads/${itemObj.postedBy.profileImage}`;
+    }
+    if (itemObj.claimedBy && itemObj.claimedBy.profileImage) {
+      itemObj.claimedBy.profileImage = `/uploads/${itemObj.claimedBy.profileImage}`;
     }
 
     // Only show validity answers to the item owner or the claimant
@@ -1083,7 +1199,7 @@ app.delete("/api/items/:id", authenticate, async (req, res) => {
   }
 });
 
-// Claim Request Routes (For Found Items)
+// Claim Request Routes (For Found Items) - UPDATED WITH DUPLICATE CHECK
 app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
   try {
     const { answers, additionalInfo } = req.body;
@@ -1116,6 +1232,22 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "You cannot claim your own item" });
+    }
+
+    // NEW: Check if the user already has a pending claim request for this item
+    const existingClaimRequest = item.claimRequests.find(
+      (request) =>
+        request.requestedBy.toString() === req.user._id.toString() &&
+        request.status === "pending"
+    );
+
+    if (existingClaimRequest) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "You already have a pending claim request for this item. Please wait for the owner to review your request.",
+        warningType: "duplicate_claim",
+      });
     }
 
     // Check if answers are provided for all questions
@@ -1160,7 +1292,7 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Inform Request Routes (For Lost Items)
+// NEW: Inform Request Routes (For Lost Items) - UPDATED WITH DUPLICATE CHECK
 app.post(
   "/api/items/:id/inform-request",
   authenticate,
@@ -1194,12 +1326,26 @@ app.post(
 
       // Check if the user is the owner of the item
       if (item.postedBy.toString() === req.user._id.toString()) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "You cannot inform about your own item",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "You cannot inform about your own item",
+        });
+      }
+
+      // NEW: Check if the user already has a pending inform request for this item
+      const existingInformRequest = item.informRequests.find(
+        (request) =>
+          request.informedBy.toString() === req.user._id.toString() &&
+          request.status === "pending"
+      );
+
+      if (existingInformRequest) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "You already have a pending inform request for this item. Please wait for the owner to review your request.",
+          warningType: "duplicate_inform",
+        });
       }
 
       if (!message) {
@@ -1872,7 +2018,16 @@ app.get("/api/items/:id/comments", authenticate, async (req, res) => {
       .populate("postedBy", "firstName lastName department profileImage")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({ success: true, comments });
+    // Format profile images
+    const formattedComments = comments.map((comment) => {
+      const commentObj = comment.toObject();
+      if (commentObj.postedBy && commentObj.postedBy.profileImage) {
+        commentObj.postedBy.profileImage = `/uploads/${commentObj.postedBy.profileImage}`;
+      }
+      return commentObj;
+    });
+
+    res.status(200).json({ success: true, comments: formattedComments });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
