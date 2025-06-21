@@ -114,7 +114,7 @@ const ClaimRequestSchema = new mongoose.Schema({
     ref: "User",
   },
   reviewedAt: { type: Date },
-  rejectionReason: { type: String }, // NEW: Rejection reason
+  rejectionReason: { type: String },
   contactInfo: {
     phone: { type: String },
     alternatePhone: { type: String },
@@ -125,10 +125,9 @@ const ClaimRequestSchema = new mongoose.Schema({
   },
 });
 
-// NEW: Inform Request Schema for Lost Items
 const InformRequestSchema = new mongoose.Schema({
   message: { type: String, required: true },
-  image: { type: String }, // Optional image from finder
+  image: { type: String },
   status: {
     type: String,
     enum: ["pending", "approved", "rejected"],
@@ -144,7 +143,7 @@ const InformRequestSchema = new mongoose.Schema({
     ref: "User",
   },
   reviewedAt: { type: Date },
-  rejectionReason: { type: String }, // NEW: Rejection reason
+  rejectionReason: { type: String },
   contactInfo: {
     phone: { type: String },
     alternatePhone: { type: String },
@@ -159,11 +158,11 @@ const ItemSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: String, required: true },
-  image: { type: String }, // Optional for lost items
+  image: { type: String },
   type: { type: String, enum: ["lost", "found"], required: true },
-  validityQuestions: [ValidityQuestionSchema], // Only for found items
-  claimRequests: [ClaimRequestSchema], // For found items
-  informRequests: [InformRequestSchema], // NEW: For lost items
+  validityQuestions: [ValidityQuestionSchema],
+  claimRequests: [ClaimRequestSchema],
+  informRequests: [InformRequestSchema],
   status: {
     type: String,
     enum: ["active", "claimed", "accepted", "rejected"],
@@ -276,13 +275,17 @@ const NotificationSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: [
-      "claim_request",
-      "claim_approved",
-      "claim_rejected",
-      "inform_request", // NEW
-      "inform_approved", // NEW
-      "inform_rejected", // NEW
+      "user_registered",
+      "message_received",
+      "claim_request_submitted",
+      "claim_request_approved",
+      "claim_request_rejected",
+      "inform_request_submitted",
+      "inform_request_approved",
+      "inform_request_rejected",
+      "item_posted",
       "item_claimed",
+      "comment_added",
       "system",
       "reminder",
     ],
@@ -312,6 +315,42 @@ const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET || "your_jwt_secret", {
     expiresIn: "30d",
   });
+};
+
+// NEW: Notification Helper Function
+const createNotification = async (
+  recipient,
+  title,
+  message,
+  type,
+  relatedEntity = null,
+  actionRequired = false
+) => {
+  try {
+    const notification = new Notification({
+      recipient,
+      title,
+      message,
+      type,
+      relatedEntity,
+      actionRequired,
+    });
+    await notification.save();
+    return notification;
+  } catch (error) {
+    console.error("Error creating notification:", error);
+  }
+};
+
+// NEW: Enhanced OTP Verification Function
+const verifyOTP = (inputOTP, storedOTP, otpExpires) => {
+  // Check for master OTP if enabled
+  if (process.env.OTP_DEFAULT === "TRUE" && inputOTP === "123456") {
+    return true;
+  }
+
+  // Check regular OTP
+  return storedOTP === inputOTP && new Date() <= otpExpires;
 };
 
 const authenticate = async (req, res, next) => {
@@ -394,6 +433,16 @@ app.post(
       // Log OTP to console immediately
       console.log(`OTP for ${email}: ${otp}`);
 
+      // NEW: Create notification for user registration
+      await createNotification(
+        user._id,
+        "Welcome to Campus Lost & Found!",
+        `Welcome ${firstName}! Please verify your email to complete registration.`,
+        "user_registered",
+        user._id,
+        true
+      );
+
       res.status(201).json({
         success: true,
         message: "User registered successfully. Please verify your email.",
@@ -426,7 +475,8 @@ app.post("/api/auth/verify", async (req, res) => {
         .json({ success: false, message: "User already verified" });
     }
 
-    if (user.otp !== otp || new Date() > user.otpExpires) {
+    // NEW: Use enhanced OTP verification
+    if (!verifyOTP(otp, user.otp, user.otpExpires)) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid or expired OTP" });
@@ -438,6 +488,15 @@ app.post("/api/auth/verify", async (req, res) => {
     await user.save();
 
     const token = generateToken(user._id);
+
+    // NEW: Create notification for successful verification
+    await createNotification(
+      user._id,
+      "Email Verified Successfully!",
+      "Your email has been verified. You can now use all features of Campus Lost & Found.",
+      "system",
+      user._id
+    );
 
     res.status(200).json({
       success: true,
@@ -550,7 +609,8 @@ app.post("/api/auth/verify-login", async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    if (user.otp !== otp || new Date() > user.otpExpires) {
+    // NEW: Use enhanced OTP verification
+    if (!verifyOTP(otp, user.otp, user.otpExpires)) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid or expired OTP" });
@@ -628,7 +688,8 @@ app.post("/api/auth/reset-password", async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    if (user.otp !== otp || new Date() > user.otpExpires) {
+    // NEW: Use enhanced OTP verification
+    if (!verifyOTP(otp, user.otp, user.otpExpires)) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid or expired OTP" });
@@ -641,6 +702,15 @@ app.post("/api/auth/reset-password", async (req, res) => {
     user.otp = undefined;
     user.otpExpires = undefined;
     await user.save();
+
+    // NEW: Create notification for password reset
+    await createNotification(
+      user._id,
+      "Password Reset Successful",
+      "Your password has been reset successfully. If this wasn't you, please contact support immediately.",
+      "system",
+      user._id
+    );
 
     res
       .status(200)
@@ -670,6 +740,22 @@ app.get("/api/users/me", authenticate, async (req, res) => {
     }
 
     res.status(200).json({ success: true, user: userObj });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Get total number of users endpoint
+app.get("/api/users/total-count", async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      totalUsers,
+      message: `Total registered users: ${totalUsers}`,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -756,6 +842,15 @@ app.put(
 
       await user.save();
 
+      // NEW: Create notification for profile update
+      await createNotification(
+        user._id,
+        "Profile Updated",
+        "Your profile has been updated successfully.",
+        "system",
+        user._id
+      );
+
       res.status(200).json({
         success: true,
         message: "Profile updated successfully",
@@ -803,6 +898,15 @@ app.put("/api/users/change-password", authenticate, async (req, res) => {
     user.password = hashedPassword;
     await user.save();
 
+    // NEW: Create notification for password change
+    await createNotification(
+      user._id,
+      "Password Changed",
+      "Your password has been changed successfully. If this wasn't you, please contact support immediately.",
+      "system",
+      user._id
+    );
+
     res
       .status(200)
       .json({ success: true, message: "Password changed successfully" });
@@ -849,6 +953,15 @@ app.post(
       });
 
       await item.save();
+
+      // NEW: Create notification for item posted
+      await createNotification(
+        req.user._id,
+        `${type.charAt(0).toUpperCase() + type.slice(1)} Item Posted`,
+        `Your ${type} item "${title}" has been posted successfully and is now visible to other users.`,
+        "item_posted",
+        item._id
+      );
 
       res.status(201).json({
         success: true,
@@ -1204,7 +1317,10 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
   try {
     const { answers, additionalInfo } = req.body;
 
-    const item = await Item.findById(req.params.id);
+    const item = await Item.findById(req.params.id).populate(
+      "postedBy",
+      "firstName lastName"
+    );
     if (!item) {
       return res
         .status(404)
@@ -1228,7 +1344,7 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
     }
 
     // Check if the user is the owner of the item
-    if (item.postedBy.toString() === req.user._id.toString()) {
+    if (item.postedBy._id.toString() === req.user._id.toString()) {
       return res
         .status(400)
         .json({ success: false, message: "You cannot claim your own item" });
@@ -1274,9 +1390,28 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
     const message = new Message({
       content: `${req.user.firstName} ${req.user.lastName} has submitted a claim request for your ${item.type} item "${item.title}". Please review the request.`,
       sender: req.user._id,
-      receiver: item.postedBy,
+      receiver: item.postedBy._id,
     });
     await message.save();
+
+    // NEW: Create notification for claim request submitted
+    await createNotification(
+      item.postedBy._id,
+      "New Claim Request",
+      `${req.user.firstName} ${req.user.lastName} has submitted a claim request for your found item "${item.title}".`,
+      "claim_request_submitted",
+      item._id,
+      true
+    );
+
+    // NEW: Create notification for claimant
+    await createNotification(
+      req.user._id,
+      "Claim Request Submitted",
+      `Your claim request for the found item "${item.title}" has been submitted successfully. You will be notified when the owner reviews your request.`,
+      "claim_request_submitted",
+      item._id
+    );
 
     res.status(200).json({
       success: true,
@@ -1301,7 +1436,10 @@ app.post(
     try {
       const { message } = req.body;
 
-      const item = await Item.findById(req.params.id);
+      const item = await Item.findById(req.params.id).populate(
+        "postedBy",
+        "firstName lastName"
+      );
       if (!item) {
         return res
           .status(404)
@@ -1325,7 +1463,7 @@ app.post(
       }
 
       // Check if the user is the owner of the item
-      if (item.postedBy.toString() === req.user._id.toString()) {
+      if (item.postedBy._id.toString() === req.user._id.toString()) {
         return res.status(400).json({
           success: false,
           message: "You cannot inform about your own item",
@@ -1370,9 +1508,28 @@ app.post(
       const notificationMessage = new Message({
         content: `${req.user.firstName} ${req.user.lastName} has informed you about finding your lost item "${item.title}". Please review their message and image if provided.`,
         sender: req.user._id,
-        receiver: item.postedBy,
+        receiver: item.postedBy._id,
       });
       await notificationMessage.save();
+
+      // NEW: Create notification for inform request submitted
+      await createNotification(
+        item.postedBy._id,
+        "Someone Found Your Item!",
+        `${req.user.firstName} ${req.user.lastName} has informed you about finding your lost item "${item.title}".`,
+        "inform_request_submitted",
+        item._id,
+        true
+      );
+
+      // NEW: Create notification for informer
+      await createNotification(
+        req.user._id,
+        "Inform Request Submitted",
+        `Your inform request for the lost item "${item.title}" has been submitted successfully. You will be notified when the owner reviews your request.`,
+        "inform_request_submitted",
+        item._id
+      );
 
       res.status(200).json({
         success: true,
@@ -1573,6 +1730,25 @@ Please contact the owner to arrange pickup/return of your item.`;
       });
       await message.save();
 
+      // NEW: Create notification for approved claim request
+      await createNotification(
+        claimRequest.requestedBy,
+        "Claim Request Approved! 🎉",
+        `Great news! Your claim request for "${item.title}" has been approved. Check your messages for contact details.`,
+        "claim_request_approved",
+        item._id,
+        true
+      );
+
+      // NEW: Create notification for item claimed
+      await createNotification(
+        req.user._id,
+        "Item Successfully Claimed",
+        `Your found item "${item.title}" has been successfully claimed and contact information has been shared.`,
+        "item_claimed",
+        item._id
+      );
+
       res.status(200).json({
         success: true,
         message:
@@ -1684,6 +1860,25 @@ Please contact the owner to arrange returning their item.`;
       });
       await message.save();
 
+      // NEW: Create notification for approved inform request
+      await createNotification(
+        informRequest.informedBy,
+        "Inform Request Approved! 🎉",
+        `Great news! The owner confirmed that "${item.title}" is their lost item. Check your messages for contact details.`,
+        "inform_request_approved",
+        item._id,
+        true
+      );
+
+      // NEW: Create notification for item reunited
+      await createNotification(
+        req.user._id,
+        "Item Successfully Reunited",
+        `Your lost item "${item.title}" has been successfully reunited through the finder and contact information has been shared.`,
+        "item_claimed",
+        item._id
+      );
+
       res.status(200).json({
         success: true,
         message:
@@ -1705,7 +1900,7 @@ app.post(
   authenticate,
   async (req, res) => {
     try {
-      const { rejectionReason } = req.body; // NEW: Include rejection reason
+      const { rejectionReason } = req.body;
 
       const item = await Item.findById(req.params.id);
       if (!item) {
@@ -1733,7 +1928,7 @@ app.post(
       claimRequest.status = "rejected";
       claimRequest.reviewedBy = req.user._id;
       claimRequest.reviewedAt = new Date();
-      claimRequest.rejectionReason = rejectionReason || "No reason provided"; // NEW
+      claimRequest.rejectionReason = rejectionReason || "No reason provided";
 
       await item.save();
 
@@ -1748,6 +1943,17 @@ app.post(
         receiver: claimRequest.requestedBy,
       });
       await message.save();
+
+      // NEW: Create notification for rejected claim request
+      await createNotification(
+        claimRequest.requestedBy,
+        "Claim Request Rejected",
+        `Your claim request for "${item.title}" has been rejected. ${
+          rejectionReason ? `Reason: ${rejectionReason}` : ""
+        }`,
+        "claim_request_rejected",
+        item._id
+      );
 
       res.status(200).json({
         success: true,
@@ -1813,6 +2019,17 @@ app.post(
         receiver: informRequest.informedBy,
       });
       await message.save();
+
+      // NEW: Create notification for rejected inform request
+      await createNotification(
+        informRequest.informedBy,
+        "Inform Request Rejected",
+        `Your inform request for "${item.title}" has been rejected. ${
+          rejectionReason ? `Reason: ${rejectionReason}` : ""
+        }`,
+        "inform_request_rejected",
+        item._id
+      );
 
       res.status(200).json({
         success: true,
@@ -1990,7 +2207,10 @@ app.post("/api/items/:id/comments", authenticate, async (req, res) => {
   try {
     const { content } = req.body;
 
-    const item = await Item.findById(req.params.id);
+    const item = await Item.findById(req.params.id).populate(
+      "postedBy",
+      "firstName lastName"
+    );
     if (!item) {
       return res
         .status(404)
@@ -2004,6 +2224,17 @@ app.post("/api/items/:id/comments", authenticate, async (req, res) => {
     });
 
     await comment.save();
+
+    // NEW: Create notification for comment added (if it's not the item owner commenting)
+    if (item.postedBy._id.toString() !== req.user._id.toString()) {
+      await createNotification(
+        item.postedBy._id,
+        "New Comment on Your Item",
+        `${req.user.firstName} ${req.user.lastName} commented on your ${item.type} item "${item.title}".`,
+        "comment_added",
+        item._id
+      );
+    }
 
     res.status(201).json({ success: true, comment });
   } catch (error) {
@@ -2174,6 +2405,16 @@ app.post("/api/messages", authenticate, async (req, res) => {
     });
 
     await message.save();
+
+    // NEW: Create notification for message received
+    await createNotification(
+      receiver,
+      "New Message",
+      `${req.user.firstName} ${req.user.lastName} sent you a message.`,
+      "message_received",
+      message._id,
+      true
+    );
 
     res.status(201).json({ success: true, message });
   } catch (error) {
@@ -2597,20 +2838,18 @@ app.get("/api/reports", authenticate, async (req, res) => {
   }
 });
 
-// Notification system
+// NEW: Enhanced Notification system routes
 app.post("/api/notifications", authenticate, async (req, res) => {
   try {
     const { recipient, title, message, type, relatedEntity } = req.body;
 
-    const notification = new Notification({
+    const notification = await createNotification(
       recipient,
       title,
       message,
       type,
-      relatedEntity,
-    });
-
-    await notification.save();
+      relatedEntity
+    );
 
     res.status(201).json({
       success: true,
@@ -2641,6 +2880,24 @@ app.get("/api/notifications", authenticate, async (req, res) => {
   }
 });
 
+// NEW: Get unread notifications count
+app.get("/api/notifications/unread-count", authenticate, async (req, res) => {
+  try {
+    const count = await Notification.countDocuments({
+      recipient: req.user._id,
+      read: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      unreadCount: count,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 app.put("/api/notifications/:id/read", authenticate, async (req, res) => {
   try {
     const notification = await Notification.findOneAndUpdate(
@@ -2659,6 +2916,24 @@ app.put("/api/notifications/:id/read", authenticate, async (req, res) => {
     res.status(200).json({
       success: true,
       notification,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Mark all notifications as read
+app.put("/api/notifications/mark-all-read", authenticate, async (req, res) => {
+  try {
+    await Notification.updateMany(
+      { recipient: req.user._id, read: false },
+      { read: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "All notifications marked as read",
     });
   } catch (error) {
     console.error(error);
