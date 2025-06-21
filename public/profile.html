@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,25 +16,46 @@
         theme: {
           extend: {
             colors: {
-              reddit: {
-                dark: "#0B1426",
-                darker: "#030712",
-                card: "#1A1A1B",
-                cardHover: "#272729",
-                orange: "#FF4500",
-                orangeHover: "#FF5722",
-                blue: "#0079D3",
-                blueHover: "#1484D6",
-                text: "#D7DADC",
-                textSecondary: "#818384",
-                border: "#343536",
-                accent: "#46D39C",
-                red: "#DC2626",
-                redHover: "#EF4444",
+              primary: {
+                50: "#fef2f2",
+                100: "#fee2e2",
+                200: "#fecaca",
+                300: "#fca5a5",
+                400: "#f87171",
+                500: "#ef4444",
+                600: "#dc2626",
+                700: "#b91c1c",
+                800: "#991b1b",
+                900: "#7f1d1d",
+              },
+              dark: {
+                50: "#f8fafc",
+                100: "#f1f5f9",
+                200: "#e2e8f0",
+                300: "#cbd5e1",
+                400: "#94a3b8",
+                500: "#64748b",
+                600: "#475569",
+                700: "#334155",
+                800: "#1e293b",
+                900: "#0f172a",
+                950: "#020617",
+              },
+              accent: {
+                50: "#ecfdf5",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
               },
             },
             fontFamily: {
-              reddit: ["Inter", "system-ui", "sans-serif"],
+              sans: ["Inter", "system-ui", "sans-serif"],
             },
             animation: {
               "fade-in": "fadeIn 0.6s ease-out",
@@ -43,8 +64,10 @@
               "scale-in": "scaleIn 0.3s ease-out",
               glow: "glow 2s ease-in-out infinite alternate",
               shimmer: "shimmer 2s linear infinite",
-              bounce: "bounce 1s infinite",
-              pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              "bounce-gentle": "bounceGentle 2s infinite",
+              "pulse-soft":
+                "pulseSoft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              float: "float 3s ease-in-out infinite",
             },
             keyframes: {
               fadeIn: {
@@ -64,13 +87,33 @@
                 "100%": { transform: "scale(1)", opacity: "1" },
               },
               glow: {
-                "0%": { boxShadow: "0 0 5px rgba(255, 69, 0, 0.5)" },
-                "100%": { boxShadow: "0 0 20px rgba(255, 69, 0, 0.8)" },
+                "0%": { boxShadow: "0 0 5px rgba(239, 68, 68, 0.5)" },
+                "100%": { boxShadow: "0 0 20px rgba(239, 68, 68, 0.8)" },
               },
               shimmer: {
                 "0%": { backgroundPosition: "-200% 0" },
                 "100%": { backgroundPosition: "200% 0" },
               },
+              bounceGentle: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-5px)" },
+              },
+              pulseSoft: {
+                "0%, 100%": { opacity: "1" },
+                "50%": { opacity: "0.8" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+            },
+            backdropBlur: {
+              xs: "2px",
+            },
+            boxShadow: {
+              glow: "0 0 20px rgba(239, 68, 68, 0.3)",
+              "glow-lg": "0 0 40px rgba(239, 68, 68, 0.4)",
+              "inner-glow": "inset 0 0 20px rgba(239, 68, 68, 0.1)",
             },
           },
         },
@@ -79,27 +122,33 @@
     <style>
       body {
         font-family: "Inter", system-ui, sans-serif;
-        background: linear-gradient(135deg, #0b1426 0%, #030712 100%);
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #020617 50%,
+          #1e293b 100%
+        );
         min-height: 100vh;
-        color: #d7dadc;
+        color: #f1f5f9;
       }
 
-      .reddit-card {
-        background: rgba(26, 26, 27, 0.95);
+      .glass-card {
+        background: rgba(30, 41, 59, 0.7);
         backdrop-filter: blur(20px);
-        border: 1px solid #343536;
+        border: 1px solid rgba(148, 163, 184, 0.1);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .reddit-card:hover {
-        background: rgba(39, 39, 41, 0.95);
-        border-color: #ff4500;
+      .glass-card:hover {
+        background: rgba(51, 65, 85, 0.8);
+        border-color: rgba(239, 68, 68, 0.3);
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(255, 69, 0, 0.15);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+          0 0 20px rgba(239, 68, 68, 0.1);
       }
 
-      .reddit-button {
-        background: linear-gradient(135deg, #ff4500 0%, #ff5722 100%);
+      .btn-primary {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         border: none;
         color: white;
         font-weight: 600;
@@ -108,12 +157,12 @@
         overflow: hidden;
       }
 
-      .reddit-button:hover {
+      .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(255, 69, 0, 0.4);
+        box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
       }
 
-      .reddit-button::before {
+      .btn-primary::before {
         content: "";
         position: absolute;
         top: 0;
@@ -129,53 +178,56 @@
         transition: left 0.5s;
       }
 
-      .reddit-button:hover::before {
+      .btn-primary:hover::before {
         left: 100%;
       }
 
-      .reddit-button-secondary {
-        background: linear-gradient(135deg, #0079d3 0%, #1484d6 100%);
-        border: none;
-        color: white;
+      .btn-secondary {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        color: #f1f5f9;
         font-weight: 600;
         transition: all 0.3s ease;
       }
 
-      .reddit-button-secondary:hover {
+      .btn-secondary:hover {
+        background: linear-gradient(135deg, #334155 0%, #475569 100%);
+        border-color: rgba(239, 68, 68, 0.3);
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 121, 211, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
       }
 
-      .reddit-button-danger {
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      .btn-danger {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
         border: none;
         color: white;
         font-weight: 600;
         transition: all 0.3s ease;
       }
 
-      .reddit-button-danger:hover {
+      .btn-danger:hover {
+        background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
         transform: translateY(-2px);
         box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
       }
 
-      .reddit-tab {
+      .tab-button {
         background: transparent;
         border: 2px solid transparent;
-        color: #818384;
+        color: #94a3b8;
         transition: all 0.3s ease;
         position: relative;
       }
 
-      .reddit-tab.active {
-        background: rgba(255, 69, 0, 0.1);
-        border-color: #ff4500;
-        color: #ff4500;
+      .tab-button.active {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: #ef4444;
+        color: #ef4444;
       }
 
-      .reddit-tab:hover:not(.active) {
-        background: rgba(255, 69, 0, 0.05);
-        color: #d7dadc;
+      .tab-button:hover:not(.active) {
+        background: rgba(239, 68, 68, 0.05);
+        color: #f1f5f9;
       }
 
       .status-badge {
@@ -187,28 +239,49 @@
       }
 
       .status-lost {
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
         color: white;
       }
 
       .status-found {
-        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
         color: white;
       }
 
       .status-active {
-        background: linear-gradient(135deg, #0079d3 0%, #1484d6 100%);
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
         color: white;
       }
 
       .status-claimed {
-        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
         color: white;
       }
 
-      .header-hidden {
-        transform: translateY(-100%);
-        opacity: 0;
+      .notification-item {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .notification-item:hover {
+        background: rgba(51, 65, 85, 0.9);
+        border-color: rgba(239, 68, 68, 0.3);
+      }
+
+      .notification-item.unread {
+        background: rgba(239, 68, 68, 0.05);
+        border-color: rgba(239, 68, 68, 0.3);
+      }
+
+      .notification-badge {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        animation: pulse-soft 2s infinite;
+      }
+
+      .profile-avatar {
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+        border: 3px solid rgba(239, 68, 68, 0.5);
       }
 
       .modal-backdrop {
@@ -219,138 +292,50 @@
       .loading-shimmer {
         background: linear-gradient(
           90deg,
-          #1a1a1b 25%,
-          #272729 50%,
-          #1a1a1b 75%
+          #1e293b 25%,
+          #334155 50%,
+          #1e293b 75%
         );
         background-size: 200% 100%;
         animation: shimmer 2s infinite;
       }
 
-      .profile-glow {
-        box-shadow: 0 0 20px rgba(255, 69, 0, 0.3);
-      }
-
-      .interaction-card {
-        background: rgba(26, 26, 27, 0.9);
-        border: 1px solid #343536;
-        transition: all 0.3s ease;
-      }
-
-      .interaction-card:hover {
-        border-color: #ff4500;
-        background: rgba(39, 39, 41, 0.9);
-      }
-
-      .claim-request-card {
-        background: linear-gradient(
-          135deg,
-          rgba(26, 26, 27, 0.95) 0%,
-          rgba(39, 39, 41, 0.95) 100%
-        );
-        border: 1px solid #343536;
-        transition: all 0.3s ease;
-      }
-
-      .claim-request-card:hover {
-        border-color: #ff4500;
-        transform: translateY(-1px);
-      }
-
       .message-bubble-sent {
-        background: linear-gradient(135deg, #ff4500 0%, #ff5722 100%);
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         color: white;
       }
 
       .message-bubble-received {
-        background: rgba(52, 53, 54, 0.8);
-        color: #d7dadc;
-        border: 1px solid #343536;
+        background: rgba(51, 65, 85, 0.8);
+        color: #f1f5f9;
+        border: 1px solid rgba(148, 163, 184, 0.2);
       }
 
       .contact-info-card {
         background: linear-gradient(
           135deg,
-          rgba(70, 211, 156, 0.1) 0%,
-          rgba(70, 211, 156, 0.05) 100%
+          rgba(16, 185, 129, 0.1) 0%,
+          rgba(5, 150, 105, 0.05) 100%
         );
-        border: 1px solid rgba(70, 211, 156, 0.3);
+        border: 1px solid rgba(16, 185, 129, 0.3);
       }
 
-      .notification-badge {
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-        animation: pulse 2s infinite;
-      }
-
-      .message-container {
-        background: rgba(26, 26, 27, 0.95);
-        border: 1px solid #343536;
+      .input-field {
+        background: rgba(30, 41, 59, 0.8);
+        border: 2px solid rgba(148, 163, 184, 0.2);
+        color: #f1f5f9;
         transition: all 0.3s ease;
       }
 
-      .message-container:hover {
-        border-color: #ff4500;
-        background: rgba(39, 39, 41, 0.95);
+      .input-field:focus {
+        background: rgba(51, 65, 85, 0.9);
+        border-color: #ef4444;
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        outline: none;
       }
 
-      .conversation-card {
-        background: linear-gradient(
-          135deg,
-          rgba(26, 26, 27, 0.98) 0%,
-          rgba(39, 39, 41, 0.98) 100%
-        );
-        border: 1px solid #343536;
-        transition: all 0.3s ease;
-      }
-
-      .conversation-card:hover {
-        border-color: #ff4500;
-        transform: translateY(-1px);
-        box-shadow: 0 8px 25px rgba(255, 69, 0, 0.1);
-      }
-
-      .online-indicator {
-        background: #46d39c;
-        animation: pulse 2s infinite;
-      }
-
-      .typing-indicator {
-        display: inline-block;
-        animation: bounce 1.4s infinite ease-in-out both;
-      }
-
-      .typing-indicator:nth-child(1) {
-        animation-delay: -0.32s;
-      }
-      .typing-indicator:nth-child(2) {
-        animation-delay: -0.16s;
-      }
-
-      .notification-item {
-        background: rgba(26, 26, 27, 0.95);
-        border: 1px solid #343536;
-        transition: all 0.3s ease;
-      }
-
-      .notification-item:hover {
-        background: rgba(39, 39, 41, 0.95);
-        border-color: #ff4500;
-      }
-
-      .notification-item.unread {
-        background: rgba(255, 69, 0, 0.05);
-        border-color: rgba(255, 69, 0, 0.3);
-      }
-
-      .image-preview {
-        border: 2px solid #343536;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-      }
-
-      .image-preview:hover {
-        border-color: #ff4500;
-        transform: scale(1.02);
+      .input-field::placeholder {
+        color: #94a3b8;
       }
 
       ::-webkit-scrollbar {
@@ -358,26 +343,50 @@
       }
 
       ::-webkit-scrollbar-track {
-        background: rgba(26, 26, 27, 0.5);
+        background: rgba(30, 41, 59, 0.5);
       }
 
       ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #ff4500 0%, #ff5722 100%);
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         border-radius: 4px;
       }
 
       ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #ff5722 0%, #ff6b35 100%);
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      }
+
+      .header-blur {
+        backdrop-filter: blur(20px);
+        background: rgba(15, 23, 42, 0.8);
+      }
+
+      .floating-element {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #f1f5f9 0%, #ef4444 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .glow-on-hover {
+        transition: all 0.3s ease;
+      }
+
+      .glow-on-hover:hover {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
       }
     </style>
   </head>
-  <body class="bg-reddit-dark min-h-screen">
+  <body class="bg-dark-950 min-h-screen">
     <!-- Header -->
     <header
       id="header"
       class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
     >
-      <div class="reddit-card border-b border-reddit-border">
+      <div class="header-blur border-b border-dark-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-16">
             <div
@@ -385,21 +394,34 @@
               onclick="goHome()"
             >
               <div
-                class="w-10 h-10 bg-gradient-to-r from-reddit-orange to-reddit-orangeHover rounded-xl flex items-center justify-center mr-3 shadow-lg profile-glow"
+                class="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center mr-3 shadow-glow floating-element"
               >
                 <span class="text-white font-bold text-lg">BUP</span>
               </div>
-              <h1
-                class="text-xl font-bold bg-gradient-to-r from-reddit-text to-reddit-textSecondary bg-clip-text text-transparent"
-              >
-                Lost & Found
-              </h1>
+              <h1 class="text-xl font-bold gradient-text">Lost & Found</h1>
             </div>
             <nav class="flex items-center space-x-4">
+              <!-- Home Button -->
+              <button
+                onclick="goHome()"
+                class="btn-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+              >
+                <svg
+                  class="w-5 h-5 inline mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+                  ></path>
+                </svg>
+                Home
+              </button>
+
               <!-- Notification Button -->
-              <!-- <button
+              <button
                 onclick="toggleNotifications()"
-                class="relative p-2 text-reddit-textSecondary hover:text-reddit-orange transition-colors duration-200"
+                class="relative p-2 text-dark-400 hover:text-primary-500 transition-colors duration-200 glow-on-hover"
                 id="notificationButton"
               >
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -412,15 +434,19 @@
                   class="absolute -top-1 -right-1 w-5 h-5 notification-badge text-white text-xs rounded-full flex items-center justify-center hidden"
                 ></span>
               </button>
-              <button 
+
+              <!-- Update Profile Button -->
+              <button
                 onclick="showUpdateProfile()"
-                class="reddit-button-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                class="btn-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
               >
                 Update Profile
-              </button> -->
+              </button>
+
+              <!-- Logout Button -->
               <button
                 onclick="logout()"
-                class="reddit-button px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                class="btn-primary px-6 py-2 rounded-lg font-medium transition-all duration-200"
               >
                 Logout
               </button>
@@ -432,10 +458,18 @@
       <!-- Notification Dropdown -->
       <div
         id="notificationDropdown"
-        class="absolute top-16 right-4 w-80 reddit-card rounded-2xl shadow-2xl hidden z-50 max-h-96 overflow-y-auto"
+        class="absolute top-16 right-4 w-80 glass-card rounded-2xl shadow-2xl hidden z-50 max-h-96 overflow-y-auto"
       >
-        <div class="p-4 border-b border-reddit-border">
-          <h3 class="text-lg font-bold text-reddit-text">Notifications</h3>
+        <div class="p-4 border-b border-dark-600">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-dark-100">Notifications</h3>
+            <button
+              onclick="markAllNotificationsRead()"
+              class="text-sm text-primary-400 hover:text-primary-300 transition-colors"
+            >
+              Mark all read
+            </button>
+          </div>
         </div>
         <div id="notificationList" class="p-2">
           <!-- Notifications will be loaded here -->
@@ -449,14 +483,14 @@
         <!-- Profile Header -->
         <div
           id="profileHeader"
-          class="reddit-card rounded-2xl p-8 mb-8 animate-fade-in"
+          class="glass-card rounded-2xl p-8 mb-8 animate-fade-in"
         >
           <div
             class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8"
           >
             <div class="relative">
               <div
-                class="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-reddit-orange to-reddit-orangeHover flex-shrink-0 shadow-2xl ring-4 ring-reddit-orange/30 profile-glow"
+                class="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-primary-600 flex-shrink-0 shadow-2xl profile-avatar"
               >
                 <img
                   id="profileImage"
@@ -466,7 +500,7 @@
                 />
               </div>
               <div
-                class="absolute -bottom-2 -right-2 w-8 h-8 bg-reddit-accent rounded-full border-4 border-reddit-dark shadow-lg flex items-center justify-center animate-glow"
+                class="absolute -bottom-2 -right-2 w-8 h-8 bg-accent-500 rounded-full border-4 border-dark-950 shadow-lg flex items-center justify-center animate-glow"
               >
                 <div class="w-3 h-3 bg-white rounded-full"></div>
               </div>
@@ -474,34 +508,23 @@
             <div class="flex-grow text-center md:text-left">
               <h2
                 id="userName"
-                class="text-3xl font-bold bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent mb-2"
+                class="text-3xl font-bold gradient-text mb-2"
               ></h2>
-              <p
-                id="userEmail"
-                class="text-reddit-textSecondary mb-2 text-lg"
-              ></p>
+              <p id="userEmail" class="text-dark-400 mb-2 text-lg"></p>
               <p
                 id="userDepartment"
-                class="text-sm text-reddit-text font-medium px-4 py-2 bg-reddit-orange/20 rounded-full inline-block border border-reddit-orange/30"
+                class="text-sm text-dark-200 font-medium px-4 py-2 bg-primary-500/20 rounded-full inline-block border border-primary-500/30"
               ></p>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <button
-                onclick="showUpdateProfile()"
-                class="reddit-button-secondary px-8 py-3 rounded-xl font-semibold"
-              >
-                Update Profile
-              </button>
             </div>
           </div>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="reddit-card rounded-2xl mb-8">
+        <div class="glass-card rounded-2xl mb-8">
           <nav class="flex overflow-x-auto p-2 space-x-2">
             <button
               onclick="switchTab('posted')"
-              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
               data-tab="posted"
             >
               <span class="flex items-center space-x-2">
@@ -518,7 +541,7 @@
             </button>
             <button
               onclick="switchTab('claimed')"
-              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
               data-tab="claimed"
             >
               <span class="flex items-center space-x-2">
@@ -534,7 +557,7 @@
             </button>
             <button
               onclick="switchTab('comments')"
-              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
               data-tab="comments"
             >
               <span class="flex items-center space-x-2">
@@ -550,7 +573,7 @@
             </button>
             <button
               onclick="switchTab('suggestions')"
-              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
               data-tab="suggestions"
             >
               <span class="flex items-center space-x-2">
@@ -564,7 +587,7 @@
             </button>
             <button
               onclick="switchTab('messages')"
-              class="reddit-tab flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
               data-tab="messages"
             >
               <span class="flex items-center space-x-2">
@@ -588,13 +611,13 @@
           <div id="loadingState" class="flex justify-center items-center py-20">
             <div class="relative">
               <div
-                class="animate-spin rounded-full h-16 w-16 border-b-4 border-reddit-orange"
+                class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500"
               ></div>
               <div
                 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               >
                 <div
-                  class="w-4 h-4 bg-reddit-orange rounded-full animate-glow"
+                  class="w-4 h-4 bg-primary-500 rounded-full animate-glow"
                 ></div>
               </div>
             </div>
@@ -609,27 +632,23 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
-        <h3
-          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
-        >
-          Update Profile
-        </h3>
-        <p class="text-reddit-textSecondary mb-6 leading-relaxed">
+        <h3 class="text-2xl font-bold mb-6 gradient-text">Update Profile</h3>
+        <p class="text-dark-400 mb-6 leading-relaxed">
           You will be redirected to the update profile page where you can modify
           your personal information.
         </p>
         <div class="flex gap-4">
           <button
             onclick="window.location.href='update-profile.html'"
-            class="flex-1 reddit-button py-3 rounded-xl font-semibold"
+            class="flex-1 btn-primary py-3 rounded-xl font-semibold"
           >
             Continue
           </button>
           <button
             onclick="hideUpdateProfile()"
-            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
           >
             Cancel
           </button>
@@ -643,71 +662,81 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
       >
-        <h3
-          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
-        >
-          Edit Item
-        </h3>
+        <h3 class="text-2xl font-bold mb-6 gradient-text">Edit Item</h3>
         <form id="editItemForm" enctype="multipart/form-data">
           <input type="hidden" id="editItemId" />
           <div class="space-y-6">
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Title</label
               >
               <input
                 type="text"
                 id="editTitle"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
                 required
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Description</label
               >
               <textarea
                 id="editDescription"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-32 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+                class="w-full input-field rounded-xl px-4 py-3 h-32 resize-none"
                 required
               ></textarea>
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Location</label
               >
               <input
                 type="text"
                 id="editLocation"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
                 required
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Image (optional)</label
               >
               <input
                 type="file"
                 id="editImage"
                 accept="image/*"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
               />
+            </div>
+            <!-- Validity Questions Section for Found Items -->
+            <div id="editValidityQuestionsSection" class="hidden">
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
+                >Validity Questions</label
+              >
+              <div id="editValidityQuestionsList" class="space-y-3"></div>
+              <button
+                type="button"
+                onclick="addEditValidityQuestion()"
+                class="mt-3 btn-secondary px-4 py-2 rounded-lg text-sm"
+              >
+                Add Question
+              </button>
             </div>
           </div>
           <div class="flex gap-4 mt-8">
             <button
               type="submit"
-              class="flex-1 reddit-button py-3 rounded-xl font-semibold"
+              class="flex-1 btn-primary py-3 rounded-xl font-semibold"
             >
               Update Item
             </button>
             <button
               type="button"
               onclick="hideEditItem()"
-              class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+              class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
             >
               Cancel
             </button>
@@ -716,24 +745,24 @@
       </div>
     </div>
 
-    <!-- Requests Modal (for both claim and inform requests) -->
+    <!-- Requests Modal -->
     <div
       id="requestsModal"
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-5xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-5xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
       >
         <h3
           id="requestsModalTitle"
-          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
+          class="text-2xl font-bold mb-6 gradient-text"
         >
           Requests
         </h3>
         <div id="requestsContent"></div>
         <button
           onclick="hideRequests()"
-          class="mt-6 reddit-button-secondary px-8 py-3 rounded-xl font-semibold"
+          class="mt-6 btn-secondary px-8 py-3 rounded-xl font-semibold"
         >
           Close
         </button>
@@ -746,78 +775,76 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
-        <h3
-          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
-        >
+        <h3 class="text-2xl font-bold mb-6 gradient-text">
           Provide Contact Information
         </h3>
         <form id="contactInfoForm">
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Phone Number *</label
               >
               <input
                 type="tel"
                 id="contactPhone"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
                 required
                 placeholder="01XXXXXXXXX"
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Alternate Phone</label
               >
               <input
                 type="tel"
                 id="contactAlternatePhone"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
                 placeholder="01XXXXXXXXX"
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Email</label
               >
               <input
                 type="email"
                 id="contactEmail"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
                 placeholder="your.email@example.com"
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Meeting Location</label
               >
               <input
                 type="text"
                 id="contactLocation"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
                 placeholder="e.g., Library entrance, Cafeteria"
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Preferred Meeting Time</label
               >
               <input
                 type="text"
                 id="contactTime"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                class="w-full input-field rounded-xl px-4 py-3"
                 placeholder="e.g., Tomorrow 2 PM, After 5 PM"
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold mb-2 text-reddit-text"
+              <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Additional Notes</label
               >
               <textarea
                 id="contactNotes"
-                class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-24 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+                class="w-full input-field rounded-xl px-4 py-3 h-24 resize-none"
                 placeholder="Any additional information..."
               ></textarea>
             </div>
@@ -825,14 +852,14 @@
           <div class="flex gap-4 mt-6">
             <button
               type="submit"
-              class="flex-1 reddit-button py-3 rounded-xl font-semibold"
+              class="flex-1 btn-primary py-3 rounded-xl font-semibold"
             >
               Approve & Share Contact
             </button>
             <button
               type="button"
               onclick="hideContactInfo()"
-              class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+              class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
             >
               Cancel
             </button>
@@ -847,7 +874,7 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <div
           class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full"
@@ -864,23 +891,20 @@
             ></path>
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-center mb-4 text-reddit-text">
+        <h3 class="text-xl font-bold text-center mb-4 text-dark-100">
           Block User
         </h3>
-        <p
-          id="blockUserMessage"
-          class="text-reddit-textSecondary text-center mb-6"
-        ></p>
+        <p id="blockUserMessage" class="text-dark-400 text-center mb-6"></p>
         <div class="flex gap-4">
           <button
             id="confirmBlockButton"
-            class="flex-1 reddit-button-danger py-3 rounded-xl font-semibold"
+            class="flex-1 btn-danger py-3 rounded-xl font-semibold"
           >
             Block User
           </button>
           <button
             onclick="hideBlockUser()"
-            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
           >
             Cancel
           </button>
@@ -894,7 +918,7 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <div
           class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full"
@@ -911,23 +935,20 @@
             ></path>
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-center mb-4 text-reddit-text">
+        <h3 class="text-xl font-bold text-center mb-4 text-dark-100">
           Confirm Delete
         </h3>
-        <p
-          id="deleteConfirmMessage"
-          class="text-reddit-textSecondary text-center mb-6"
-        ></p>
+        <p id="deleteConfirmMessage" class="text-dark-400 text-center mb-6"></p>
         <div class="flex gap-4">
           <button
             id="confirmDeleteButton"
-            class="flex-1 reddit-button-danger py-3 rounded-xl font-semibold"
+            class="flex-1 btn-danger py-3 rounded-xl font-semibold"
           >
             Delete
           </button>
           <button
             onclick="hideDeleteConfirm()"
-            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
           >
             Cancel
           </button>
@@ -941,30 +962,27 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
-        <h3
-          id="editModalTitle"
-          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
-        >
+        <h3 id="editModalTitle" class="text-2xl font-bold mb-6 gradient-text">
           Edit
         </h3>
         <textarea
           id="editContent"
-          class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-32 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+          class="w-full input-field rounded-xl px-4 py-3 h-32 resize-none"
           required
           placeholder="Enter your content here..."
         ></textarea>
         <div class="flex gap-4 mt-6">
           <button
             onclick="saveEdit()"
-            class="flex-1 reddit-button py-3 rounded-xl font-semibold"
+            class="flex-1 btn-primary py-3 rounded-xl font-semibold"
           >
             Save Changes
           </button>
           <button
             onclick="hideEditModal()"
-            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
           >
             Cancel
           </button>
@@ -978,29 +996,25 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="reddit-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
-        <h3
-          class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
-        >
-          Reject Request
-        </h3>
+        <h3 class="text-2xl font-bold mb-6 gradient-text">Reject Request</h3>
         <textarea
           id="rejectionReason"
-          class="w-full border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 h-32 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200 resize-none"
+          class="w-full input-field rounded-xl px-4 py-3 h-32 resize-none"
           required
           placeholder="Please provide a reason for rejection..."
         ></textarea>
         <div class="flex gap-4 mt-6">
           <button
             onclick="submitRejection()"
-            class="flex-1 reddit-button-danger py-3 rounded-xl font-semibold"
+            class="flex-1 btn-danger py-3 rounded-xl font-semibold"
           >
             Reject Request
           </button>
           <button
             onclick="hideRejectionModal()"
-            class="flex-1 reddit-button-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
           >
             Cancel
           </button>
@@ -1022,6 +1036,7 @@
       let pendingApproval = null;
       let pendingBlock = null;
       let notificationPollingInterval = null;
+      let editValidityQuestionCount = 0;
 
       // Initialize page
       document.addEventListener("DOMContentLoaded", function () {
@@ -1048,9 +1063,11 @@
           const header = document.getElementById("header");
 
           if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            header.classList.add("header-hidden");
+            header.style.transform = "translateY(-100%)";
+            header.style.opacity = "0";
           } else {
-            header.classList.remove("header-hidden");
+            header.style.transform = "translateY(0)";
+            header.style.opacity = "1";
           }
           lastScrollY = currentScrollY;
         });
@@ -1122,7 +1139,7 @@
           firstName
         )}+${encodeURIComponent(
           lastName
-        )}&background=FF4500&color=fff&size=128&rounded=true&bold=true`;
+        )}&background=ef4444&color=fff&size=128&rounded=true&bold=true`;
       }
 
       // Get full image URL
@@ -1157,12 +1174,12 @@
         if (!notifications || notifications.length === 0) {
           notificationList.innerHTML = `
             <div class="text-center py-8">
-              <div class="w-16 h-16 mx-auto mb-4 bg-reddit-textSecondary/20 rounded-full flex items-center justify-center">
-                <svg class="w-8 h-8 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+              <div class="w-16 h-16 mx-auto mb-4 bg-dark-600/20 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-dark-400" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
                 </svg>
               </div>
-              <p class="text-reddit-textSecondary">No notifications yet</p>
+              <p class="text-dark-400">No notifications yet</p>
             </div>
           `;
           return;
@@ -1180,19 +1197,19 @@
                   ${getNotificationIcon(notification.type)}
                 </div>
                 <div class="flex-1 min-w-0">
-                  <h4 class="text-sm font-semibold text-reddit-text truncate">${
+                  <h4 class="text-sm font-semibold text-dark-100 truncate">${
                     notification.title
                   }</h4>
-                  <p class="text-xs text-reddit-textSecondary mt-1 leading-relaxed">${
+                  <p class="text-xs text-dark-400 mt-1 leading-relaxed">${
                     notification.message
                   }</p>
-                  <p class="text-xs text-reddit-textSecondary/70 mt-2">${formatTimeAgo(
+                  <p class="text-xs text-dark-500 mt-2">${formatTimeAgo(
                     notification.createdAt
                   )}</p>
                 </div>
                 ${
                   !notification.read
-                    ? '<div class="w-2 h-2 bg-reddit-orange rounded-full flex-shrink-0"></div>'
+                    ? '<div class="w-2 h-2 bg-primary-500 rounded-full flex-shrink-0"></div>'
                     : ""
                 }
               </div>
@@ -1207,22 +1224,22 @@
         switch (type) {
           case "claim_request":
           case "inform_request":
-            return `<svg class="${iconClasses} text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
+            return `<svg class="${iconClasses} text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                       <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
                     </svg>`;
           case "claim_approved":
           case "inform_approved":
-            return `<svg class="${iconClasses} text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+            return `<svg class="${iconClasses} text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>`;
           case "claim_rejected":
           case "inform_rejected":
-            return `<svg class="${iconClasses} text-reddit-red" fill="currentColor" viewBox="0 0 20 20">
+            return `<svg class="${iconClasses} text-red-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>`;
           default:
-            return `<svg class="${iconClasses} text-reddit-orange" fill="currentColor" viewBox="0 0 20 20">
+            return `<svg class="${iconClasses} text-primary-400" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
                     </svg>`;
         }
@@ -1263,6 +1280,22 @@
         }
       }
 
+      async function markAllNotificationsRead() {
+        try {
+          await fetch("/api/notifications/mark-all-read", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          loadNotifications();
+          showToast("All notifications marked as read", "success");
+        } catch (error) {
+          console.error("Error marking all notifications as read:", error);
+          showToast("Error marking notifications as read", "error");
+        }
+      }
+
       function startNotificationPolling() {
         // Poll for new notifications every 30 seconds
         notificationPollingInterval = setInterval(() => {
@@ -1288,7 +1321,7 @@
         currentTab = tab;
 
         // Update tab buttons
-        document.querySelectorAll(".reddit-tab").forEach((btn) => {
+        document.querySelectorAll(".tab-button").forEach((btn) => {
           btn.classList.remove("active");
         });
 
@@ -1307,9 +1340,9 @@
         container.innerHTML = `
           <div class="flex justify-center items-center py-20">
             <div class="relative">
-              <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-reddit-orange"></div>
+              <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500"></div>
               <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div class="w-4 h-4 bg-reddit-orange rounded-full animate-glow"></div>
+                <div class="w-4 h-4 bg-primary-500 rounded-full animate-glow"></div>
               </div>
             </div>
           </div>
@@ -1342,7 +1375,7 @@
                 </svg>
               </div>
               <h3 class="text-lg font-semibold text-red-500 mb-2">Error Loading Content</h3>
-              <p class="text-reddit-textSecondary">Please try refreshing the page</p>
+              <p class="text-dark-400">Please try refreshing the page</p>
             </div>
           `;
           showToast("Error loading content. Please try again.", "error");
@@ -1366,15 +1399,15 @@
               ${data.items
                 .map(
                   (item) => `
-                  <div class="reddit-card rounded-2xl overflow-hidden">
+                  <div class="glass-card rounded-2xl overflow-hidden glow-on-hover">
                     <div class="relative">
                       ${
                         item.image
                           ? `<img src="${getFullImageUrl(item.image)}" alt="${
                               item.title
-                            }" class="w-full h-56 object-cover image-preview">`
-                          : `<div class="w-full h-56 bg-gradient-to-br from-reddit-card to-reddit-cardHover flex items-center justify-center">
-                              <svg class="w-16 h-16 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+                            }" class="w-full h-56 object-cover">`
+                          : `<div class="w-full h-56 bg-gradient-to-br from-dark-800 to-dark-700 flex items-center justify-center">
+                              <svg class="w-16 h-16 text-dark-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
                               </svg>
                             </div>`
@@ -1389,13 +1422,13 @@
                       </div>
                     </div>
                     <div class="p-6">
-                      <h3 class="font-bold text-xl mb-3 text-reddit-text">${
+                      <h3 class="font-bold text-xl mb-3 text-dark-100">${
                         item.title
                       }</h3>
-                      <p class="text-reddit-textSecondary text-sm mb-3 line-clamp-2">${
+                      <p class="text-dark-400 text-sm mb-3 line-clamp-2">${
                         item.description
                       }</p>
-                      <div class="flex items-center text-reddit-textSecondary text-sm mb-4">
+                      <div class="flex items-center text-dark-400 text-sm mb-4">
                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                           <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                         </svg>
@@ -1404,7 +1437,7 @@
                       <div class="flex gap-2">
                         <button onclick="editItem('${
                           item._id
-                        }')" class="flex-1 reddit-button-secondary text-white py-2 px-4 rounded-lg text-sm font-medium">
+                        }')" class="flex-1 btn-secondary text-white py-2 px-4 rounded-lg text-sm font-medium">
                           Edit
                         </button>
                         ${getRequestButtonsForItem(item)}
@@ -1412,7 +1445,7 @@
                           item._id
                         }', '${
                     item.title
-                  }')" class="reddit-button-danger py-2 px-4 rounded-lg text-sm font-medium">
+                  }')" class="btn-danger py-2 px-4 rounded-lg text-sm font-medium">
                           Delete
                         </button>
                       </div>
@@ -1426,15 +1459,15 @@
         } else {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-orange/20 rounded-full flex items-center justify-center">
-                <svg class="w-12 h-12 text-reddit-orange" fill="currentColor" viewBox="0 0 20 20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-primary-500/20 rounded-full flex items-center justify-center floating-element">
+                <svg class="w-12 h-12 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                   <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
                 </svg>
               </div>
-              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Items Posted Yet</h3>
-              <p class="text-reddit-textSecondary mb-6">Start by posting your first lost or found item</p>
-              <button onclick="window.location.href='post-item.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+              <h3 class="text-xl font-semibold text-dark-100 mb-2">No Items Posted Yet</h3>
+              <p class="text-dark-400 mb-6">Start by posting your first lost or found item</p>
+              <button onclick="window.location.href='post-item.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
                 Post an Item
               </button>
             </div>
@@ -1451,7 +1484,7 @@
           item.claimRequests &&
           item.claimRequests.length > 0
         ) {
-          buttons += `<button onclick="viewRequests('${item._id}', 'claim')" class="flex-1 reddit-button text-white py-2 px-4 rounded-lg text-sm font-medium">
+          buttons += `<button onclick="viewRequests('${item._id}', 'claim')" class="flex-1 btn-primary text-white py-2 px-4 rounded-lg text-sm font-medium">
                         Claims (${item.claimRequests.length})
                       </button>`;
         }
@@ -1461,7 +1494,7 @@
           item.informRequests &&
           item.informRequests.length > 0
         ) {
-          buttons += `<button onclick="viewRequests('${item._id}', 'inform')" class="flex-1 reddit-button text-white py-2 px-4 rounded-lg text-sm font-medium">
+          buttons += `<button onclick="viewRequests('${item._id}', 'inform')" class="flex-1 btn-primary text-white py-2 px-4 rounded-lg text-sm font-medium">
                         Info (${item.informRequests.length})
                       </button>`;
         }
@@ -1486,15 +1519,15 @@
               ${data.items
                 .map(
                   (item) => `
-                  <div class="reddit-card rounded-2xl overflow-hidden">
+                  <div class="glass-card rounded-2xl overflow-hidden glow-on-hover">
                     <div class="relative">
                       ${
                         item.image
                           ? `<img src="${getFullImageUrl(item.image)}" alt="${
                               item.title
-                            }" class="w-full h-56 object-cover image-preview">`
-                          : `<div class="w-full h-56 bg-gradient-to-br from-reddit-card to-reddit-cardHover flex items-center justify-center">
-                              <svg class="w-16 h-16 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+                            }" class="w-full h-56 object-cover">`
+                          : `<div class="w-full h-56 bg-gradient-to-br from-dark-800 to-dark-700 flex items-center justify-center">
+                              <svg class="w-16 h-16 text-dark-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
                               </svg>
                             </div>`
@@ -1507,20 +1540,20 @@
                       </div>
                     </div>
                     <div class="p-6">
-                      <h3 class="font-bold text-xl mb-3 text-reddit-text">${
+                      <h3 class="font-bold text-xl mb-3 text-dark-100">${
                         item.title
                       }</h3>
-                      <p class="text-reddit-textSecondary text-sm mb-3 line-clamp-2">${
+                      <p class="text-dark-400 text-sm mb-3 line-clamp-2">${
                         item.description
                       }</p>
-                      <div class="flex items-center text-reddit-textSecondary text-sm mb-3">
+                      <div class="flex items-center text-dark-400 text-sm mb-3">
                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                           <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                         </svg>
                         ${item.location}
                       </div>
-                      <div class="flex items-center space-x-2 text-sm text-reddit-textSecondary mb-4">
-                        <div class="w-6 h-6 rounded-full overflow-hidden bg-reddit-orange">
+                      <div class="flex items-center space-x-2 text-sm text-dark-400 mb-4">
+                        <div class="w-6 h-6 rounded-full overflow-hidden bg-primary-500">
                           <img src="${getProfileImageUrl(
                             item.postedBy
                           )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1534,7 +1567,7 @@
                       </div>
                       <button onclick="viewContactInfo('${
                         item._id
-                      }')" class="w-full reddit-button py-2 px-4 rounded-lg text-sm font-medium">
+                      }')" class="w-full btn-primary py-2 px-4 rounded-lg text-sm font-medium">
                         View Contact Info
                       </button>
                     </div>
@@ -1547,14 +1580,14 @@
         } else {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-accent/20 rounded-full flex items-center justify-center">
-                <svg class="w-12 h-12 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-accent-500/20 rounded-full flex items-center justify-center floating-element">
+                <svg class="w-12 h-12 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                 </svg>
               </div>
-              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Items Claimed Yet</h3>
-              <p class="text-reddit-textSecondary mb-6">Items you've successfully claimed will appear here</p>
-              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+              <h3 class="text-xl font-semibold text-dark-100 mb-2">No Items Claimed Yet</h3>
+              <p class="text-dark-400 mb-6">Items you've successfully claimed will appear here</p>
+              <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
                 Browse Items
               </button>
             </div>
@@ -1579,11 +1612,11 @@
               ${data.comments
                 .map(
                   (comment) => `
-                  <div class="interaction-card rounded-2xl p-6">
+                  <div class="glass-card rounded-2xl p-6 glow-on-hover">
                     <div class="flex items-start justify-between">
                       <div class="flex-1">
                         <div class="flex items-center space-x-3 mb-3">
-                          <div class="w-10 h-10 rounded-full overflow-hidden bg-reddit-orange">
+                          <div class="w-10 h-10 rounded-full overflow-hidden bg-primary-500">
                             <img src="${getProfileImageUrl(
                               comment.postedBy
                             )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1592,10 +1625,10 @@
                   )}'">
                           </div>
                           <div>
-                            <p class="font-semibold text-reddit-text">${
+                            <p class="font-semibold text-dark-100">${
                               comment.postedBy.firstName
                             } ${comment.postedBy.lastName}</p>
-                            <p class="text-xs text-reddit-textSecondary">${new Date(
+                            <p class="text-xs text-dark-400">${new Date(
                               comment.createdAt
                             ).toLocaleDateString("en-US", {
                               year: "numeric",
@@ -1606,10 +1639,10 @@
                             })}</p>
                           </div>
                         </div>
-                        <p class="text-reddit-text mb-3 leading-relaxed">${
+                        <p class="text-dark-200 mb-3 leading-relaxed">${
                           comment.content
                         }</p>
-                        <div class="inline-flex items-center px-3 py-1 bg-reddit-blue/20 text-reddit-blue text-sm rounded-full border border-reddit-blue/30">
+                        <div class="inline-flex items-center px-3 py-1 bg-blue-500/20 text-blue-400 text-sm rounded-full border border-blue-500/30">
                           <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                             <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
@@ -1623,14 +1656,14 @@
                         }', '${comment.content.replace(
                     /'/g,
                     "\\'"
-                  )}')" class="text-reddit-blue hover:text-reddit-blueHover hover:bg-reddit-blue/10 p-2 rounded-lg transition-all duration-200">
+                  )}'" class="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 rounded-lg transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                           </svg>
                         </button>
                         <button onclick="confirmDelete('comment', '${
                           comment._id
-                        }', 'this comment')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
+                        }', 'this comment')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                           </svg>
@@ -1646,14 +1679,14 @@
         } else {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-blue/20 rounded-full flex items-center justify-center">
-                <svg class="w-12 h-12 text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center floating-element">
+                <svg class="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
                 </svg>
               </div>
-              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Comments Yet</h3>
-              <p class="text-reddit-textSecondary mb-6">Your comments on items will appear here</p>
-              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+              <h3 class="text-xl font-semibold text-dark-100 mb-2">No Comments Yet</h3>
+              <p class="text-dark-400 mb-6">Your comments on items will appear here</p>
+              <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
                 Browse Items
               </button>
             </div>
@@ -1678,11 +1711,11 @@
               ${data.suggestions
                 .map(
                   (suggestion) => `
-                  <div class="interaction-card rounded-2xl p-6">
+                  <div class="glass-card rounded-2xl p-6 glow-on-hover">
                     <div class="flex items-start justify-between">
                       <div class="flex-1">
                         <div class="flex items-center space-x-3 mb-3">
-                          <div class="w-10 h-10 rounded-full overflow-hidden bg-reddit-orange">
+                          <div class="w-10 h-10 rounded-full overflow-hidden bg-primary-500">
                             <img src="${getProfileImageUrl(
                               suggestion.postedBy
                             )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1691,10 +1724,10 @@
                   )}'">
                           </div>
                           <div>
-                            <p class="font-semibold text-reddit-text">${
+                            <p class="font-semibold text-dark-100">${
                               suggestion.postedBy.firstName
                             } ${suggestion.postedBy.lastName}</p>
-                            <p class="text-xs text-reddit-textSecondary">${new Date(
+                            <p class="text-xs text-dark-400">${new Date(
                               suggestion.createdAt
                             ).toLocaleDateString("en-US", {
                               year: "numeric",
@@ -1705,7 +1738,7 @@
                             })}</p>
                           </div>
                         </div>
-                        <p class="text-reddit-text leading-relaxed">${
+                        <p class="text-dark-200 leading-relaxed">${
                           suggestion.content
                         }</p>
                       </div>
@@ -1715,14 +1748,14 @@
                         }', '${suggestion.content.replace(
                     /'/g,
                     "\\'"
-                  )}')" class="text-reddit-blue hover:text-reddit-blueHover hover:bg-reddit-blue/10 p-2 rounded-lg transition-all duration-200">
+                  )}'" class="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 rounded-lg transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                           </svg>
                         </button>
                         <button onclick="confirmDelete('suggestion', '${
                           suggestion._id
-                        }', 'this suggestion')" class="text-red-500 hover:text-red-400 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
+                        }', 'this suggestion')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                           </svg>
@@ -1738,14 +1771,14 @@
         } else {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-orange/20 rounded-full flex items-center justify-center">
-                <svg class="w-12 h-12 text-reddit-orange" fill="currentColor" viewBox="0 0 20 20">
+              <div class="w-24 h-24 mx-auto mb-6 bg-primary-500/20 rounded-full flex items-center justify-center floating-element">
+                <svg class="w-12 h-12 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                 </svg>
               </div>
-              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Suggestions Yet</h3>
-              <p class="text-reddit-textSecondary mb-6">Your suggestions for improving the platform will appear here</p>
-              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+              <h3 class="text-xl font-semibold text-dark-100 mb-2">No Suggestions Yet</h3>
+              <p class="text-dark-400 mb-6">Your suggestions for improving the platform will appear here</p>
+              <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
                 Go to Home
               </button>
             </div>
@@ -1820,7 +1853,7 @@
                 ${sortedConversations
                   .map(
                     (conversation) => `
-                    <div class="conversation-card rounded-2xl p-6" onclick="openConversation('${
+                    <div class="glass-card rounded-2xl p-6 cursor-pointer glow-on-hover" onclick="openConversation('${
                       conversation.user._id
                     }', '${conversation.user.firstName} ${
                       conversation.user.lastName
@@ -1828,7 +1861,7 @@
                       <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-4">
                           <div class="relative">
-                            <div class="w-14 h-14 rounded-full overflow-hidden bg-reddit-orange">
+                            <div class="w-14 h-14 rounded-full overflow-hidden bg-primary-500">
                               <img src="${getProfileImageUrl(
                                 conversation.user
                               )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1836,16 +1869,16 @@
                       conversation.user.lastName
                     )}'">
                             </div>
-                            <div class="absolute -bottom-1 -right-1 w-4 h-4 online-indicator rounded-full border-2 border-reddit-dark"></div>
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-500 rounded-full border-2 border-dark-950 animate-pulse-soft"></div>
                           </div>
                           <div class="flex-1">
-                            <h4 class="font-bold text-lg text-reddit-text">${
+                            <h4 class="font-bold text-lg text-dark-100">${
                               conversation.user.firstName
                             } ${conversation.user.lastName}</h4>
-                            <p class="text-sm text-reddit-textSecondary">${
+                            <p class="text-sm text-dark-400">${
                               conversation.user.department
                             }</p>
-                            <p class="text-xs text-reddit-textSecondary/70 mt-1">
+                            <p class="text-xs text-dark-500 mt-1">
                               Last active: ${formatTimeAgo(
                                 conversation.lastMessage.createdAt
                               )}
@@ -1867,7 +1900,7 @@
                           ${
                             // Prevent blocking self
                             conversation.user._id !== currentUser._id
-                              ? `<button onclick="event.stopPropagation(); confirmBlockUser('${conversation.user._id}', '${conversation.user.firstName} ${conversation.user.lastName}')" class="text-reddit-red hover:text-reddit-redHover hover:bg-reddit-red/10 p-2 rounded-lg transition-all duration-200">
+                              ? `<button onclick="event.stopPropagation(); confirmBlockUser('${conversation.user._id}', '${conversation.user.firstName} ${conversation.user.lastName}')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                      <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"></path>
                                    </svg>
@@ -1878,9 +1911,9 @@
                       </div>
                       
                       <!-- Last Message Preview -->
-                      <div class="bg-reddit-card/50 rounded-lg p-3 border border-reddit-border/50">
+                      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600/50">
                         <div class="flex items-start space-x-2">
-                          <div class="w-6 h-6 rounded-full overflow-hidden bg-reddit-orange flex-shrink-0">
+                          <div class="w-6 h-6 rounded-full overflow-hidden bg-primary-500 flex-shrink-0">
                             <img src="${getProfileImageUrl(
                               conversation.lastMessage.sender
                             )}" alt="Sender" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1889,7 +1922,7 @@
                     )}'">
                           </div>
                           <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-reddit-text">
+                            <p class="text-sm font-medium text-dark-200">
                               ${
                                 conversation.lastMessage.sender._id ===
                                 currentUser._id
@@ -1897,7 +1930,7 @@
                                   : conversation.lastMessage.sender.firstName
                               }:
                             </p>
-                            <p class="text-sm text-reddit-textSecondary truncate">
+                            <p class="text-sm text-dark-400 truncate">
                               ${conversation.lastMessage.content.substring(
                                 0,
                                 100
@@ -1910,7 +1943,7 @@
                       </div>
                       
                       <!-- Message Count -->
-                      <div class="mt-3 flex items-center justify-between text-xs text-reddit-textSecondary">
+                      <div class="mt-3 flex items-center justify-between text-xs text-dark-500">
                         <span>${conversation.messages.length} message${
                       conversation.messages.length !== 1 ? "s" : ""
                     }</span>
@@ -1936,10 +1969,10 @@
         modal.className =
           "fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
         modal.innerHTML = `
-          <div class="reddit-card rounded-2xl max-w-4xl w-full h-[80vh] shadow-2xl animate-scale-in flex flex-col">
-            <div class="flex items-center justify-between p-6 border-b border-reddit-border">
-              <h3 class="text-xl font-bold text-reddit-text">Conversation with ${userName}</h3>
-              <button onclick="this.closest('.modal-backdrop').remove()" class="text-reddit-textSecondary hover:text-reddit-text p-2 rounded-lg hover:bg-reddit-cardHover transition-all duration-200">
+          <div class="glass-card rounded-2xl max-w-4xl w-full h-[80vh] shadow-2xl animate-scale-in flex flex-col">
+            <div class="flex items-center justify-between p-6 border-b border-dark-600">
+              <h3 class="text-xl font-bold text-dark-100">Conversation with ${userName}</h3>
+              <button onclick="this.closest('.modal-backdrop').remove()" class="text-dark-400 hover:text-dark-200 p-2 rounded-lg hover:bg-dark-700 transition-all duration-200">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                 </svg>
@@ -1947,21 +1980,21 @@
             </div>
             <div id="conversationMessages" class="flex-1 overflow-y-auto p-6 space-y-4">
               <div class="flex justify-center items-center py-8">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-reddit-orange"></div>
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
               </div>
             </div>
-            <div class="p-6 border-t border-reddit-border">
+            <div class="p-6 border-t border-dark-600">
               <div class="flex space-x-4">
                 <input
                   type="text"
                   id="newMessageInput"
                   placeholder="Type your message..."
-                  class="flex-1 border-2 border-reddit-border bg-reddit-card text-reddit-text rounded-xl px-4 py-3 focus:border-reddit-orange focus:ring-4 focus:ring-reddit-orange/20 transition-all duration-200"
+                  class="flex-1 input-field rounded-xl px-4 py-3"
                   onkeypress="handleMessageKeyPress(event, '${userId}')"
                 />
                 <button
                   onclick="sendMessage('${userId}')"
-                  class="reddit-button px-6 py-3 rounded-xl font-semibold"
+                  class="btn-primary px-6 py-3 rounded-xl font-semibold"
                 >
                   Send
                 </button>
@@ -2006,7 +2039,7 @@
                       ? "flex-row-reverse space-x-reverse"
                       : ""
                   }">
-                    <div class="w-8 h-8 rounded-full overflow-hidden bg-reddit-orange flex-shrink-0">
+                    <div class="w-8 h-8 rounded-full overflow-hidden bg-primary-500 flex-shrink-0">
                       <img src="${getProfileImageUrl(
                         message.sender
                       )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -2040,7 +2073,7 @@
           } else {
             container.innerHTML = `
               <div class="text-center py-8">
-                <p class="text-reddit-textSecondary">No messages yet. Start the conversation!</p>
+                <p class="text-dark-400">No messages yet. Start the conversation!</p>
               </div>
             `;
           }
@@ -2048,7 +2081,7 @@
           console.error("Error loading conversation:", error);
           document.getElementById("conversationMessages").innerHTML = `
             <div class="text-center py-8">
-              <p class="text-reddit-red">Error loading messages</p>
+              <p class="text-red-400">Error loading messages</p>
             </div>
           `;
         }
@@ -2098,15 +2131,15 @@
       function getNoMessagesTemplate() {
         return `
           <div class="text-center py-20">
-            <div class="w-24 h-24 mx-auto mb-6 bg-reddit-blue/20 rounded-full flex items-center justify-center">
-              <svg class="w-12 h-12 text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
+            <div class="w-24 h-24 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center floating-element">
+              <svg class="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-reddit-text mb-2">No Messages Yet</h3>
-            <p class="text-reddit-textSecondary mb-6">Your conversations will appear here</p>
-            <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+            <h3 class="text-xl font-semibold text-dark-100 mb-2">No Messages Yet</h3>
+            <p class="text-dark-400 mb-6">Your conversations will appear here</p>
+            <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
               Browse Items
             </button>
           </div>
@@ -2125,7 +2158,7 @@
         }
       }
 
-      // Edit item
+      // Edit item with validity questions support
       async function editItem(itemId) {
         try {
           showToast("Loading item details...", "info");
@@ -2144,6 +2177,18 @@
             document.getElementById("editDescription").value = item.description;
             document.getElementById("editLocation").value = item.location;
 
+            // Handle validity questions for found items
+            if (item.type === "found") {
+              document
+                .getElementById("editValidityQuestionsSection")
+                .classList.remove("hidden");
+              loadEditValidityQuestions(item.validityQuestions || []);
+            } else {
+              document
+                .getElementById("editValidityQuestionsSection")
+                .classList.add("hidden");
+            }
+
             document.getElementById("editItemModal").classList.remove("hidden");
           } else {
             throw new Error("Failed to load item details");
@@ -2151,6 +2196,58 @@
         } catch (error) {
           showToast("Error loading item details. Please try again.", "error");
         }
+      }
+
+      // Load validity questions for editing
+      function loadEditValidityQuestions(questions) {
+        const container = document.getElementById("editValidityQuestionsList");
+        editValidityQuestionCount = 0;
+        container.innerHTML = "";
+
+        questions.forEach((question, index) => {
+          addEditValidityQuestion(question.question, question.answer);
+        });
+
+        if (questions.length === 0) {
+          addEditValidityQuestion();
+        }
+      }
+
+      // Add validity question for editing
+      function addEditValidityQuestion(question = "", answer = "") {
+        const container = document.getElementById("editValidityQuestionsList");
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "glass-card p-4 rounded-lg";
+        questionDiv.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-semibold text-dark-200">Question ${
+              editValidityQuestionCount + 1
+            }</h4>
+            <button type="button" onclick="this.closest('.glass-card').remove()" class="text-red-400 hover:text-red-300 p-1 rounded">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="space-y-3">
+            <input
+              type="text"
+              placeholder="Enter verification question"
+              value="${question}"
+              class="w-full input-field rounded-lg px-3 py-2 text-sm validity-question"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Enter correct answer"
+              value="${answer}"
+              class="w-full input-field rounded-lg px-3 py-2 text-sm validity-answer"
+              required
+            />
+          </div>
+        `;
+        container.appendChild(questionDiv);
+        editValidityQuestionCount++;
       }
 
       // Handle edit item form submission
@@ -2175,6 +2272,29 @@
           const imageFile = document.getElementById("editImage").files[0];
           if (imageFile) {
             formData.append("image", imageFile);
+          }
+
+          // Handle validity questions for found items
+          const validityQuestionsSection = document.getElementById(
+            "editValidityQuestionsSection"
+          );
+          if (!validityQuestionsSection.classList.contains("hidden")) {
+            const questions = [];
+            const questionInputs =
+              document.querySelectorAll(".validity-question");
+            const answerInputs = document.querySelectorAll(".validity-answer");
+
+            for (let i = 0; i < questionInputs.length; i++) {
+              const question = questionInputs[i].value.trim();
+              const answer = answerInputs[i].value.trim();
+              if (question && answer) {
+                questions.push({ question, answer });
+              }
+            }
+
+            if (questions.length > 0) {
+              formData.append("validityQuestions", JSON.stringify(questions));
+            }
           }
 
           try {
@@ -2234,12 +2354,12 @@
             } else {
               content.innerHTML = `
                 <div class="text-center py-12">
-                  <div class="w-16 h-16 mx-auto mb-4 bg-reddit-textSecondary/20 rounded-full flex items-center justify-center">
-                    <svg class="w-8 h-8 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+                  <div class="w-16 h-16 mx-auto mb-4 bg-dark-600/20 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-dark-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
                     </svg>
                   </div>
-                  <p class="text-reddit-textSecondary text-lg">No ${type} requests yet</p>
+                  <p class="text-dark-400 text-lg">No ${type} requests yet</p>
                 </div>
               `;
             }
@@ -2259,10 +2379,10 @@
         const user = request[userKey];
 
         return `
-          <div class="claim-request-card rounded-2xl p-6">
+          <div class="glass-card rounded-2xl p-6 glow-on-hover">
             <div class="flex items-center justify-between mb-6">
               <div class="flex items-center space-x-4">
-                <div class="w-14 h-14 rounded-full overflow-hidden bg-reddit-orange">
+                <div class="w-14 h-14 rounded-full overflow-hidden bg-primary-500">
                   <img src="${getProfileImageUrl(
                     user
                   )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -2271,13 +2391,11 @@
         )}'">
                 </div>
                 <div>
-                  <h4 class="font-bold text-lg text-reddit-text">${
+                  <h4 class="font-bold text-lg text-dark-100">${
                     user.firstName
                   } ${user.lastName}</h4>
-                  <p class="text-sm text-reddit-textSecondary">${
-                    user.department
-                  }</p>
-                  <p class="text-xs text-reddit-textSecondary/70 mt-1">
+                  <p class="text-sm text-dark-400">${user.department}</p>
+                  <p class="text-xs text-dark-500 mt-1">
                     ${formatTimeAgo(request.createdAt || Date.now())}
                   </p>
                 </div>
@@ -2291,8 +2409,8 @@
               type === "claim" && request.answers && request.answers.length > 0
                 ? `
               <div class="mb-6">
-                <h5 class="font-semibold mb-3 text-reddit-text flex items-center">
-                  <svg class="w-5 h-5 mr-2 text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
+                <h5 class="font-semibold mb-3 text-dark-200 flex items-center">
+                  <svg class="w-5 h-5 mr-2 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                   </svg>
                   Answers to Verification Questions:
@@ -2301,11 +2419,11 @@
                   ${request.answers
                     .map(
                       (answer, index) =>
-                        `<div class="bg-reddit-card/70 p-4 rounded-lg border border-reddit-border/50">
-                           <p class="text-sm font-medium text-reddit-blue mb-1">Question ${
+                        `<div class="bg-dark-800/70 p-4 rounded-lg border border-dark-600/50">
+                           <p class="text-sm font-medium text-blue-400 mb-1">Question ${
                              index + 1
                            }:</p>
-                           <p class="text-sm text-reddit-text">${answer}</p>
+                           <p class="text-sm text-dark-200">${answer}</p>
                          </div>`
                     )
                     .join("")}
@@ -2319,14 +2437,14 @@
               type === "inform" && request.message
                 ? `
               <div class="mb-6">
-                <h5 class="font-semibold mb-3 text-reddit-text flex items-center">
-                  <svg class="w-5 h-5 mr-2 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                <h5 class="font-semibold mb-3 text-dark-200 flex items-center">
+                  <svg class="w-5 h-5 mr-2 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
                   </svg>
                   Finder's Message:
                 </h5>
-                <div class="bg-reddit-card/70 p-4 rounded-lg border border-reddit-border/50">
-                  <p class="text-sm text-reddit-text leading-relaxed">${request.message}</p>
+                <div class="bg-dark-800/70 p-4 rounded-lg border border-dark-600/50">
+                  <p class="text-sm text-dark-200 leading-relaxed">${request.message}</p>
                 </div>
               </div>
             `
@@ -2337,8 +2455,8 @@
               type === "inform" && request.image
                 ? `
               <div class="mb-6">
-                <h5 class="font-semibold mb-3 text-reddit-text flex items-center">
-                  <svg class="w-5 h-5 mr-2 text-reddit-orange" fill="currentColor" viewBox="0 0 20 20">
+                <h5 class="font-semibold mb-3 text-dark-200 flex items-center">
+                  <svg class="w-5 h-5 mr-2 text-primary-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
                   </svg>
                   Found Item Image:
@@ -2347,16 +2465,16 @@
                   <img 
                     src="${getFullImageUrl(request.image)}" 
                     alt="Found item" 
-                    class="max-w-full h-64 object-cover rounded-lg image-preview cursor-pointer" 
+                    class="max-w-full h-64 object-cover rounded-lg cursor-pointer glow-on-hover" 
                     onclick="showImageModal('${getFullImageUrl(
                       request.image
                     )}')"
-                    onerror="this.parentElement.innerHTML='<div class=\\'w-full h-64 bg-reddit-card rounded-lg border border-reddit-border flex items-center justify-center\\'>
+                    onerror="this.parentElement.innerHTML='<div class=\\'w-full h-64 bg-dark-800 rounded-lg border border-dark-600 flex items-center justify-center\\'>
                       <div class=\\'text-center\\'>
-                        <svg class=\\'w-12 h-12 text-reddit-textSecondary mx-auto mb-2\\' fill=\\'currentColor\\' viewBox=\\'0 0 20 20\\'>
+                        <svg class=\\'w-12 h-12 text-dark-500 mx-auto mb-2\\' fill=\\'currentColor\\' viewBox=\\'0 0 20 20\\'>
                           <path fill-rule=\\'evenodd\\' d=\\'M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z\\' clip-rule=\\'evenodd\\'></path>
                         </svg>
-                        <p class=\\'text-reddit-textSecondary text-sm\\'>Image not available</p>
+                        <p class=\\'text-dark-500 text-sm\\'>Image not available</p>
                       </div>
                     </div>'"
                   >
@@ -2373,14 +2491,14 @@
               (type === "claim" ? request.additionalInfo : false)
                 ? `
               <div class="mb-6">
-                <h5 class="font-semibold mb-3 text-reddit-text flex items-center">
-                  <svg class="w-5 h-5 mr-2 text-reddit-textSecondary" fill="currentColor" viewBox="0 0 20 20">
+                <h5 class="font-semibold mb-3 text-dark-200 flex items-center">
+                  <svg class="w-5 h-5 mr-2 text-dark-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
                   </svg>
                   Additional Information:
                 </h5>
-                <div class="bg-reddit-card/70 p-4 rounded-lg border border-reddit-border/50">
-                  <p class="text-sm text-reddit-text leading-relaxed">${request.additionalInfo}</p>
+                <div class="bg-dark-800/70 p-4 rounded-lg border border-dark-600/50">
+                  <p class="text-sm text-dark-200 leading-relaxed">${request.additionalInfo}</p>
                 </div>
               </div>
             `
@@ -2391,7 +2509,7 @@
               request.status === "approved" && request.contactInfo
                 ? `
               <div class="contact-info-card p-6 rounded-xl mb-6">
-                <h5 class="font-semibold mb-4 text-reddit-accent flex items-center text-lg">
+                <h5 class="font-semibold mb-4 text-accent-400 flex items-center text-lg">
                   <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
@@ -2402,55 +2520,55 @@
                   ${
                     request.contactInfo.phone
                       ? `<div class="flex items-center space-x-2">
-                           <svg class="w-4 h-4 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                           <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                            </svg>
                            <span class="font-medium">Phone:</span> 
-                           <span class="text-reddit-accent">${request.contactInfo.phone}</span>
+                           <span class="text-accent-400">${request.contactInfo.phone}</span>
                          </div>`
                       : ""
                   }
                   ${
                     request.contactInfo.alternatePhone
                       ? `<div class="flex items-center space-x-2">
-                           <svg class="w-4 h-4 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                           <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                            </svg>
                            <span class="font-medium">Alt Phone:</span> 
-                           <span class="text-reddit-accent">${request.contactInfo.alternatePhone}</span>
+                           <span class="text-accent-400">${request.contactInfo.alternatePhone}</span>
                          </div>`
                       : ""
                   }
                   ${
                     request.contactInfo.email
                       ? `<div class="flex items-center space-x-2">
-                           <svg class="w-4 h-4 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                           <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                            </svg>
                            <span class="font-medium">Email:</span> 
-                           <span class="text-reddit-accent">${request.contactInfo.email}</span>
+                           <span class="text-accent-400">${request.contactInfo.email}</span>
                          </div>`
                       : ""
                   }
                   ${
                     request.contactInfo.meetingLocation
                       ? `<div class="flex items-center space-x-2">
-                           <svg class="w-4 h-4 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                           <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                            </svg>
                            <span class="font-medium">Location:</span> 
-                           <span class="text-reddit-textSecondary">${request.contactInfo.meetingLocation}</span>
+                           <span class="text-dark-300">${request.contactInfo.meetingLocation}</span>
                          </div>`
                       : ""
                   }
                   ${
                     request.contactInfo.meetingTime
                       ? `<div class="flex items-center space-x-2">
-                           <svg class="w-4 h-4 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                           <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                            </svg>
                            <span class="font-medium">Time:</span> 
-                           <span class="text-reddit-textSecondary">${request.contactInfo.meetingTime}</span>
+                           <span class="text-dark-300">${request.contactInfo.meetingTime}</span>
                          </div>`
                       : ""
                   }
@@ -2458,12 +2576,12 @@
                     request.contactInfo.additionalNotes
                       ? `<div class="md:col-span-2 mt-2">
                            <div class="flex items-start space-x-2">
-                             <svg class="w-4 h-4 text-reddit-accent mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                             <svg class="w-4 h-4 text-accent-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path>
                              </svg>
                              <div>
                                <span class="font-medium block">Additional Notes:</span>
-                               <span class="text-reddit-textSecondary">${request.contactInfo.additionalNotes}</span>
+                               <span class="text-dark-300">${request.contactInfo.additionalNotes}</span>
                              </div>
                            </div>
                          </div>`
@@ -2495,10 +2613,10 @@
               request.status === "pending"
                 ? `
               <div class="flex gap-4 mt-6">
-                <button onclick="showContactInfo('${itemId}', '${request._id}', '${type}')" class="flex-1 reddit-button py-3 rounded-xl text-sm font-semibold">
+                <button onclick="showContactInfo('${itemId}', '${request._id}', '${type}')" class="flex-1 btn-primary py-3 rounded-xl text-sm font-semibold">
                   Approve Request
                 </button>
-                <button onclick="showRejectionModal('${itemId}', '${request._id}', '${type}')" class="flex-1 reddit-button-danger py-3 rounded-xl text-sm font-semibold">
+                <button onclick="showRejectionModal('${itemId}', '${request._id}', '${type}')" class="flex-1 btn-danger py-3 rounded-xl text-sm font-semibold">
                   Reject Request
                 </button>
               </div>
@@ -2638,10 +2756,10 @@
             // Create a modal to display contact info
             const modal = document.createElement("div");
             modal.className =
-              "fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
+              "fixe inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
             modal.innerHTML = `
-              <div class="reddit-card rounded-2xl max-w-lg w-full p-8 shadow-2xl animate-scale-in">
-                <h3 class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-accent bg-clip-text text-transparent">
+              <div class="glass-card rounded-2xl max-w-lg w-full p-8 shadow-2xl animate-scale-in">
+                <h3 class="text-2xl font-bold mb-6 gradient-text">
                   Contact Information
                 </h3>
                 <div class="contact-info-card p-6 rounded-xl mb-6">
@@ -2649,14 +2767,14 @@
                     ${
                       contactInfo.phone
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-reddit-accent/20 rounded-full flex items-center justify-center">
-                               <svg class="w-5 h-5 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                               <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                                </svg>
                              </div>
                              <div>
-                               <p class="font-medium text-reddit-text">Phone</p>
-                               <p class="text-reddit-accent font-semibold">${contactInfo.phone}</p>
+                               <p class="font-medium text-dark-200">Phone</p>
+                               <p class="text-accent-400 font-semibold">${contactInfo.phone}</p>
                              </div>
                            </div>`
                         : ""
@@ -2664,14 +2782,14 @@
                     ${
                       contactInfo.alternatePhone
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-reddit-accent/20 rounded-full flex items-center justify-center">
-                               <svg class="w-5 h-5 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                               <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                                </svg>
                              </div>
                              <div>
-                               <p class="font-medium text-reddit-text">Alternate Phone</p>
-                               <p class="text-reddit-accent font-semibold">${contactInfo.alternatePhone}</p>
+                               <p class="font-medium text-dark-200">Alternate Phone</p>
+                               <p class="text-accent-400 font-semibold">${contactInfo.alternatePhone}</p>
                              </div>
                            </div>`
                         : ""
@@ -2679,14 +2797,14 @@
                     ${
                       contactInfo.email
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-reddit-accent/20 rounded-full flex items-center justify-center">
-                               <svg class="w-5 h-5 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                               <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                                </svg>
                              </div>
                              <div>
-                               <p class="font-medium text-reddit-text">Email</p>
-                               <p class="text-reddit-accent font-semibold">${contactInfo.email}</p>
+                               <p class="font-medium text-dark-200">Email</p>
+                               <p class="text-accent-400 font-semibold">${contactInfo.email}</p>
                              </div>
                            </div>`
                         : ""
@@ -2694,14 +2812,14 @@
                     ${
                       contactInfo.meetingLocation
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-reddit-accent/20 rounded-full flex items-center justify-center">
-                               <svg class="w-5 h-5 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                               <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                                </svg>
                              </div>
                              <div>
-                               <p class="font-medium text-reddit-text">Meeting Location</p>
-                               <p class="text-reddit-textSecondary">${contactInfo.meetingLocation}</p>
+                               <p class="font-medium text-dark-200">Meeting Location</p>
+                               <p class="text-dark-300">${contactInfo.meetingLocation}</p>
                              </div>
                            </div>`
                         : ""
@@ -2709,14 +2827,14 @@
                     ${
                       contactInfo.meetingTime
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-reddit-accent/20 rounded-full flex items-center justify-center">
-                               <svg class="w-5 h-5 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                               <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                </svg>
                              </div>
                              <div>
-                               <p class="font-medium text-reddit-text">Meeting Time</p>
-                               <p class="text-reddit-textSecondary">${contactInfo.meetingTime}</p>
+                               <p class="font-medium text-dark-200">Meeting Time</p>
+                               <p class="text-dark-300">${contactInfo.meetingTime}</p>
                              </div>
                            </div>`
                         : ""
@@ -2724,21 +2842,21 @@
                     ${
                       contactInfo.additionalNotes
                         ? `<div class="flex items-start space-x-3">
-                             <div class="w-10 h-10 bg-reddit-accent/20 rounded-full flex items-center justify-center">
-                               <svg class="w-5 h-5 text-reddit-accent" fill="currentColor" viewBox="0 0 20 20">
+                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                               <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path>
                                </svg>
                              </div>
                              <div>
-                               <p class="font-medium text-reddit-text">Additional Notes</p>
-                               <p class="text-reddit-textSecondary">${contactInfo.additionalNotes}</p>
+                               <p class="font-medium text-dark-200">Additional Notes</p>
+                               <p class="text-dark-300">${contactInfo.additionalNotes}</p>
                              </div>
                            </div>`
                         : ""
                     }
                   </div>
                 </div>
-                <button onclick="this.closest('.modal-backdrop').remove()" class="w-full reddit-button py-3 rounded-xl font-semibold">
+                <button onclick="this.closest('.modal-backdrop').remove()" class="w-full btn-primary py-3 rounded-xl font-semibold">
                   Close
                 </button>
               </div>
@@ -3067,10 +3185,10 @@
         const toastDiv = document.createElement("div");
 
         const colors = {
-          success: "bg-gradient-to-r from-reddit-accent to-green-500",
+          success: "bg-gradient-to-r from-accent-500 to-green-500",
           error: "bg-gradient-to-r from-red-500 to-red-600",
           warning: "bg-gradient-to-r from-yellow-500 to-yellow-600",
-          info: "bg-gradient-to-r from-reddit-blue to-reddit-blueHover",
+          info: "bg-gradient-to-r from-blue-500 to-blue-600",
         };
 
         const icons = {
