@@ -86,8 +86,8 @@ const UserSchema = new mongoose.Schema({
   otp: { type: String },
   otpExpires: { type: Date },
   profileImage: { type: String, default: "" },
-  isBlocked: { type: Boolean, default: false }, // For user blocking functionality
-  blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Users blocked by this user
+  isBlocked: { type: Boolean, default: false },
+  blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -114,7 +114,37 @@ const ClaimRequestSchema = new mongoose.Schema({
     ref: "User",
   },
   reviewedAt: { type: Date },
-  // NEW: Contact information shared when approving
+  rejectionReason: { type: String }, // NEW: Rejection reason
+  contactInfo: {
+    phone: { type: String },
+    alternatePhone: { type: String },
+    email: { type: String },
+    meetingLocation: { type: String },
+    meetingTime: { type: String },
+    additionalNotes: { type: String },
+  },
+});
+
+// NEW: Inform Request Schema for Lost Items
+const InformRequestSchema = new mongoose.Schema({
+  message: { type: String, required: true },
+  image: { type: String }, // Optional image from finder
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  },
+  informedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  reviewedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  reviewedAt: { type: Date },
+  rejectionReason: { type: String }, // NEW: Rejection reason
   contactInfo: {
     phone: { type: String },
     alternatePhone: { type: String },
@@ -129,10 +159,11 @@ const ItemSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: String, required: true },
-  image: { type: String },
+  image: { type: String }, // Optional for lost items
   type: { type: String, enum: ["lost", "found"], required: true },
-  validityQuestions: [ValidityQuestionSchema],
-  claimRequests: [ClaimRequestSchema],
+  validityQuestions: [ValidityQuestionSchema], // Only for found items
+  claimRequests: [ClaimRequestSchema], // For found items
+  informRequests: [InformRequestSchema], // NEW: For lost items
   status: {
     type: String,
     enum: ["active", "claimed", "accepted", "rejected"],
@@ -148,9 +179,9 @@ const ItemSchema = new mongoose.Schema({
     type: String,
     enum: ["low", "medium", "high"],
     default: "medium",
-  }, // For future priority system
-  tags: [{ type: String }], // For future tagging system
-  viewCount: { type: Number, default: 0 }, // For analytics
+  },
+  tags: [{ type: String }],
+  viewCount: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
@@ -163,8 +194,8 @@ const CommentSchema = new mongoose.Schema({
     required: true,
   },
   item: { type: mongoose.Schema.Types.ObjectId, ref: "Item", required: true },
-  parentComment: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" }, // For nested comments
-  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // For comment likes
+  parentComment: { type: mongoose.Schema.Types.ObjectId, ref: "Comment" },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
@@ -182,8 +213,8 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     enum: ["text", "system", "contact_share"],
     default: "text",
-  }, // For different message types
-  attachments: [{ type: String }], // For future file attachments
+  },
+  attachments: [{ type: String }],
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -198,25 +229,24 @@ const SuggestionSchema = new mongoose.Schema({
     type: String,
     enum: ["feature", "bug", "improvement", "other"],
     default: "other",
-  }, // For categorizing suggestions
+  },
   status: {
     type: String,
     enum: ["pending", "reviewed", "implemented", "rejected"],
     default: "pending",
-  }, // For tracking suggestion status
-  votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // For voting on suggestions
-  adminResponse: { type: String }, // For admin responses
+  },
+  votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  adminResponse: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 
-// NEW: Report Schema for reporting inappropriate content or users
 const ReportSchema = new mongoose.Schema({
   reportType: {
     type: String,
     enum: ["user", "item", "comment", "message"],
     required: true,
   },
-  reportedEntity: { type: mongoose.Schema.Types.ObjectId, required: true }, // Can reference User, Item, Comment, or Message
+  reportedEntity: { type: mongoose.Schema.Types.ObjectId, required: true },
   reportedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -235,7 +265,6 @@ const ReportSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// NEW: Notification Schema for system notifications
 const NotificationSchema = new mongoose.Schema({
   recipient: {
     type: mongoose.Schema.Types.ObjectId,
@@ -250,13 +279,16 @@ const NotificationSchema = new mongoose.Schema({
       "claim_request",
       "claim_approved",
       "claim_rejected",
+      "inform_request", // NEW
+      "inform_approved", // NEW
+      "inform_rejected", // NEW
       "item_claimed",
       "system",
       "reminder",
     ],
     required: true,
   },
-  relatedEntity: { type: mongoose.Schema.Types.ObjectId }, // Can reference Item, ClaimRequest, etc.
+  relatedEntity: { type: mongoose.Schema.Types.ObjectId },
   read: { type: Boolean, default: false },
   actionRequired: { type: Boolean, default: false },
   expiresAt: { type: Date },
@@ -352,7 +384,7 @@ app.post(
         department,
         password: hashedPassword,
         idCardImage: req.file ? req.file.filename : "",
-        profileImage: req.file ? req.file.filename : "", // Set profileImage same as idCardImage initially
+        profileImage: req.file ? req.file.filename : "",
         otp,
         otpExpires,
       });
@@ -368,7 +400,7 @@ app.post(
         userId: user._id,
         profileImage: user.profileImage
           ? `/uploads/${user.profileImage}`
-          : `/uploads/${user.idCardImage}`, // Return idCardImage if profileImage is empty
+          : `/uploads/${user.idCardImage}`,
       });
     } catch (error) {
       console.error(error);
@@ -787,17 +819,12 @@ app.post(
   upload.single("image"),
   async (req, res) => {
     try {
-      const {
-        title,
-        description,
-        location,
-        type,
-        validityQuestions, // Now expecting an array of {question, answer} objects
-      } = req.body;
+      const { title, description, location, type, validityQuestions } =
+        req.body;
 
       // Parse validityQuestions if it's a string
       let questions = [];
-      if (validityQuestions) {
+      if (validityQuestions && type === "found") {
         try {
           questions =
             typeof validityQuestions === "string"
@@ -817,7 +844,7 @@ app.post(
         location,
         image: req.file ? req.file.filename : null,
         type,
-        validityQuestions: questions,
+        validityQuestions: type === "found" ? questions : [], // Only for found items
         postedBy: req.user._id,
       });
 
@@ -837,9 +864,11 @@ app.post(
   }
 );
 
+// UPDATED: Filter out claimed items from search results
 app.get("/api/items", authenticate, async (req, res) => {
   try {
-    const { type, search, postedBy, claimedBy, status } = req.query;
+    const { type, search, postedBy, claimedBy, status, includeReunited } =
+      req.query;
 
     let query = {};
     if (type) query.type = type;
@@ -858,6 +887,11 @@ app.get("/api/items", authenticate, async (req, res) => {
     }
     if (status) {
       query.status = status;
+    }
+
+    // NEW: Exclude reunited items from general search unless specifically requested
+    if (includeReunited !== "true") {
+      query.status = { $ne: "claimed" };
     }
 
     const items = await Item.find(query)
@@ -880,7 +914,7 @@ app.get("/api/items", authenticate, async (req, res) => {
       ) {
         itemObj.validityQuestions = itemObj.validityQuestions.map((q) => ({
           question: q.question,
-          answer: undefined, // Hide answers
+          answer: undefined,
         }));
       }
 
@@ -923,7 +957,7 @@ app.get("/api/items/:id", authenticate, async (req, res) => {
     ) {
       itemObj.validityQuestions = itemObj.validityQuestions.map((q) => ({
         question: q.question,
-        answer: undefined, // Hide answers
+        answer: undefined,
       }));
     }
 
@@ -959,7 +993,7 @@ app.put(
 
       // Parse validityQuestions if it's a string
       let questions = [];
-      if (validityQuestions) {
+      if (validityQuestions && item.type === "found") {
         try {
           questions =
             typeof validityQuestions === "string"
@@ -977,8 +1011,10 @@ app.put(
       item.title = title || item.title;
       item.description = description || item.description;
       item.location = location || item.location;
-      item.validityQuestions =
-        questions.length > 0 ? questions : item.validityQuestions;
+      if (item.type === "found") {
+        item.validityQuestions =
+          questions.length > 0 ? questions : item.validityQuestions;
+      }
 
       if (req.file) {
         // Delete old image if exists
@@ -1047,7 +1083,7 @@ app.delete("/api/items/:id", authenticate, async (req, res) => {
   }
 });
 
-// Claim Request Routes (MODIFIED to include contact information)
+// Claim Request Routes (For Found Items)
 app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
   try {
     const { answers, additionalInfo } = req.body;
@@ -1057,6 +1093,14 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "Item not found" });
+    }
+
+    // Check if this is a found item
+    if (item.type !== "found") {
+      return res.status(400).json({
+        success: false,
+        message: "Claim requests are only for found items",
+      });
     }
 
     // Check if the item is already claimed or accepted
@@ -1074,15 +1118,13 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
         .json({ success: false, message: "You cannot claim your own item" });
     }
 
-    // For found items, check if answers are provided for all questions
-    if (item.type === "found") {
-      if (!answers || answers.length !== item.validityQuestions.length) {
-        return res.status(400).json({
-          success: false,
-          message: "Please provide answers to all validity questions",
-          validityQuestions: item.validityQuestions.map((q) => q.question),
-        });
-      }
+    // Check if answers are provided for all questions
+    if (!answers || answers.length !== item.validityQuestions.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide answers to all validity questions",
+        validityQuestions: item.validityQuestions.map((q) => q.question),
+      });
     }
 
     // Create a new claim request
@@ -1117,6 +1159,89 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
+// NEW: Inform Request Routes (For Lost Items)
+app.post(
+  "/api/items/:id/inform-request",
+  authenticate,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { message } = req.body;
+
+      const item = await Item.findById(req.params.id);
+      if (!item) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Item not found" });
+      }
+
+      // Check if this is a lost item
+      if (item.type !== "lost") {
+        return res.status(400).json({
+          success: false,
+          message: "Inform requests are only for lost items",
+        });
+      }
+
+      // Check if the item is already claimed
+      if (item.status !== "active") {
+        return res.status(400).json({
+          success: false,
+          message: "Item is already claimed by another user",
+        });
+      }
+
+      // Check if the user is the owner of the item
+      if (item.postedBy.toString() === req.user._id.toString()) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "You cannot inform about your own item",
+          });
+      }
+
+      if (!message) {
+        return res.status(400).json({
+          success: false,
+          message: "Please provide a message describing the found item",
+        });
+      }
+
+      // Create a new inform request
+      const informRequest = {
+        message: message,
+        image: req.file ? req.file.filename : null,
+        status: "pending",
+        informedBy: req.user._id,
+      };
+
+      item.informRequests.push(informRequest);
+      await item.save();
+
+      // Create a notification message for the item owner
+      const notificationMessage = new Message({
+        content: `${req.user.firstName} ${req.user.lastName} has informed you about finding your lost item "${item.title}". Please review their message and image if provided.`,
+        sender: req.user._id,
+        receiver: item.postedBy,
+      });
+      await notificationMessage.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Inform request submitted successfully",
+        item: {
+          ...item.toObject(),
+          image: item.image ? `/uploads/${item.image}` : null,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+);
 
 app.get("/api/items/:id/claim-requests", authenticate, async (req, res) => {
   try {
@@ -1159,13 +1284,61 @@ app.get("/api/items/:id/claim-requests", authenticate, async (req, res) => {
   }
 });
 
-// MODIFIED: Approve claim request with contact information
+// NEW: Get inform requests for lost items
+app.get("/api/items/:id/inform-requests", authenticate, async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id)
+      .populate(
+        "informRequests.informedBy",
+        "firstName lastName department profileImage"
+      )
+      .populate(
+        "informRequests.reviewedBy",
+        "firstName lastName department profileImage"
+      );
+
+    if (!item) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Item not found" });
+    }
+
+    // Check if the user is the owner of the item
+    if (item.postedBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to view inform requests for this item",
+      });
+    }
+
+    const itemObj = item.toObject();
+    if (itemObj.image) {
+      itemObj.image = `/uploads/${itemObj.image}`;
+    }
+
+    // Format inform request images
+    const formattedInformRequests = itemObj.informRequests.map((request) => ({
+      ...request,
+      image: request.image ? `/uploads/${request.image}` : null,
+    }));
+
+    res.status(200).json({
+      success: true,
+      informRequests: formattedInformRequests,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Approve claim request with contact information
 app.post(
   "/api/items/:id/claim-requests/:requestId/approve",
   authenticate,
   async (req, res) => {
     try {
-      const { contactInfo } = req.body; // NEW: Expected contact information object
+      const { contactInfo } = req.body;
 
       // Validate required contact information
       if (!contactInfo || !contactInfo.phone) {
@@ -1270,11 +1443,124 @@ Please contact the owner to arrange pickup/return of your item.`;
   }
 );
 
+// NEW: Approve inform request with contact information
+app.post(
+  "/api/items/:id/inform-requests/:requestId/approve",
+  authenticate,
+  async (req, res) => {
+    try {
+      const { contactInfo } = req.body;
+
+      // Validate required contact information
+      if (!contactInfo || !contactInfo.phone) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Contact phone number is required when approving an inform request",
+        });
+      }
+
+      const item = await Item.findById(req.params.id);
+      if (!item) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Item not found" });
+      }
+
+      // Check if the user is the owner of the item
+      if (item.postedBy.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+          success: false,
+          message: "Not authorized to approve inform requests for this item",
+        });
+      }
+
+      const informRequest = item.informRequests.id(req.params.requestId);
+      if (!informRequest) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Inform request not found" });
+      }
+
+      // Update the inform request status and add contact information
+      informRequest.status = "approved";
+      informRequest.reviewedBy = req.user._id;
+      informRequest.reviewedAt = new Date();
+      informRequest.contactInfo = {
+        phone: contactInfo.phone,
+        alternatePhone: contactInfo.alternatePhone || "",
+        email: contactInfo.email || req.user.email,
+        meetingLocation: contactInfo.meetingLocation || "",
+        meetingTime: contactInfo.meetingTime || "",
+        additionalNotes: contactInfo.additionalNotes || "",
+      };
+
+      // Update the item status
+      item.status = "claimed";
+      item.claimedBy = informRequest.informedBy;
+
+      await item.save();
+
+      // Create a detailed notification message for the finder with contact information
+      const contactMessage = `Your inform request for the lost item "${
+        item.title
+      }" has been approved! The owner confirmed this is their item.
+
+Contact Information:
+📞 Phone: ${contactInfo.phone}
+${
+  contactInfo.alternatePhone
+    ? `📞 Alternate Phone: ${contactInfo.alternatePhone}\n`
+    : ""
+}
+📧 Email: ${contactInfo.email || req.user.email}
+${
+  contactInfo.meetingLocation
+    ? `📍 Meeting Location: ${contactInfo.meetingLocation}\n`
+    : ""
+}
+${
+  contactInfo.meetingTime ? `⏰ Meeting Time: ${contactInfo.meetingTime}\n` : ""
+}
+${
+  contactInfo.additionalNotes
+    ? `📝 Additional Notes: ${contactInfo.additionalNotes}\n`
+    : ""
+}
+
+Please contact the owner to arrange returning their item.`;
+
+      const message = new Message({
+        content: contactMessage,
+        sender: req.user._id,
+        receiver: informRequest.informedBy,
+        messageType: "contact_share",
+      });
+      await message.save();
+
+      res.status(200).json({
+        success: true,
+        message:
+          "Inform request approved successfully with contact information shared",
+        item: {
+          ...item.toObject(),
+          image: item.image ? `/uploads/${item.image}` : null,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+);
+
 app.post(
   "/api/items/:id/claim-requests/:requestId/reject",
   authenticate,
   async (req, res) => {
     try {
+      const { rejectionReason } = req.body; // NEW: Include rejection reason
+
       const item = await Item.findById(req.params.id);
       if (!item) {
         return res
@@ -1301,12 +1587,17 @@ app.post(
       claimRequest.status = "rejected";
       claimRequest.reviewedBy = req.user._id;
       claimRequest.reviewedAt = new Date();
+      claimRequest.rejectionReason = rejectionReason || "No reason provided"; // NEW
 
       await item.save();
 
       // Create a notification message for the claimant
       const message = new Message({
-        content: `Your claim request for the ${item.type} item "${item.title}" has been rejected.`,
+        content: `Your claim request for the ${item.type} item "${
+          item.title
+        }" has been rejected. ${
+          rejectionReason ? `Reason: ${rejectionReason}` : ""
+        }`,
         sender: req.user._id,
         receiver: claimRequest.requestedBy,
       });
@@ -1327,7 +1618,166 @@ app.post(
   }
 );
 
-// NEW: Get contact information for approved claim requests (only for claimant)
+// NEW: Reject inform request with reason
+app.post(
+  "/api/items/:id/inform-requests/:requestId/reject",
+  authenticate,
+  async (req, res) => {
+    try {
+      const { rejectionReason } = req.body;
+
+      const item = await Item.findById(req.params.id);
+      if (!item) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Item not found" });
+      }
+
+      // Check if the user is the owner of the item
+      if (item.postedBy.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+          success: false,
+          message: "Not authorized to reject inform requests for this item",
+        });
+      }
+
+      const informRequest = item.informRequests.id(req.params.requestId);
+      if (!informRequest) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Inform request not found" });
+      }
+
+      // Update the inform request status
+      informRequest.status = "rejected";
+      informRequest.reviewedBy = req.user._id;
+      informRequest.reviewedAt = new Date();
+      informRequest.rejectionReason = rejectionReason || "No reason provided";
+
+      await item.save();
+
+      // Create a notification message for the finder
+      const message = new Message({
+        content: `Your inform request for the lost item "${
+          item.title
+        }" has been rejected. ${
+          rejectionReason ? `Reason: ${rejectionReason}` : ""
+        }`,
+        sender: req.user._id,
+        receiver: informRequest.informedBy,
+      });
+      await message.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Inform request rejected successfully",
+        item: {
+          ...item.toObject(),
+          image: item.image ? `/uploads/${item.image}` : null,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+);
+
+// NEW: Get rejection reason for claim requests
+app.get(
+  "/api/claim-requests/:requestId/rejection-reason",
+  authenticate,
+  async (req, res) => {
+    try {
+      const item = await Item.findOne({
+        "claimRequests._id": req.params.requestId,
+        $or: [
+          { "claimRequests.requestedBy": req.user._id },
+          { postedBy: req.user._id },
+        ],
+      });
+
+      if (!item) {
+        return res.status(404).json({
+          success: false,
+          message: "Claim request not found or not authorized",
+        });
+      }
+
+      const claimRequest = item.claimRequests.id(req.params.requestId);
+      if (!claimRequest) {
+        return res.status(404).json({
+          success: false,
+          message: "Claim request not found",
+        });
+      }
+
+      if (claimRequest.status !== "rejected") {
+        return res.status(400).json({
+          success: false,
+          message: "Claim request is not rejected",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        rejectionReason: claimRequest.rejectionReason || "No reason provided",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+);
+
+// NEW: Get rejection reason for inform requests
+app.get(
+  "/api/inform-requests/:requestId/rejection-reason",
+  authenticate,
+  async (req, res) => {
+    try {
+      const item = await Item.findOne({
+        "informRequests._id": req.params.requestId,
+        $or: [
+          { "informRequests.informedBy": req.user._id },
+          { postedBy: req.user._id },
+        ],
+      });
+
+      if (!item) {
+        return res.status(404).json({
+          success: false,
+          message: "Inform request not found or not authorized",
+        });
+      }
+
+      const informRequest = item.informRequests.id(req.params.requestId);
+      if (!informRequest) {
+        return res.status(404).json({
+          success: false,
+          message: "Inform request not found",
+        });
+      }
+
+      if (informRequest.status !== "rejected") {
+        return res.status(400).json({
+          success: false,
+          message: "Inform request is not rejected",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        rejectionReason: informRequest.rejectionReason || "No reason provided",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+);
+
+// Get contact information for approved claim requests (only for claimant)
 app.get("/api/items/:id/contact-info", authenticate, async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
@@ -1351,12 +1801,23 @@ app.get("/api/items/:id/contact-info", authenticate, async (req, res) => {
       });
     }
 
-    // Find the approved claim request for the current user
-    const approvedRequest = item.claimRequests.find(
-      (request) =>
-        request.requestedBy.toString() === req.user._id.toString() &&
-        request.status === "approved"
-    );
+    // Find the approved request for the current user (either claim or inform)
+    let approvedRequest = null;
+    let itemOwner = null;
+
+    if (item.type === "found") {
+      approvedRequest = item.claimRequests.find(
+        (request) =>
+          request.requestedBy.toString() === req.user._id.toString() &&
+          request.status === "approved"
+      );
+    } else if (item.type === "lost") {
+      approvedRequest = item.informRequests.find(
+        (request) =>
+          request.informedBy.toString() === req.user._id.toString() &&
+          request.status === "approved"
+      );
+    }
 
     if (!approvedRequest || !approvedRequest.contactInfo) {
       return res.status(404).json({
@@ -1501,7 +1962,7 @@ app.delete("/api/comments/:id", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Comment Like/Unlike functionality
+// Comment Like/Unlike functionality
 app.post("/api/comments/:id/like", authenticate, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
@@ -1598,7 +2059,7 @@ app.get("/api/messages", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Mark messages as read
+// Mark messages as read
 app.put("/api/messages/mark-read", authenticate, async (req, res) => {
   try {
     const { messageIds } = req.body;
@@ -1621,7 +2082,7 @@ app.put("/api/messages/mark-read", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Get unread message count
+// Get unread message count
 app.get("/api/messages/unread-count", authenticate, async (req, res) => {
   try {
     const count = await Message.countDocuments({
@@ -1668,7 +2129,7 @@ app.get("/api/suggestions", authenticate, async (req, res) => {
     }
 
     const suggestions = await Suggestion.find(query)
-      .populate("postedBy", "firstName lastName department profileImage") // Add profileImage
+      .populate("postedBy", "firstName lastName department profileImage")
       .sort({ createdAt: -1 });
 
     // Format image URLs
@@ -1746,7 +2207,7 @@ app.delete("/api/suggestions/:id", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Vote on suggestions
+// Vote on suggestions
 app.post("/api/suggestions/:id/vote", authenticate, async (req, res) => {
   try {
     const suggestion = await Suggestion.findById(req.params.id);
@@ -1783,7 +2244,7 @@ app.post("/api/suggestions/:id/vote", authenticate, async (req, res) => {
   }
 });
 
-// Stats Routes - FIXED TO HANDLE REUNITED COUNT PROPERLY
+// Stats Routes - UPDATED TO HANDLE REUNITED COUNT PROPERLY
 app.get("/api/stats", authenticate, async (req, res) => {
   try {
     // Count active lost items (items that haven't been claimed yet)
@@ -1808,7 +2269,7 @@ app.get("/api/stats", authenticate, async (req, res) => {
       stats: {
         lostCount,
         foundCount,
-        reunitedCount, // Changed from claimedCount to reunitedCount
+        reunitedCount,
       },
     });
   } catch (error) {
@@ -1817,7 +2278,7 @@ app.get("/api/stats", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Advanced analytics routes for future admin dashboard
+// Advanced analytics routes for future admin dashboard
 app.get("/api/analytics/overview", authenticate, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -1871,7 +2332,7 @@ app.get("/api/analytics/overview", authenticate, async (req, res) => {
   }
 });
 
-// NEW: User blocking and reporting functionality
+// User blocking and reporting functionality
 app.post("/api/users/:id/block", authenticate, async (req, res) => {
   try {
     const userToBlock = req.params.id;
@@ -1936,7 +2397,7 @@ app.get("/api/users/blocked", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Reporting system
+// Reporting system
 app.post("/api/reports", authenticate, async (req, res) => {
   try {
     const { reportType, reportedEntity, reason, description } = req.body;
@@ -1981,7 +2442,7 @@ app.get("/api/reports", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Notification system
+// Notification system
 app.post("/api/notifications", authenticate, async (req, res) => {
   try {
     const { recipient, title, message, type, relatedEntity } = req.body;
@@ -2050,13 +2511,10 @@ app.put("/api/notifications/:id/read", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Bulk operations for future admin functionality
+// Bulk operations for future admin functionality
 app.post("/api/admin/bulk-delete-items", authenticate, async (req, res) => {
   try {
     const { itemIds } = req.body;
-
-    // Note: In a real application, you'd want to add admin role checking here
-    // For now, users can only delete their own items in bulk
 
     await Item.deleteMany({
       _id: { $in: itemIds },
@@ -2105,7 +2563,7 @@ app.post("/api/admin/bulk-update-items", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Search and filter enhancements for future use
+// Search and filter enhancements
 app.get("/api/search/advanced", authenticate, async (req, res) => {
   try {
     const {
@@ -2119,6 +2577,7 @@ app.get("/api/search/advanced", authenticate, async (req, res) => {
       sortOrder,
       page = 1,
       limit = 20,
+      includeReunited,
     } = req.query;
 
     let searchQuery = {};
@@ -2134,6 +2593,11 @@ app.get("/api/search/advanced", authenticate, async (req, res) => {
     if (type) searchQuery.type = type;
     if (location) searchQuery.location = { $regex: location, $options: "i" };
     if (status) searchQuery.status = status;
+
+    // NEW: Exclude reunited items from search unless specifically requested
+    if (includeReunited !== "true") {
+      searchQuery.status = { $ne: "claimed" };
+    }
 
     if (dateFrom || dateTo) {
       searchQuery.createdAt = {};
@@ -2174,7 +2638,7 @@ app.get("/api/search/advanced", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Export data functionality for users
+// Export data functionality for users
 app.get("/api/export/my-data", authenticate, async (req, res) => {
   try {
     const { format = "json" } = req.query;
@@ -2218,7 +2682,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Route for landing page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "home.html"));
+  res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
 // Start server

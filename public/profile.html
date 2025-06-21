@@ -317,12 +317,6 @@
             </div>
             <nav class="flex items-center space-x-4">
               <button
-                onclick="exportMyData()"
-                class="reddit-button-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
-              >
-                Export Data
-              </button>
-              <button
                 onclick="showUpdateProfile()"
                 class="reddit-button-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
               >
@@ -613,22 +607,23 @@
       </div>
     </div>
 
-    <!-- Claim Requests Modal -->
+    <!-- Requests Modal (for both claim and inform requests) -->
     <div
-      id="claimRequestsModal"
+      id="requestsModal"
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
         class="reddit-card rounded-2xl max-w-5xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
       >
         <h3
+          id="requestsModalTitle"
           class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
         >
-          Claim Requests
+          Requests
         </h3>
-        <div id="claimRequestsContent"></div>
+        <div id="requestsContent"></div>
         <button
-          onclick="hideClaimRequests()"
+          onclick="hideRequests()"
           class="mt-6 reddit-button-secondary px-8 py-3 rounded-xl font-semibold"
         >
           Close
@@ -879,7 +874,7 @@
         <h3
           class="text-2xl font-bold mb-6 bg-gradient-to-r from-reddit-text to-reddit-orange bg-clip-text text-transparent"
         >
-          Reject Claim Request
+          Reject Request
         </h3>
         <textarea
           id="rejectionReason"
@@ -982,43 +977,30 @@
         document.getElementById("userDepartment").textContent = user.department;
 
         const profileImg = document.getElementById("profileImage");
+        const profileImageUrl = getProfileImageUrl(user);
+        profileImg.src = profileImageUrl;
+        profileImg.onerror = function () {
+          this.src = generateProfileInitials(user.firstName, user.lastName);
+        };
+      }
+
+      // Get profile image URL with proper fallback handling
+      function getProfileImageUrl(user) {
         if (user.profileImage) {
-          profileImg.src = user.profileImage.startsWith("http")
+          return user.profileImage.startsWith("http")
             ? user.profileImage
             : `${window.location.origin}${user.profileImage}`;
-          profileImg.onerror = function () {
-            this.src = generateProfileInitials(user.firstName, user.lastName);
-          };
-        } else {
-          profileImg.src = generateProfileInitials(
-            user.firstName,
-            user.lastName
-          );
         }
+        return generateProfileInitials(user.firstName, user.lastName);
       }
 
       // Generate profile initials as fallback
       function generateProfileInitials(firstName, lastName) {
-        const canvas = document.createElement("canvas");
-        canvas.width = 128;
-        canvas.height = 128;
-        const ctx = canvas.getContext("2d");
-
-        // Background gradient
-        const gradient = ctx.createLinearGradient(0, 0, 128, 128);
-        gradient.addColorStop(0, "#FF4500");
-        gradient.addColorStop(1, "#FF5722");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 128, 128);
-
-        // Text
-        ctx.fillStyle = "white";
-        ctx.font = "bold 48px Inter";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(`${firstName.charAt(0)}${lastName.charAt(0)}`, 64, 64);
-
-        return canvas.toDataURL();
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          firstName
+        )}+${encodeURIComponent(
+          lastName
+        )}&background=FF4500&color=fff&size=128&rounded=true&bold=true`;
       }
 
       // Get full image URL
@@ -1152,13 +1134,7 @@
                         }')" class="flex-1 reddit-button-secondary text-white py-2 px-4 rounded-lg text-sm font-medium">
                           Edit
                         </button>
-                        ${
-                          item.claimRequests && item.claimRequests.length > 0
-                            ? `<button onclick="viewClaimRequests('${item._id}')" class="flex-1 reddit-button text-white py-2 px-4 rounded-lg text-sm font-medium">
-                                Claims (${item.claimRequests.length})
-                              </button>`
-                            : ""
-                        }
+                        ${getRequestButtonsForItem(item)}
                         <button onclick="confirmDelete('item', '${
                           item._id
                         }', '${
@@ -1191,6 +1167,33 @@
             </div>
           `;
         }
+      }
+
+      // Get request buttons for item based on type and requests
+      function getRequestButtonsForItem(item) {
+        let buttons = "";
+
+        if (
+          item.type === "found" &&
+          item.claimRequests &&
+          item.claimRequests.length > 0
+        ) {
+          buttons += `<button onclick="viewRequests('${item._id}', 'claim')" class="flex-1 reddit-button text-white py-2 px-4 rounded-lg text-sm font-medium">
+                        Claims (${item.claimRequests.length})
+                      </button>`;
+        }
+
+        if (
+          item.type === "lost" &&
+          item.informRequests &&
+          item.informRequests.length > 0
+        ) {
+          buttons += `<button onclick="viewRequests('${item._id}', 'inform')" class="flex-1 reddit-button text-white py-2 px-4 rounded-lg text-sm font-medium">
+                        Info (${item.informRequests.length})
+                      </button>`;
+        }
+
+        return buttons;
       }
 
       // Load claimed items
@@ -1245,13 +1248,12 @@
                       </div>
                       <div class="flex items-center space-x-2 text-sm text-reddit-textSecondary mb-4">
                         <div class="w-6 h-6 rounded-full overflow-hidden bg-reddit-orange">
-                          <img src="${
-                            getFullImageUrl(item.postedBy.profileImage) ||
-                            generateProfileInitials(
-                              item.postedBy.firstName,
-                              item.postedBy.lastName
-                            )
-                          }" alt="Profile" class="w-full h-full object-cover">
+                          <img src="${getProfileImageUrl(
+                            item.postedBy
+                          )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
+                    item.postedBy.firstName,
+                    item.postedBy.lastName
+                  )}'">
                         </div>
                         <span>Posted by: ${item.postedBy.firstName} ${
                     item.postedBy.lastName
@@ -1309,13 +1311,12 @@
                       <div class="flex-1">
                         <div class="flex items-center space-x-3 mb-3">
                           <div class="w-10 h-10 rounded-full overflow-hidden bg-reddit-orange">
-                            <img src="${
-                              getFullImageUrl(comment.postedBy.profileImage) ||
-                              generateProfileInitials(
-                                comment.postedBy.firstName,
-                                comment.postedBy.lastName
-                              )
-                            }" alt="Profile" class="w-full h-full object-cover">
+                            <img src="${getProfileImageUrl(
+                              comment.postedBy
+                            )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
+                    comment.postedBy.firstName,
+                    comment.postedBy.lastName
+                  )}'">
                           </div>
                           <div>
                             <p class="font-semibold text-reddit-text">${
@@ -1409,15 +1410,12 @@
                       <div class="flex-1">
                         <div class="flex items-center space-x-3 mb-3">
                           <div class="w-10 h-10 rounded-full overflow-hidden bg-reddit-orange">
-                            <img src="${
-                              getFullImageUrl(
-                                suggestion.postedBy.profileImage
-                              ) ||
-                              generateProfileInitials(
-                                suggestion.postedBy.firstName,
-                                suggestion.postedBy.lastName
-                              )
-                            }" alt="Profile" class="w-full h-full object-cover">
+                            <img src="${getProfileImageUrl(
+                              suggestion.postedBy
+                            )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
+                    suggestion.postedBy.firstName,
+                    suggestion.postedBy.lastName
+                  )}'">
                           </div>
                           <div>
                             <p class="font-semibold text-reddit-text">${
@@ -1482,7 +1480,7 @@
         }
       }
 
-      // Load messages
+      // Load messages (FIXED: Filter out self-messages)
       async function loadMessages() {
         const response = await fetch("/api/messages", {
           headers: {
@@ -1494,114 +1492,129 @@
         const container = document.getElementById("tabContent");
 
         if (data.messages && data.messages.length > 0) {
-          // Group messages by conversation
-          const conversations = {};
-          data.messages.forEach((message) => {
-            const otherUserId =
-              message.sender._id === currentUser._id
-                ? message.receiver._id
-                : message.sender._id;
-            const otherUser =
-              message.sender._id === currentUser._id
-                ? message.receiver
-                : message.sender;
+          // FIXED: Filter out messages sent to self
+          const filteredMessages = data.messages.filter(
+            (message) => message.sender._id !== message.receiver._id
+          );
 
-            if (!conversations[otherUserId]) {
-              conversations[otherUserId] = {
-                user: otherUser,
-                messages: [],
-              };
-            }
-            conversations[otherUserId].messages.push(message);
-          });
+          if (filteredMessages.length > 0) {
+            // Group messages by conversation
+            const conversations = {};
+            filteredMessages.forEach((message) => {
+              const otherUserId =
+                message.sender._id === currentUser._id
+                  ? message.receiver._id
+                  : message.sender._id;
+              const otherUser =
+                message.sender._id === currentUser._id
+                  ? message.receiver
+                  : message.sender;
 
-          container.innerHTML = `
-            <div class="space-y-8">
-              ${Object.values(conversations)
-                .map(
-                  (conversation) => `
-                  <div class="interaction-card rounded-2xl p-6">
-                    <div class="flex items-center justify-between mb-6">
-                      <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full overflow-hidden bg-reddit-orange mr-4">
-                          <img src="${
-                            getFullImageUrl(conversation.user.profileImage) ||
-                            generateProfileInitials(
-                              conversation.user.firstName,
-                              conversation.user.lastName
-                            )
-                          }" alt="Profile" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                          <h4 class="font-bold text-lg text-reddit-text">${
-                            conversation.user.firstName
-                          } ${conversation.user.lastName}</h4>
-                          <p class="text-sm text-reddit-textSecondary">${
-                            conversation.user.department
-                          }</p>
-                        </div>
-                      </div>
-                      <button onclick="confirmBlockUser('${
-                        conversation.user._id
-                      }', '${conversation.user.firstName} ${
-                    conversation.user.lastName
-                  }')" class="reddit-button-danger px-4 py-2 rounded-lg text-sm font-medium">
-                        Block User
-                      </button>
-                    </div>
-                    <div class="space-y-4 max-h-80 overflow-y-auto">
-                      ${conversation.messages
-                        .slice(-5)
-                        .map(
-                          (message) => `
-                          <div class="flex ${
-                            message.sender._id === currentUser._id
-                              ? "justify-end"
-                              : "justify-start"
-                          }">
-                            <div class="max-w-sm px-4 py-3 rounded-2xl ${
-                              message.sender._id === currentUser._id
-                                ? "message-bubble-sent"
-                                : "message-bubble-received"
-                            }">
-                              <p class="text-sm leading-relaxed">${
-                                message.content
-                              }</p>
-                              <p class="text-xs opacity-75 mt-2">${new Date(
-                                message.createdAt
-                              ).toLocaleTimeString("en-US", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}</p>
-                            </div>
+              if (!conversations[otherUserId]) {
+                conversations[otherUserId] = {
+                  user: otherUser,
+                  messages: [],
+                };
+              }
+              conversations[otherUserId].messages.push(message);
+            });
+
+            container.innerHTML = `
+              <div class="space-y-8">
+                ${Object.values(conversations)
+                  .map(
+                    (conversation) => `
+                    <div class="interaction-card rounded-2xl p-6">
+                      <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                          <div class="w-12 h-12 rounded-full overflow-hidden bg-reddit-orange mr-4">
+                            <img src="${getProfileImageUrl(
+                              conversation.user
+                            )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
+                      conversation.user.firstName,
+                      conversation.user.lastName
+                    )}'">
                           </div>
-                        `
-                        )
-                        .join("")}
+                          <div>
+                            <h4 class="font-bold text-lg text-reddit-text">${
+                              conversation.user.firstName
+                            } ${conversation.user.lastName}</h4>
+                            <p class="text-sm text-reddit-textSecondary">${
+                              conversation.user.department
+                            }</p>
+                          </div>
+                        </div>
+                        ${
+                          // FIXED: Prevent blocking self
+                          conversation.user._id !== currentUser._id
+                            ? `<button onclick="confirmBlockUser('${conversation.user._id}', '${conversation.user.firstName} ${conversation.user.lastName}')" class="reddit-button-danger px-4 py-2 rounded-lg text-sm font-medium">
+                                 Block User
+                               </button>`
+                            : ""
+                        }
+                      </div>
+                      <div class="space-y-4 max-h-80 overflow-y-auto">
+                        ${conversation.messages
+                          .slice(-5)
+                          .map(
+                            (message) => `
+                            <div class="flex ${
+                              message.sender._id === currentUser._id
+                                ? "justify-end"
+                                : "justify-start"
+                            }">
+                              <div class="max-w-sm px-4 py-3 rounded-2xl ${
+                                message.sender._id === currentUser._id
+                                  ? "message-bubble-sent"
+                                  : "message-bubble-received"
+                              }">
+                                <p class="text-sm leading-relaxed">${
+                                  message.content
+                                }</p>
+                                <p class="text-xs opacity-75 mt-2">${new Date(
+                                  message.createdAt
+                                ).toLocaleTimeString("en-US", {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}</p>
+                              </div>
+                            </div>
+                          `
+                          )
+                          .join("")}
+                      </div>
                     </div>
-                  </div>
-                `
-                )
-                .join("")}
-            </div>
-          `;
-        } else {
-          container.innerHTML = `
-            <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-reddit-blue/20 rounded-full flex items-center justify-center">
-                <svg class="w-12 h-12 text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                </svg>
+                  `
+                  )
+                  .join("")}
               </div>
-              <h3 class="text-xl font-semibold text-reddit-text mb-2">No Messages Yet</h3>
-              <p class="text-reddit-textSecondary mb-6">Your conversations will appear here</p>
-              <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
-                Browse Items
-              </button>
-            </div>
-          `;
+            `;
+          } else {
+            // No messages after filtering
+            container.innerHTML = getNoMessagesTemplate();
+          }
+        } else {
+          container.innerHTML = getNoMessagesTemplate();
         }
+      }
+
+      // Template for no messages state
+      function getNoMessagesTemplate() {
+        return `
+          <div class="text-center py-20">
+            <div class="w-24 h-24 mx-auto mb-6 bg-reddit-blue/20 rounded-full flex items-center justify-center">
+              <svg class="w-12 h-12 text-reddit-blue" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-reddit-text mb-2">No Messages Yet</h3>
+            <p class="text-reddit-textSecondary mb-6">Your conversations will appear here</p>
+            <button onclick="window.location.href='home.html'" class="reddit-button px-8 py-3 rounded-xl font-semibold">
+              Browse Items
+            </button>
+          </div>
+        `;
       }
 
       // Helper function to get status class
@@ -1690,11 +1703,13 @@
           }
         });
 
-      // View claim requests
-      async function viewClaimRequests(itemId) {
+      // View requests (both claim and inform requests)
+      async function viewRequests(itemId, type) {
         try {
-          showToast("Loading claim requests...", "info");
-          const response = await fetch(`/api/items/${itemId}/claim-requests`, {
+          showToast("Loading requests...", "info");
+          const endpoint =
+            type === "claim" ? "claim-requests" : "inform-requests";
+          const response = await fetch(`/api/items/${itemId}/${endpoint}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -1702,133 +1717,20 @@
 
           if (response.ok) {
             const data = await response.json();
-            const content = document.getElementById("claimRequestsContent");
+            const content = document.getElementById("requestsContent");
+            const title = document.getElementById("requestsModalTitle");
 
-            if (data.claimRequests && data.claimRequests.length > 0) {
+            title.textContent =
+              type === "claim" ? "Claim Requests" : "Inform Requests";
+            const requests =
+              type === "claim" ? data.claimRequests : data.informRequests;
+
+            if (requests && requests.length > 0) {
               content.innerHTML = `
                 <div class="space-y-6">
-                  ${data.claimRequests
-                    .map(
-                      (request) => `
-                      <div class="claim-request-card rounded-2xl p-6">
-                        <div class="flex items-center justify-between mb-6">
-                          <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-full overflow-hidden bg-reddit-orange">
-                              <img src="${
-                                getFullImageUrl(
-                                  request.requestedBy.profileImage
-                                ) ||
-                                generateProfileInitials(
-                                  request.requestedBy.firstName,
-                                  request.requestedBy.lastName
-                                )
-                              }" alt="Profile" class="w-full h-full object-cover">
-                            </div>
-                            <div>
-                              <h4 class="font-bold text-lg text-reddit-text">${
-                                request.requestedBy.firstName
-                              } ${request.requestedBy.lastName}</h4>
-                              <p class="text-sm text-reddit-textSecondary">${
-                                request.requestedBy.department
-                              }</p>
-                            </div>
-                          </div>
-                          <span class="status-badge px-4 py-2 text-sm font-bold rounded-full ${
-                            request.status === "pending"
-                              ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
-                              : request.status === "approved"
-                              ? "status-found"
-                              : "bg-red-500/20 text-red-400 border border-red-500/30"
-                          }">${request.status.toUpperCase()}</span>
-                        </div>
-                        
-                        ${
-                          request.answers && request.answers.length > 0
-                            ? `
-                            <div class="mb-4">
-                              <h5 class="font-semibold mb-3 text-reddit-text">Answers:</h5>
-                              <ul class="space-y-2">
-                                ${request.answers
-                                  .map(
-                                    (answer, index) =>
-                                      `<li class="text-sm text-reddit-textSecondary bg-reddit-card p-3 rounded-lg border border-reddit-border">• ${answer}</li>`
-                                  )
-                                  .join("")}
-                              </ul>
-                            </div>
-                        `
-                            : ""
-                        }
-                        
-                        ${
-                          request.additionalInfo
-                            ? `
-                            <div class="mb-4">
-                              <h5 class="font-semibold mb-2 text-reddit-text">Additional Info:</h5>
-                              <p class="text-sm text-reddit-textSecondary bg-reddit-card p-3 rounded-lg border border-reddit-border">${request.additionalInfo}</p>
-                            </div>
-                        `
-                            : ""
-                        }
-
-                        ${
-                          request.status === "approved" && request.contactInfo
-                            ? `
-                            <div class="contact-info-card p-4 rounded-lg mb-4">
-                              <h5 class="font-semibold mb-3 text-reddit-accent">Contact Information Shared:</h5>
-                              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                                ${
-                                  request.contactInfo.phone
-                                    ? `<div><span class="font-medium">Phone:</span> ${request.contactInfo.phone}</div>`
-                                    : ""
-                                }
-                                ${
-                                  request.contactInfo.alternatePhone
-                                    ? `<div><span class="font-medium">Alt Phone:</span> ${request.contactInfo.alternatePhone}</div>`
-                                    : ""
-                                }
-                                ${
-                                  request.contactInfo.email
-                                    ? `<div><span class="font-medium">Email:</span> ${request.contactInfo.email}</div>`
-                                    : ""
-                                }
-                                ${
-                                  request.contactInfo.meetingLocation
-                                    ? `<div><span class="font-medium">Location:</span> ${request.contactInfo.meetingLocation}</div>`
-                                    : ""
-                                }
-                                ${
-                                  request.contactInfo.meetingTime
-                                    ? `<div><span class="font-medium">Time:</span> ${request.contactInfo.meetingTime}</div>`
-                                    : ""
-                                }
-                                ${
-                                  request.contactInfo.additionalNotes
-                                    ? `<div class="md:col-span-2"><span class="font-medium">Notes:</span> ${request.contactInfo.additionalNotes}</div>`
-                                    : ""
-                                }
-                              </div>
-                            </div>
-                        `
-                            : ""
-                        }
-                        
-                        ${
-                          request.status === "pending"
-                            ? `
-                            <div class="flex gap-4 mt-6">
-                              <button onclick="showContactInfo('${itemId}', '${request._id}')" class="flex-1 reddit-button py-3 rounded-xl text-sm font-semibold">
-                                Approve Request
-                              </button>
-                              <button onclick="showRejectionModal('${itemId}', '${request._id}')" class="flex-1 reddit-button-danger py-3 rounded-xl text-sm font-semibold">
-                                Reject Request
-                              </button>
-                            </div>
-                        `
-                            : ""
-                        }
-                      </div>
-                    `
+                  ${requests
+                    .map((request) =>
+                      generateRequestCard(request, itemId, type)
                     )
                     .join("")}
                 </div>
@@ -1841,25 +1743,181 @@
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
                     </svg>
                   </div>
-                  <p class="text-reddit-textSecondary text-lg">No claim requests yet</p>
+                  <p class="text-reddit-textSecondary text-lg">No ${type} requests yet</p>
                 </div>
               `;
             }
 
-            document
-              .getElementById("claimRequestsModal")
-              .classList.remove("hidden");
+            document.getElementById("requestsModal").classList.remove("hidden");
           } else {
-            throw new Error("Failed to load claim requests");
+            throw new Error("Failed to load requests");
           }
         } catch (error) {
-          showToast("Error loading claim requests. Please try again.", "error");
+          showToast("Error loading requests. Please try again.", "error");
         }
       }
 
-      // Show contact info modal
-      function showContactInfo(itemId, requestId) {
-        pendingApproval = { itemId, requestId };
+      // Generate request card HTML (for both claim and inform requests)
+      function generateRequestCard(request, itemId, type) {
+        const userKey = type === "claim" ? "requestedBy" : "informedBy";
+        const user = request[userKey];
+
+        return `
+          <div class="claim-request-card rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-full overflow-hidden bg-reddit-orange">
+                  <img src="${getProfileImageUrl(
+                    user
+                  )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
+          user.firstName,
+          user.lastName
+        )}'">
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-reddit-text">${
+                    user.firstName
+                  } ${user.lastName}</h4>
+                  <p class="text-sm text-reddit-textSecondary">${
+                    user.department
+                  }</p>
+                </div>
+              </div>
+              <span class="status-badge px-4 py-2 text-sm font-bold rounded-full ${getRequestStatusClass(
+                request.status
+              )}">${request.status.toUpperCase()}</span>
+            </div>
+            
+            ${
+              type === "claim" && request.answers && request.answers.length > 0
+                ? `
+              <div class="mb-4">
+                <h5 class="font-semibold mb-3 text-reddit-text">Answers:</h5>
+                <ul class="space-y-2">
+                  ${request.answers
+                    .map(
+                      (answer) =>
+                        `<li class="text-sm text-reddit-textSecondary bg-reddit-card p-3 rounded-lg border border-reddit-border">• ${answer}</li>`
+                    )
+                    .join("")}
+                </ul>
+              </div>
+            `
+                : ""
+            }
+            
+            ${
+              type === "inform" && request.message
+                ? `
+              <div class="mb-4">
+                <h5 class="font-semibold mb-2 text-reddit-text">Message:</h5>
+                <p class="text-sm text-reddit-textSecondary bg-reddit-card p-3 rounded-lg border border-reddit-border">${request.message}</p>
+              </div>
+            `
+                : ""
+            }
+            
+            ${
+              type === "inform" && request.image
+                ? `
+              <div class="mb-4">
+                <h5 class="font-semibold mb-2 text-reddit-text">Image:</h5>
+                <img src="${getFullImageUrl(
+                  request.image
+                )}" alt="Found item" class="max-w-full h-48 object-cover rounded-lg border border-reddit-border">
+              </div>
+            `
+                : ""
+            }
+            
+            ${
+              (type === "claim" ? request.additionalInfo : false)
+                ? `
+              <div class="mb-4">
+                <h5 class="font-semibold mb-2 text-reddit-text">Additional Info:</h5>
+                <p class="text-sm text-reddit-textSecondary bg-reddit-card p-3 rounded-lg border border-reddit-border">${request.additionalInfo}</p>
+              </div>
+            `
+                : ""
+            }
+
+            ${
+              request.status === "approved" && request.contactInfo
+                ? `
+              <div class="contact-info-card p-4 rounded-lg mb-4">
+                <h5 class="font-semibold mb-3 text-reddit-accent">Contact Information Shared:</h5>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                  ${
+                    request.contactInfo.phone
+                      ? `<div><span class="font-medium">Phone:</span> ${request.contactInfo.phone}</div>`
+                      : ""
+                  }
+                  ${
+                    request.contactInfo.alternatePhone
+                      ? `<div><span class="font-medium">Alt Phone:</span> ${request.contactInfo.alternatePhone}</div>`
+                      : ""
+                  }
+                  ${
+                    request.contactInfo.email
+                      ? `<div><span class="font-medium">Email:</span> ${request.contactInfo.email}</div>`
+                      : ""
+                  }
+                  ${
+                    request.contactInfo.meetingLocation
+                      ? `<div><span class="font-medium">Location:</span> ${request.contactInfo.meetingLocation}</div>`
+                      : ""
+                  }
+                  ${
+                    request.contactInfo.meetingTime
+                      ? `<div><span class="font-medium">Time:</span> ${request.contactInfo.meetingTime}</div>`
+                      : ""
+                  }
+                  ${
+                    request.contactInfo.additionalNotes
+                      ? `<div class="md:col-span-2"><span class="font-medium">Notes:</span> ${request.contactInfo.additionalNotes}</div>`
+                      : ""
+                  }
+                </div>
+              </div>
+            `
+                : ""
+            }
+            
+            ${
+              request.status === "pending"
+                ? `
+              <div class="flex gap-4 mt-6">
+                <button onclick="showContactInfo('${itemId}', '${request._id}', '${type}')" class="flex-1 reddit-button py-3 rounded-xl text-sm font-semibold">
+                  Approve Request
+                </button>
+                <button onclick="showRejectionModal('${itemId}', '${request._id}', '${type}')" class="flex-1 reddit-button-danger py-3 rounded-xl text-sm font-semibold">
+                  Reject Request
+                </button>
+              </div>
+            `
+                : ""
+            }
+          </div>
+        `;
+      }
+
+      // Get request status class
+      function getRequestStatusClass(status) {
+        switch (status) {
+          case "pending":
+            return "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30";
+          case "approved":
+            return "status-found";
+          case "rejected":
+            return "bg-red-500/20 text-red-400 border border-red-500/30";
+          default:
+            return "bg-gray-500/20 text-gray-400 border border-gray-500/30";
+        }
+      }
+
+      // Show contact info modal (updated to handle both types)
+      function showContactInfo(itemId, requestId, type) {
+        pendingApproval = { itemId, requestId, type };
         document.getElementById("contactInfoModal").classList.remove("hidden");
         document.getElementById("contactPhone").focus();
       }
@@ -1871,7 +1929,7 @@
         pendingApproval = null;
       }
 
-      // Handle contact info form submission
+      // Handle contact info form submission (updated to handle both types)
       document
         .getElementById("contactInfoForm")
         .addEventListener("submit", async function (e) {
@@ -1900,9 +1958,13 @@
           }
 
           try {
-            showToast("Approving claim request...", "info");
+            showToast("Approving request...", "info");
+            const endpoint =
+              pendingApproval.type === "claim"
+                ? "claim-requests"
+                : "inform-requests";
             const response = await fetch(
-              `/api/items/${pendingApproval.itemId}/claim-requests/${pendingApproval.requestId}/approve`,
+              `/api/items/${pendingApproval.itemId}/${endpoint}/${pendingApproval.requestId}/approve`,
               {
                 method: "POST",
                 headers: {
@@ -1915,17 +1977,14 @@
 
             if (response.ok) {
               hideContactInfo();
-              showToast("Claim request approved successfully!", "success");
-              hideClaimRequests();
+              showToast("Request approved successfully!", "success");
+              hideRequests();
               switchTab("posted");
             } else {
-              throw new Error("Failed to approve claim request");
+              throw new Error("Failed to approve request");
             }
           } catch (error) {
-            showToast(
-              "Error approving claim request. Please try again.",
-              "error"
-            );
+            showToast("Error approving request. Please try again.", "error");
           }
         });
 
@@ -2003,9 +2062,9 @@
         }
       }
 
-      // Show rejection modal
-      function showRejectionModal(itemId, requestId) {
-        pendingRejection = { itemId, requestId };
+      // Show rejection modal (updated to handle both types)
+      function showRejectionModal(itemId, requestId, type) {
+        pendingRejection = { itemId, requestId, type };
         document.getElementById("rejectionModal").classList.remove("hidden");
         document.getElementById("rejectionReason").focus();
       }
@@ -2017,7 +2076,7 @@
         pendingRejection = null;
       }
 
-      // Submit rejection
+      // Submit rejection (updated to handle both types)
       async function submitRejection() {
         const reason = document.getElementById("rejectionReason").value.trim();
         if (!reason) {
@@ -2028,9 +2087,13 @@
         if (!pendingRejection) return;
 
         try {
-          showToast("Rejecting claim request...", "info");
+          showToast("Rejecting request...", "info");
+          const endpoint =
+            pendingRejection.type === "claim"
+              ? "claim-requests"
+              : "inform-requests";
           const response = await fetch(
-            `/api/items/${pendingRejection.itemId}/claim-requests/${pendingRejection.requestId}/reject`,
+            `/api/items/${pendingRejection.itemId}/${endpoint}/${pendingRejection.requestId}/reject`,
             {
               method: "POST",
               headers: {
@@ -2043,22 +2106,25 @@
 
           if (response.ok) {
             hideRejectionModal();
-            showToast("Claim request rejected successfully!", "success");
-            hideClaimRequests();
+            showToast("Request rejected successfully!", "success");
+            hideRequests();
             switchTab("posted");
           } else {
-            throw new Error("Failed to reject claim request");
+            throw new Error("Failed to reject request");
           }
         } catch (error) {
-          showToast(
-            "Error rejecting claim request. Please try again.",
-            "error"
-          );
+          showToast("Error rejecting request. Please try again.", "error");
         }
       }
 
-      // Confirm block user
+      // Confirm block user (FIXED: Prevent self-blocking)
       function confirmBlockUser(userId, userName) {
+        // FIXED: Check if user is trying to block themselves
+        if (userId === currentUser._id) {
+          showToast("You cannot block yourself", "warning");
+          return;
+        }
+
         pendingBlock = userId;
         document.getElementById(
           "blockUserMessage"
@@ -2096,43 +2162,6 @@
       function hideBlockUser() {
         document.getElementById("blockUserModal").classList.add("hidden");
         pendingBlock = null;
-      }
-
-      // Export user data
-      async function exportMyData() {
-        try {
-          showToast("Preparing your data export...", "info");
-          const response = await fetch("/api/export/my-data", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-
-            // Create and download the file
-            const blob = new Blob([JSON.stringify(data.data, null, 2)], {
-              type: "application/json",
-            });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `bup-lost-found-data-${
-              new Date().toISOString().split("T")[0]
-            }.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showToast("Data exported successfully!", "success");
-          } else {
-            throw new Error("Failed to export data");
-          }
-        } catch (error) {
-          showToast("Error exporting data. Please try again.", "error");
-        }
       }
 
       // Confirm delete function
@@ -2306,8 +2335,8 @@
         document.getElementById("editItemModal").classList.add("hidden");
       }
 
-      function hideClaimRequests() {
-        document.getElementById("claimRequestsModal").classList.add("hidden");
+      function hideRequests() {
+        document.getElementById("requestsModal").classList.add("hidden");
       }
 
       function hideEditModal() {
