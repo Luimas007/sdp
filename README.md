@@ -81,3 +81,15 @@ project-root/
 ### ✅ You're all set!
 
 Now go ahead and build out your **Lost & Found** platform 🚀
+
+
+---
+
+### 🌐 Live Project (Localhost)
+
+Once the server is running, open your browser and visit:
+
+👉 [http://localhost:5000](http://localhost:5000)
+
+This is where the BUP Lost-Found Bulletin will be accessible locally.
+
