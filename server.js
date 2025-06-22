@@ -8,8 +8,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const crypto = require("crypto");
-const mongoURI =
-  process.env.MONGO_URL || "mongodb://mongo:27017/campus_lost_found";
+//const mongoURI =
+//process.env.MONGO_URL || "mongodb://mongo:27017/campus_lost_found";
 
 // Initialize Express app
 const app = express();
@@ -1049,7 +1049,117 @@ app.get("/api/items", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Specific route for reunited log
+// NEW: Specific endpoint for items successfully claimed by the current user
+app.get("/api/items/my-claimed", authenticate, async (req, res) => {
+  try {
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+
+    // Query for items successfully claimed by the current user
+    const claimedItems = await Item.find({
+      claimedBy: req.user._id,
+      status: "claimed",
+    })
+      .populate("postedBy", "firstName lastName department profileImage")
+      .populate("claimedBy", "firstName lastName department profileImage")
+      .populate({
+        path: "claimRequests.requestedBy",
+        select: "firstName lastName department profileImage",
+      })
+      .populate({
+        path: "informRequests.informedBy",
+        select: "firstName lastName department profileImage",
+      })
+      .sort({ updatedAt: -1 }) // Sort by when they were claimed (updatedAt)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Item.countDocuments({
+      claimedBy: req.user._id,
+      status: "claimed",
+    });
+
+    // Format the items with additional claim information
+    const formattedItems = claimedItems.map((item) => {
+      const itemObj = item.toObject();
+
+      // Format image URLs
+      if (itemObj.image) {
+        itemObj.image = `/uploads/${itemObj.image}`;
+      }
+
+      // Format profile images
+      if (itemObj.postedBy && itemObj.postedBy.profileImage) {
+        itemObj.postedBy.profileImage = `/uploads/${itemObj.postedBy.profileImage}`;
+      }
+      if (itemObj.claimedBy && itemObj.claimedBy.profileImage) {
+        itemObj.claimedBy.profileImage = `/uploads/${itemObj.claimedBy.profileImage}`;
+      }
+
+      // Add claim details
+      let claimDetails = {};
+
+      if (itemObj.type === "found") {
+        // For found items, find the approved claim request
+        const approvedClaim = itemObj.claimRequests.find(
+          (req) =>
+            req.status === "approved" &&
+            req.requestedBy._id &&
+            req.requestedBy._id.toString() === req.user._id.toString()
+        );
+        if (approvedClaim) {
+          claimDetails = {
+            claimDate: approvedClaim.reviewedAt,
+            claimType: "claim_approved",
+            originalPoster: itemObj.postedBy,
+            contactInfo: approvedClaim.contactInfo,
+          };
+        }
+      } else if (itemObj.type === "lost") {
+        // For lost items, find the approved inform request
+        const approvedInform = itemObj.informRequests.find(
+          (req) =>
+            req.status === "approved" &&
+            req.informedBy._id &&
+            req.informedBy._id.toString() === req.user._id.toString()
+        );
+        if (approvedInform) {
+          claimDetails = {
+            claimDate: approvedInform.reviewedAt,
+            claimType: "inform_approved",
+            originalPoster: itemObj.postedBy,
+            contactInfo: approvedInform.contactInfo,
+          };
+        }
+      }
+
+      // Show validity question answers since this user successfully claimed the item
+      // Keep the answers visible for successfully claimed items
+
+      return {
+        ...itemObj,
+        claimDetails,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      items: formattedItems,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+      message: `Found ${total} items successfully claimed by you`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Specific route for reunited log (all successfully reunited items in the system)
 app.get("/api/items/reunited", authenticate, async (req, res) => {
   try {
     const { page = 1, limit = 20 } = req.query;
@@ -2660,12 +2770,19 @@ app.get("/api/stats", authenticate, async (req, res) => {
       status: "claimed",
     });
 
+    // NEW: Count items claimed by the current user
+    const myClaimedCount = await Item.countDocuments({
+      claimedBy: req.user._id,
+      status: "claimed",
+    });
+
     res.status(200).json({
       success: true,
       stats: {
         lostCount,
         foundCount,
         reunitedCount,
+        myClaimedCount,
       },
     });
   } catch (error) {
