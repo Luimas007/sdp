@@ -9,328 +9,814 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      .bg-auth {
-        background-image: linear-gradient(
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0.5)
+      * {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a1a1a 25%,
+          #2d1b2d 50%,
+          #1a1a1a 75%,
+          #0a0a0a 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .glass-card {
+        background: rgba(20, 20, 20, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 69, 0, 0.2);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8),
+          0 0 0 1px rgba(255, 69, 0, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 69, 0, 0.9) 0%,
+          rgba(220, 20, 60, 0.9) 50%,
+          rgba(139, 0, 0, 0.9) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: radial-gradient(
+            circle at 25% 25%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
           ),
-          url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
-        background-size: cover;
-        background-position: center;
+          radial-gradient(
+            circle at 75% 75%,
+            rgba(255, 255, 255, 0.05) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+
+      .hero-section::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.03) 50%,
+          transparent 70%
+        );
+        animation: shimmer 3s linear infinite;
+        pointer-events: none;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        100% {
+          transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+      }
+
+      .form-input {
+        background: rgba(30, 30, 30, 0.8);
+        border: 1px solid rgba(255, 69, 0, 0.3);
+        color: #ffffff;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+        background: rgba(40, 40, 40, 0.9);
+        border-color: #ff4500;
+        box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.1),
+          0 0 20px rgba(255, 69, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+      }
+
+      .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .form-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        display: block;
+        transition: color 0.3s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          #ff4500 0%,
+          #dc143c 50%,
+          #8b0000 100%
+        );
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(255, 69, 0, 0.3);
+      }
+
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(255, 69, 0, 0.4);
+        background: linear-gradient(
+          135deg,
+          #ff6500 0%,
+          #ff143c 50%,
+          #ab0000 100%
+        );
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+      }
+
+      .floating-icon {
+        position: absolute;
+        color: rgba(255, 69, 0, 0.6);
+        animation: float 6s ease-in-out infinite;
+        z-index: 1;
+      }
+
+      .floating-icon:nth-child(1) {
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+      .floating-icon:nth-child(2) {
+        top: 20%;
+        right: 15%;
+        animation-delay: 2s;
+      }
+      .floating-icon:nth-child(3) {
+        bottom: 20%;
+        left: 15%;
+        animation-delay: 4s;
+      }
+      .floating-icon:nth-child(4) {
+        bottom: 30%;
+        right: 20%;
+        animation-delay: 1s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+          opacity: 0.8;
+        }
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 69, 0, 0.2);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .feature-item:hover {
+        background: rgba(255, 69, 0, 0.1);
+        transform: translateX(5px);
+        border-color: rgba(255, 69, 0, 0.4);
+      }
+
+      .feature-icon {
+        color: #ff4500;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+      }
+
+      .feature-item:hover .feature-icon {
+        transform: scale(1.2) rotate(5deg);
       }
 
       #passwordStrength.weak {
-        background-color: #ef4444;
+        background: linear-gradient(90deg, #ef4444, #dc2626);
         width: 33%;
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
       }
 
       #passwordStrength.medium {
-        background-color: #f59e0b;
+        background: linear-gradient(90deg, #f59e0b, #d97706);
         width: 66%;
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
       }
 
       #passwordStrength.strong {
-        background-color: #10b981;
+        background: linear-gradient(90deg, #10b981, #059669);
+        width: 100%;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+      }
+
+      .strength-meter {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 0.5rem;
+      }
+
+      .modal-backdrop {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+      }
+
+      .modal-content {
+        background: rgba(20, 20, 20, 0.95);
+        border: 1px solid rgba(255, 69, 0, 0.3);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(20px);
+      }
+
+      .checkbox-custom {
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid rgba(255, 69, 0, 0.5);
+        border-radius: 4px;
+        background: rgba(30, 30, 30, 0.8);
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .checkbox-custom:checked {
+        background: linear-gradient(135deg, #ff4500, #dc143c);
+        border-color: #ff4500;
+        transform: scale(1.05);
+      }
+
+      .checkbox-custom:checked::after {
+        content: "\2713";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 0.875rem;
+        font-weight: bold;
+      }
+
+      .file-upload {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
         width: 100%;
       }
 
-      #termsModal {
-        z-index: 50;
+      .file-upload input[type="file"] {
+        position: absolute;
+        left: -9999px;
       }
 
-      .prose {
-        color: #374151;
+      .file-upload-label {
+        background: rgba(30, 30, 30, 0.8);
+        border: 2px dashed rgba(255, 69, 0, 0.5);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: rgba(255, 255, 255, 0.7);
       }
 
-      .prose h4 {
-        font-weight: 600;
-        margin-top: 1.25em;
-        margin-bottom: 0.75em;
-        color: #111827;
+      .file-upload-label:hover {
+        border-color: #ff4500;
+        background: rgba(255, 69, 0, 0.05);
+        color: #ff4500;
+        transform: translateY(-2px);
       }
 
-      .prose p {
-        margin-top: 0.75em;
-        margin-bottom: 0.75em;
+      .error-message {
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
 
-      .prose ul {
-        margin-top: 0.75em;
-        margin-bottom: 0.75em;
-        padding-left: 1.5em;
-        list-style-type: disc;
+      .success-message {
+        color: #10b981;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 69, 0, 0.6);
+        z-index: 10;
+        transition: color 0.3s ease;
+      }
+
+      .form-input.with-icon {
+        padding-left: 3rem;
+      }
+
+      .input-group:focus-within .input-icon {
+        color: #ff4500;
+      }
+
+      .logo-animation {
+        animation: logoGlow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes logoGlow {
+        from {
+          text-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+        }
+        to {
+          text-shadow: 0 0 30px rgba(255, 69, 0, 0.8),
+            0 0 40px rgba(255, 69, 0, 0.3);
+        }
+      }
+
+      .form-container {
+        background: rgba(15, 15, 15, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 69, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .form-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #ff4500, transparent);
+        animation: borderGlow 3s ease-in-out infinite;
+      }
+
+      @keyframes borderGlow {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .select-custom {
+        background: rgba(30, 30, 30, 0.8);
+        border: 1px solid rgba(255, 69, 0, 0.3);
+        color: #ffffff;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ff4500' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+      }
+
+      .otp-input {
+        font-family: "Courier New", monospace;
+        font-size: 1.5rem;
+        text-align: center;
+        letter-spacing: 0.5rem;
+        font-weight: bold;
+      }
+
+      .pulse-ring {
+        position: absolute;
+        border: 3px solid rgba(255, 69, 0, 0.3);
+        border-radius: 50%;
+        animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      }
+
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.33);
+          opacity: 1;
+        }
+        80%,
+        100% {
+          transform: scale(2.4);
+          opacity: 0;
+        }
       }
     </style>
   </head>
-  <body
-    class="bg-[url('register.jpg')] bg-cover bg-center bg-no-repeat min-h-screen"
-  >
-    <div class="min-h-screen flex items-center justify-center p-4">
+  <body>
+    <!-- Floating background elements -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <div class="floating-icon"><i class="fas fa-search text-2xl"></i></div>
+      <div class="floating-icon"><i class="fas fa-shield-alt text-xl"></i></div>
+      <div class="floating-icon"><i class="fas fa-users text-2xl"></i></div>
+      <div class="floating-icon">
+        <i class="fas fa-graduation-cap text-xl"></i>
+      </div>
+    </div>
+
+    <div
+      class="min-h-screen flex items-center justify-center p-4 relative z-10"
+    >
       <div
-        class="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row"
+        class="w-full max-w-6xl glass-card rounded-2xl overflow-hidden flex flex-col lg:flex-row shadow-2xl"
       >
-        <!-- Left side with image -->
+        <!-- Left side with hero section -->
         <div
-          class="hidden md:block md:w-1/2 bg-auth text-white p-8 flex flex-col justify-center"
+          class="lg:w-2/5 hero-section text-white p-8 lg:p-12 flex flex-col justify-center relative"
         >
-          <h1 class="text-3xl font-bold mb-4">Campus Lost & Found</h1>
-          <p class="mb-6">
-            Reuniting students with their lost belongings since 2023
-          </p>
-          <div class="space-y-4">
-            <div class="flex items-center">
-              <i class="fas fa-check-circle mr-2"></i>
-              <span>Secure university-only access</span>
+          <div class="relative z-10">
+            <div class="mb-8">
+              <h1
+                class="text-4xl lg:text-5xl font-bold mb-4 logo-animation text-center mx-auto"
+              >
+                BUP
+              </h1>
+              <h1
+                class="text-4xl lg:text-5xl font-bold mb-4 logo-animation text-center mx-auto"
+              >
+                Lost & Found
+              </h1>
+
+              <p class="text-xl opacity-90 mb-8 font-light">
+                Reuniting students with their lost belongings since 2023
+              </p>
             </div>
-            <div class="flex items-center">
-              <i class="fas fa-check-circle mr-2"></i>
-              <span>Verified student community</span>
-            </div>
-            <div class="flex items-center">
-              <i class="fas fa-check-circle mr-2"></i>
-              <span>Easy item recovery process</span>
+
+            <div class="space-y-4">
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <span class="font-medium">Secure university-only access</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <span class="font-medium">Verified student community</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-sync-alt"></i>
+                </div>
+                <span class="font-medium">Easy item recovery process</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-bell"></i>
+                </div>
+                <span class="font-medium">Real-time notifications</span>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Right side with form -->
-        <div class="w-full md:w-1/2 p-8">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Create Account</h2>
+        <div class="lg:w-3/5 form-container p-8 lg:p-12">
+          <div class="max-w-md mx-auto">
+            <h2 class="text-3xl font-bold text-white mb-2">Create Account</h2>
+            <p class="text-gray-400 mb-8">
+              Join our community and never lose anything again
+            </p>
 
-          <form id="registerForm" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="firstName"
-                  class="block text-sm font-medium text-gray-700"
-                  >First Name</label
-                >
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  required
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                />
-                <p id="firstNameError" class="text-red-500 text-xs mt-1 hidden">
-                  Please enter your first name
-                </p>
+            <form id="registerForm" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="input-group">
+                  <label for="firstName" class="form-label">
+                    <i class="fas fa-user mr-2"></i>First Name
+                  </label>
+                  <div class="relative">
+                    <i class="fas fa-user input-icon"></i>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      required
+                      class="form-input with-icon w-full rounded-lg p-3 text-white placeholder-gray-400"
+                      placeholder="Enter your first name"
+                    />
+                  </div>
+                  <p id="firstNameError" class="error-message hidden">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Please enter your first name
+                  </p>
+                </div>
+                <div class="input-group">
+                  <label for="lastName" class="form-label">
+                    <i class="fas fa-user mr-2"></i>Last Name
+                  </label>
+                  <div class="relative">
+                    <i class="fas fa-user input-icon"></i>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      required
+                      class="form-input with-icon w-full rounded-lg p-3 text-white placeholder-gray-400"
+                      placeholder="Enter your last name"
+                    />
+                  </div>
+                  <p id="lastNameError" class="error-message hidden">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Please enter your last name
+                  </p>
+                </div>
               </div>
-              <div>
-                <label
-                  for="lastName"
-                  class="block text-sm font-medium text-gray-700"
-                  >Last Name</label
-                >
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  required
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                />
-                <p id="lastNameError" class="text-red-500 text-xs mt-1 hidden">
-                  Please enter your last name
-                </p>
-              </div>
-            </div>
 
-            <div>
-              <label for="email" class="block text-sm font-medium text-gray-700"
-                >University Email</label
-              >
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                placeholder="studentID@student.bup.edu.bd or name@bup.edu.bd"
-              />
-              <p id="emailError" class="text-red-500 text-xs mt-1 hidden">
-                Please enter a valid university email
-              </p>
-            </div>
-
-            <div>
-              <label for="phone" class="block text-sm font-medium text-gray-700"
-                >Phone Number</label
-              >
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                placeholder="01XXXXXXXXX"
-              />
-              <p id="phoneError" class="text-red-500 text-xs mt-1 hidden">
-                Please enter a valid Bangladeshi phone number
-              </p>
-            </div>
-
-            <div>
-              <label
-                for="department"
-                class="block text-sm font-medium text-gray-700"
-                >Department</label
-              >
-              <select
-                id="department"
-                name="department"
-                required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-              >
-                <option value="">Select Department</option>
-                <option value="CSE">Computer Science & Engineering</option>
-                <option value="EEE">Electrical & Electronic Engineering</option>
-                <option value="CE">Civil Engineering</option>
-                <option value="ME">Mechanical Engineering</option>
-                <option value="IPE">Industrial & Production Engineering</option>
-                <option value="ARCH">Architecture</option>
-                <option value="BBA">Business Administration</option>
-                <option value="ENGLISH">English</option>
-                <option value="ECONOMICS">Economics</option>
-              </select>
-              <p id="departmentError" class="text-red-500 text-xs mt-1 hidden">
-                Please select your department
-              </p>
-            </div>
-
-            <div class="relative">
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700"
-                >Password</label
-              >
-              <div class="relative">
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  required
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border pr-10"
-                  oninput="checkPasswordStrength(this.value)"
-                />
-                <button
-                  type="button"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
-                  onclick="togglePasswordVisibility('password', 'passwordToggleIcon')"
-                >
-                  <i id="passwordToggleIcon" class="fas fa-eye"></i>
-                </button>
-              </div>
-              <!-- Password strength meter -->
-              <div
-                class="mt-1 h-1.5 w-full bg-gray-200 rounded-full overflow-hidden"
-              >
-                <div
-                  id="passwordStrength"
-                  class="h-full w-0 transition-all duration-300"
-                ></div>
-              </div>
-              <div id="passwordStrengthText" class="text-xs mt-1"></div>
-              <p id="passwordError" class="text-red-500 text-xs mt-1 hidden">
-                Password must be at least 6 characters
-              </p>
-            </div>
-
-            <div class="relative">
-              <label
-                for="confirmPassword"
-                class="block text-sm font-medium text-gray-700"
-                >Confirm Password</label
-              >
-              <div class="relative">
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  required
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border pr-10"
-                />
-                <button
-                  type="button"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
-                  onclick="togglePasswordVisibility('confirmPassword', 'confirmPasswordToggleIcon')"
-                >
-                  <i id="confirmPasswordToggleIcon" class="fas fa-eye"></i>
-                </button>
-              </div>
-              <p
-                id="confirmPasswordError"
-                class="text-red-500 text-xs mt-1 hidden"
-              >
-                Passwords do not match
-              </p>
-            </div>
-
-            <div>
-              <label
-                for="idCardImage"
-                class="block text-sm font-medium text-gray-700"
-                >Upload ID Card Image</label
-              >
-              <input
-                type="file"
-                id="idCardImage"
-                name="idCardImage"
-                accept="image/*"
-                required
-                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
-              <p id="idCardImageError" class="text-red-500 text-xs mt-1 hidden">
-                Please upload your ID card image
-              </p>
-            </div>
-
-            <div class="flex items-start">
-              <div class="flex items-center h-5">
-                <input
-                  id="terms"
-                  name="terms"
-                  type="checkbox"
-                  required
-                  class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
-                />
-              </div>
-              <div class="ml-3 text-sm">
-                <label for="terms" class="font-medium text-gray-700"
-                  >I agree to the
-                  <a
-                    href="#"
-                    class="text-blue-600 hover:text-blue-500"
-                    onclick="event.preventDefault(); document.getElementById('termsModal').classList.remove('hidden')"
-                  >
-                    Terms and Conditions
-                  </a>
+              <div class="input-group">
+                <label for="email" class="form-label">
+                  <i class="fas fa-envelope mr-2"></i>University Email
                 </label>
-                <p id="termsError" class="text-red-500 text-xs mt-1 hidden">
-                  You must agree to the terms and conditions
+                <div class="relative">
+                  <i class="fas fa-envelope input-icon"></i>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="form-input with-icon w-full rounded-lg p-3 text-white placeholder-gray-400"
+                    placeholder="studentID@student.bup.edu.bd"
+                  />
+                </div>
+                <p id="emailError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Please enter a valid university email
                 </p>
               </div>
-            </div>
 
-            <div>
+              <div class="input-group">
+                <label for="phone" class="form-label">
+                  <i class="fas fa-phone mr-2"></i>Phone Number
+                </label>
+                <div class="relative">
+                  <i class="fas fa-phone input-icon"></i>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    class="form-input with-icon w-full rounded-lg p-3 text-white placeholder-gray-400"
+                    placeholder="01XXXXXXXXX"
+                  />
+                </div>
+                <p id="phoneError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Please enter a valid Bangladeshi phone number
+                </p>
+              </div>
+
+              <div class="input-group">
+                <label for="department" class="form-label">
+                  <i class="fas fa-building mr-2"></i>Department
+                </label>
+                <div class="relative">
+                  <i class="fas fa-building input-icon"></i>
+                  <select
+                    id="department"
+                    name="department"
+                    required
+                    class="select-custom form-input with-icon w-full rounded-lg p-3"
+                  >
+                    <option value="">Select Department</option>
+                    <option value="CSE">Computer Science & Engineering</option>
+                    <option value="EEE">
+                      Electrical & Electronic Engineering
+                    </option>
+                    <option value="CE">Civil Engineering</option>
+                    <option value="ME">Mechanical Engineering</option>
+                    <option value="IPE">
+                      Industrial & Production Engineering
+                    </option>
+                    <option value="ARCH">Architecture</option>
+                    <option value="BBA">Business Administration</option>
+                    <option value="ENGLISH">English</option>
+                    <option value="ECONOMICS">Economics</option>
+                  </select>
+                </div>
+                <p id="departmentError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Please select your department
+                </p>
+              </div>
+
+              <div class="input-group">
+                <label for="password" class="form-label">
+                  <i class="fas fa-lock mr-2"></i>Password
+                </label>
+                <div class="relative">
+                  <i class="fas fa-lock input-icon"></i>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    class="form-input with-icon w-full rounded-lg p-3 pr-12 text-white placeholder-gray-400"
+                    placeholder="Create a strong password"
+                    oninput="checkPasswordStrength(this.value)"
+                  />
+                  <button
+                    type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+                    onclick="togglePasswordVisibility('password', 'passwordToggleIcon')"
+                  >
+                    <i id="passwordToggleIcon" class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <div class="strength-meter">
+                  <div
+                    id="passwordStrength"
+                    class="h-full w-0 transition-all duration-500 rounded-full"
+                  ></div>
+                </div>
+                <div id="passwordStrengthText" class="text-xs mt-2"></div>
+                <p id="passwordError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Password must be at least 6 characters
+                </p>
+              </div>
+
+              <div class="input-group">
+                <label for="confirmPassword" class="form-label">
+                  <i class="fas fa-lock mr-2"></i>Confirm Password
+                </label>
+                <div class="relative">
+                  <i class="fas fa-lock input-icon"></i>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    required
+                    class="form-input with-icon w-full rounded-lg p-3 pr-12 text-white placeholder-gray-400"
+                    placeholder="Confirm your password"
+                  />
+                  <button
+                    type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+                    onclick="togglePasswordVisibility('confirmPassword', 'confirmPasswordToggleIcon')"
+                  >
+                    <i id="confirmPasswordToggleIcon" class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <p id="confirmPasswordError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Passwords do not match
+                </p>
+              </div>
+
+              <div class="input-group">
+                <label for="idCardImage" class="form-label">
+                  <i class="fas fa-id-card mr-2"></i>Upload ID Card Image
+                </label>
+                <div class="file-upload">
+                  <input
+                    type="file"
+                    id="idCardImage"
+                    name="idCardImage"
+                    accept="image/*"
+                    required
+                  />
+                  <label for="idCardImage" class="file-upload-label">
+                    <i
+                      class="fas fa-cloud-upload-alt text-3xl mb-4 block text-gray-400"
+                    ></i>
+                    <span class="block text-sm"
+                      >Click to upload your ID card</span
+                    >
+                    <span class="block text-xs text-gray-500 mt-2"
+                      >PNG, JPG up to 10MB</span
+                    >
+                  </label>
+                </div>
+                <p id="idCardImageError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Please upload your ID card image
+                </p>
+              </div>
+
+              <div class="flex items-start space-x-3">
+                <div class="flex items-center h-5 mt-1">
+                  <input
+                    id="terms"
+                    name="terms"
+                    type="checkbox"
+                    required
+                    class="checkbox-custom"
+                  />
+                </div>
+                <div class="text-sm">
+                  <label for="terms" class="text-gray-300">
+                    I agree to the
+                    <a
+                      href="#"
+                      class="text-red-400 hover:text-red-300 font-medium underline decoration-red-400/30 hover:decoration-red-300/50 transition-all"
+                      onclick="event.preventDefault(); document.getElementById('termsModal').classList.remove('hidden')"
+                    >
+                      Terms and Conditions
+                    </a>
+                  </label>
+                  <p id="termsError" class="error-message hidden mt-2">
+                    <i class="fas fa-exclamation-circle"></i>
+                    You must agree to the terms and conditions
+                  </p>
+                </div>
+              </div>
+
               <button
                 type="submit"
-                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                class="btn-primary w-full py-4 px-6 rounded-lg font-semibold text-lg relative overflow-hidden transition-all duration-300"
               >
-                Register
+                <span class="relative z-10">Create Account</span>
               </button>
-            </div>
-          </form>
+            </form>
 
-          <div class="mt-4 text-center">
-            <p class="text-sm text-gray-600">
-              Already have an account?
-              <a
-                href="login.html"
-                class="font-medium text-blue-600 hover:text-blue-500"
-                >Sign in</a
-              >
-            </p>
+            <div class="mt-8 text-center">
+              <p class="text-gray-400">
+                Already have an account?
+                <a
+                  href="login.html"
+                  class="text-red-400 hover:text-red-300 font-medium underline decoration-red-400/30 hover:decoration-red-300/50 transition-all ml-1"
+                >
+                  Sign in
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -339,50 +825,58 @@
     <!-- OTP Verification Modal -->
     <div
       id="otpModal"
-      class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden"
+      class="fixed inset-0 modal-backdrop flex items-center justify-center hidden z-50"
     >
-      <div class="bg-white rounded-lg p-6 max-w-md w-full">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">
-          Verify Your Email
-        </h3>
-        <p class="text-sm text-gray-500 mb-4">
-          We've sent a 6-digit OTP to your email. Please enter it below:
-        </p>
+      <div class="modal-content rounded-2xl p-8 max-w-md w-full m-4 relative">
+        <div class="text-center mb-6">
+          <div class="pulse-ring w-16 h-16 mx-auto mb-4"></div>
+          <div
+            class="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <i class="fas fa-envelope text-white text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">Verify Your Email</h3>
+          <p class="text-gray-400">
+            We've sent a 6-digit OTP to your email. Please enter it below:
+          </p>
+        </div>
 
         <form id="otpForm">
           <input type="hidden" id="userId" />
-          <div class="mb-4">
-            <label
-              for="otp"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >OTP Code</label
-            >
+          <div class="mb-6">
+            <label for="otp" class="form-label text-center block">
+              <i class="fas fa-key mr-2"></i>OTP Code
+            </label>
             <input
               type="text"
               id="otp"
               maxlength="6"
               pattern="\d{6}"
               required
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border text-center text-lg tracking-widest"
+              class="form-input otp-input w-full rounded-lg p-4 text-white placeholder-gray-400"
+              placeholder="000000"
             />
-            <p id="otpError" class="text-red-500 text-xs mt-1 hidden">
+            <p id="otpError" class="error-message hidden mt-2">
+              <i class="fas fa-exclamation-circle"></i>
               Please enter a valid 6-digit OTP
             </p>
           </div>
 
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col sm:flex-row gap-4">
             <button
               type="button"
               id="resendOtpBtn"
-              class="text-sm text-blue-600 hover:text-blue-500"
+              class="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300"
             >
-              Resend OTP
+              <i class="fas fa-redo mr-2"></i>Resend OTP
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="flex-1 btn-primary py-3 px-4 rounded-lg font-medium relative overflow-hidden"
             >
-              Verify
+              <span class="relative z-10">
+                <i class="fas fa-check mr-2"></i>Verify
+              </span>
             </button>
           </div>
         </form>
@@ -392,77 +886,171 @@
     <!-- Terms and Conditions Modal -->
     <div
       id="termsModal"
-      class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50"
+      class="fixed inset-0 modal-backdrop flex items-center justify-center hidden z-50"
     >
       <div
-        class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+        class="modal-content rounded-2xl p-8 max-w-4xl w-full m-4 max-h-[80vh] overflow-y-auto"
       >
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-xl font-bold text-gray-800">Terms and Conditions</h3>
+        <div
+          class="flex justify-between items-center mb-6 sticky top-0 bg-inherit z-10 pb-4 border-b border-gray-700"
+        >
+          <h3 class="text-2xl font-bold text-white">Terms and Conditions</h3>
           <button
             onclick="document.getElementById('termsModal').classList.add('hidden')"
-            class="text-gray-500 hover:text-gray-700"
+            class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700 rounded-lg"
           >
-            <i class="fas fa-times"></i>
+            <i class="fas fa-times text-xl"></i>
           </button>
         </div>
 
-        <div class="prose prose-sm max-w-none">
-          <h4>1. Acceptance of Terms</h4>
-          <p>
-            By registering for and using the Campus Lost & Found service, you
-            agree to be bound by these Terms and Conditions.
-          </p>
+        <div class="prose prose-sm max-w-none text-gray-300 space-y-6">
+          <div
+            class="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-lg p-6"
+          >
+            <h4 class="text-lg font-semibold text-white mb-3">
+              <i class="fas fa-handshake mr-2 text-red-400"></i>1. Acceptance of
+              Terms
+            </h4>
+            <p>
+              By registering for and using the Campus Lost & Found service, you
+              agree to be bound by these Terms and Conditions.
+            </p>
+          </div>
 
-          <h4>2. Eligibility</h4>
-          <p>
-            This service is exclusively available to current students and staff
-            of Bangladesh University of Professionals (BUP).
-          </p>
+          <div
+            class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-lg p-6"
+          >
+            <h4 class="text-lg font-semibold text-white mb-3">
+              <i class="fas fa-user-check mr-2 text-blue-400"></i>2. Eligibility
+            </h4>
+            <p>
+              This service is exclusively available to current students and
+              staff of Bangladesh University of Professionals (BUP).
+            </p>
+          </div>
 
-          <h4>3. User Responsibilities</h4>
-          <p>Users must:</p>
-          <ul>
-            <li>Provide accurate information during registration</li>
-            <li>Only post items they have genuinely found or lost</li>
-            <li>Not use the service for commercial purposes</li>
-            <li>Treat other users with respect</li>
-          </ul>
+          <div
+            class="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-lg p-6"
+          >
+            <h4 class="text-lg font-semibold text-white mb-3">
+              <i class="fas fa-tasks mr-2 text-green-400"></i>3. User
+              Responsibilities
+            </h4>
+            <p class="mb-3">Users must:</p>
+            <ul class="space-y-2 ml-4">
+              <li class="flex items-start">
+                <i
+                  class="fas fa-check-circle text-green-400 mr-2 mt-1 text-sm"
+                ></i>
+                Provide accurate information during registration
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-check-circle text-green-400 mr-2 mt-1 text-sm"
+                ></i>
+                Only post items they have genuinely found or lost
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-check-circle text-green-400 mr-2 mt-1 text-sm"
+                ></i>
+                Not use the service for commercial purposes
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-check-circle text-green-400 mr-2 mt-1 text-sm"
+                ></i>
+                Treat other users with respect
+              </li>
+            </ul>
+          </div>
 
-          <h4>4. Privacy Policy</h4>
-          <p>
-            We collect personal information solely for the purpose of verifying
-            your identity as a BUP member and facilitating lost item recovery.
-          </p>
+          <div
+            class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-6"
+          >
+            <h4 class="text-lg font-semibold text-white mb-3">
+              <i class="fas fa-shield-alt mr-2 text-purple-400"></i>4. Privacy
+              Policy
+            </h4>
+            <p>
+              We collect personal information solely for the purpose of
+              verifying your identity as a BUP member and facilitating lost item
+              recovery.
+            </p>
+          </div>
 
-          <h4>5. Prohibited Conduct</h4>
-          <p>Users may not:</p>
-          <ul>
-            <li>Post false or misleading information</li>
-            <li>Attempt to claim items that aren't theirs</li>
-            <li>Harass other users</li>
-            <li>Use the service for any illegal activities</li>
-          </ul>
+          <div
+            class="bg-gradient-to-r from-red-500/10 to-pink-500/10 border border-red-500/20 rounded-lg p-6"
+          >
+            <h4 class="text-lg font-semibold text-white mb-3">
+              <i class="fas fa-ban mr-2 text-red-400"></i>5. Prohibited Conduct
+            </h4>
+            <p class="mb-3">Users may not:</p>
+            <ul class="space-y-2 ml-4">
+              <li class="flex items-start">
+                <i
+                  class="fas fa-times-circle text-red-400 mr-2 mt-1 text-sm"
+                ></i>
+                Post false or misleading information
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-times-circle text-red-400 mr-2 mt-1 text-sm"
+                ></i>
+                Attempt to claim items that aren't theirs
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-times-circle text-red-400 mr-2 mt-1 text-sm"
+                ></i>
+                Harass other users
+              </li>
+              <li class="flex items-start">
+                <i
+                  class="fas fa-times-circle text-red-400 mr-2 mt-1 text-sm"
+                ></i>
+                Use the service for any illegal activities
+              </li>
+            </ul>
+          </div>
 
-          <h4>6. Limitation of Liability</h4>
-          <p>
-            The university is not responsible for any disputes between users
-            regarding lost items.
-          </p>
+          <div
+            class="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg p-6"
+          >
+            <h4 class="text-lg font-semibold text-white mb-3">
+              <i class="fas fa-exclamation-triangle mr-2 text-yellow-400"></i>6.
+              Limitation of Liability
+            </h4>
+            <p>
+              The university is not responsible for any disputes between users
+              regarding lost items.
+            </p>
+          </div>
 
-          <h4>7. Changes to Terms</h4>
-          <p>
-            These terms may be updated periodically. Continued use of the
-            service constitutes acceptance of the updated terms.
-          </p>
+          <div
+            class="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-lg p-6"
+          >
+            <h4 class="text-lg font-semibold text-white mb-3">
+              <i class="fas fa-edit mr-2 text-indigo-400"></i>7. Changes to
+              Terms
+            </h4>
+            <p>
+              These terms may be updated periodically. Continued use of the
+              service constitutes acceptance of the updated terms.
+            </p>
+          </div>
         </div>
 
-        <div class="mt-4 flex justify-end">
+        <div
+          class="mt-8 flex justify-end sticky bottom-0 bg-inherit pt-4 border-t border-gray-700"
+        >
           <button
             onclick="document.getElementById('termsModal').classList.add('hidden')"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            class="btn-primary px-8 py-3 rounded-lg font-medium relative overflow-hidden"
           >
-            I Understand
+            <span class="relative z-10">
+              <i class="fas fa-check mr-2"></i>I Understand
+            </span>
           </button>
         </div>
       </div>
@@ -491,7 +1079,8 @@
         const strengthText = document.getElementById("passwordStrengthText");
 
         // Reset
-        strengthBar.className = "h-full w-0 transition-all duration-300";
+        strengthBar.className =
+          "h-full w-0 transition-all duration-500 rounded-full";
         strengthText.textContent = "";
 
         if (!password) return;
@@ -512,16 +1101,22 @@
         // Determine strength level
         if (strength <= 2) {
           strengthBar.classList.add("weak");
-          strengthText.textContent = "Weak password";
-          strengthText.className = "text-xs mt-1 text-red-500";
+          strengthText.innerHTML =
+            '<i class="fas fa-exclamation-triangle mr-1"></i>Weak password';
+          strengthText.className =
+            "text-xs mt-2 text-red-400 flex items-center";
         } else if (strength <= 4) {
           strengthBar.classList.add("medium");
-          strengthText.textContent = "Medium strength password";
-          strengthText.className = "text-xs mt-1 text-amber-500";
+          strengthText.innerHTML =
+            '<i class="fas fa-shield-alt mr-1"></i>Medium strength password';
+          strengthText.className =
+            "text-xs mt-2 text-yellow-400 flex items-center";
         } else {
           strengthBar.classList.add("strong");
-          strengthText.textContent = "Strong password";
-          strengthText.className = "text-xs mt-1 text-emerald-500";
+          strengthText.innerHTML =
+            '<i class="fas fa-check-circle mr-1"></i>Strong password';
+          strengthText.className =
+            "text-xs mt-2 text-green-400 flex items-center";
         }
 
         // Update your existing password validation
@@ -626,12 +1221,40 @@
         return isValid;
       }
 
+      // File upload preview
+      document
+        .getElementById("idCardImage")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const label = document.querySelector(".file-upload-label");
+            label.innerHTML = `
+            <i class="fas fa-check-circle text-3xl mb-4 block text-green-400"></i>
+            <span class="block text-sm text-green-400">${file.name}</span>
+            <span class="block text-xs text-gray-500 mt-2">${(
+              file.size /
+              1024 /
+              1024
+            ).toFixed(2)} MB</span>
+          `;
+            label.classList.add("border-green-400", "bg-green-400/5");
+            label.classList.remove("border-red-500/50");
+          }
+        });
+
       document
         .getElementById("registerForm")
         .addEventListener("submit", async function (e) {
           e.preventDefault();
 
           if (!validateForm()) return;
+
+          // Add loading state
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+          submitBtn.disabled = true;
 
           const formData = new FormData();
           formData.append(
@@ -681,6 +1304,10 @@
           } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
+          } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
           }
         });
 
@@ -694,6 +1321,13 @@
             document.getElementById("otpError").classList.remove("hidden");
             return;
           }
+
+          // Add loading state
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Verifying...';
+          submitBtn.disabled = true;
 
           try {
             const response = await fetch("/api/auth/verify", {
@@ -718,6 +1352,10 @@
           } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
+          } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
           }
         });
 
@@ -725,6 +1363,12 @@
         .getElementById("resendOtpBtn")
         .addEventListener("click", async function () {
           if (!userId) return;
+
+          // Add loading state
+          const originalText = this.innerHTML;
+          this.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+          this.disabled = true;
 
           try {
             const response = await fetch("/api/auth/resend-otp", {
@@ -747,6 +1391,10 @@
           } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
+          } finally {
+            // Reset button state
+            this.innerHTML = originalText;
+            this.disabled = false;
           }
         });
     </script>

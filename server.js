@@ -1101,12 +1101,16 @@ app.get("/api/items/my-claimed", authenticate, async (req, res) => {
 
       if (itemObj.type === "found") {
         // For found items, find the approved claim request
-        const approvedClaim = itemObj.claimRequests.find(
-          (req) =>
-            req.status === "approved" &&
-            req.requestedBy._id &&
-            req.requestedBy._id.toString() === req.user._id.toString()
-        );
+        const approvedClaim = itemObj.claimRequests.find((request) => {
+          const requestedById =
+            request.requestedBy && request.requestedBy._id
+              ? request.requestedBy._id.toString()
+              : request.requestedBy.toString();
+          return (
+            request.status === "approved" &&
+            requestedById === req.user._id.toString()
+          );
+        });
         if (approvedClaim) {
           claimDetails = {
             claimDate: approvedClaim.reviewedAt,
@@ -1117,12 +1121,16 @@ app.get("/api/items/my-claimed", authenticate, async (req, res) => {
         }
       } else if (itemObj.type === "lost") {
         // For lost items, find the approved inform request
-        const approvedInform = itemObj.informRequests.find(
-          (req) =>
-            req.status === "approved" &&
-            req.informedBy._id &&
-            req.informedBy._id.toString() === req.user._id.toString()
-        );
+        const approvedInform = itemObj.informRequests.find((request) => {
+          const informedById =
+            request.informedBy && request.informedBy._id
+              ? request.informedBy._id.toString()
+              : request.informedBy.toString();
+          return (
+            request.status === "approved" &&
+            informedById === req.user._id.toString()
+          );
+        });
         if (approvedInform) {
           claimDetails = {
             claimDate: approvedInform.reviewedAt,
@@ -1206,7 +1214,7 @@ app.get("/api/items/reunited", authenticate, async (req, res) => {
       if (itemObj.type === "found") {
         // For found items, find the approved claim request
         const approvedClaim = itemObj.claimRequests.find(
-          (req) => req.status === "approved"
+          (request) => request.status === "approved"
         );
         if (approvedClaim) {
           reunionDetails = {
@@ -1219,7 +1227,7 @@ app.get("/api/items/reunited", authenticate, async (req, res) => {
       } else if (itemObj.type === "lost") {
         // For lost items, find the approved inform request
         const approvedInform = itemObj.informRequests.find(
-          (req) => req.status === "approved"
+          (request) => request.status === "approved"
         );
         if (approvedInform) {
           reunionDetails = {

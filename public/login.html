@@ -9,136 +9,641 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      .bg-auth {
-        background-image: linear-gradient(
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0.5)
+      * {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a1a1a 25%,
+          #2d1b2d 50%,
+          #1a1a1a 75%,
+          #0a0a0a 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .glass-card {
+        background: rgba(20, 20, 20, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 69, 0, 0.2);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8),
+          0 0 0 1px rgba(255, 69, 0, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 69, 0, 0.9) 0%,
+          rgba(220, 20, 60, 0.9) 50%,
+          rgba(139, 0, 0, 0.9) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: radial-gradient(
+            circle at 25% 25%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
           ),
-          url("bup.jpg");
-        background-size: cover;
-        background-position: center;
+          radial-gradient(
+            circle at 75% 75%,
+            rgba(255, 255, 255, 0.05) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+
+      .hero-section::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.03) 50%,
+          transparent 70%
+        );
+        animation: shimmer 3s linear infinite;
+        pointer-events: none;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        100% {
+          transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+      }
+
+      .form-input {
+        background: rgba(30, 30, 30, 0.8);
+        border: 1px solid rgba(255, 69, 0, 0.3);
+        color: #ffffff;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+        background: rgba(40, 40, 40, 0.9);
+        border-color: #ff4500;
+        box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.1),
+          0 0 20px rgba(255, 69, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+      }
+
+      .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .form-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        display: block;
+        transition: color 0.3s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          #ff4500 0%,
+          #dc143c 50%,
+          #8b0000 100%
+        );
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(255, 69, 0, 0.3);
+      }
+
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(255, 69, 0, 0.4);
+        background: linear-gradient(
+          135deg,
+          #ff6500 0%,
+          #ff143c 50%,
+          #ab0000 100%
+        );
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+      }
+
+      .floating-icon {
+        position: absolute;
+        color: rgba(255, 69, 0, 0.6);
+        animation: float 6s ease-in-out infinite;
+        z-index: 1;
+      }
+
+      .floating-icon:nth-child(1) {
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+      .floating-icon:nth-child(2) {
+        top: 20%;
+        right: 15%;
+        animation-delay: 2s;
+      }
+      .floating-icon:nth-child(3) {
+        bottom: 20%;
+        left: 15%;
+        animation-delay: 4s;
+      }
+      .floating-icon:nth-child(4) {
+        bottom: 30%;
+        right: 20%;
+        animation-delay: 1s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+          opacity: 0.8;
+        }
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 69, 0, 0.2);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .feature-item:hover {
+        background: rgba(255, 69, 0, 0.1);
+        transform: translateX(5px);
+        border-color: rgba(255, 69, 0, 0.4);
+      }
+
+      .feature-icon {
+        color: #ff4500;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+      }
+
+      .feature-item:hover .feature-icon {
+        transform: scale(1.2) rotate(5deg);
+      }
+
+      .modal-backdrop {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+      }
+
+      .modal-content {
+        background: rgba(20, 20, 20, 0.95);
+        border: 1px solid rgba(255, 69, 0, 0.3);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(20px);
+      }
+
+      .checkbox-custom {
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid rgba(255, 69, 0, 0.5);
+        border-radius: 4px;
+        background: rgba(30, 30, 30, 0.8);
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .checkbox-custom:checked {
+        background: linear-gradient(135deg, #ff4500, #dc143c);
+        border-color: #ff4500;
+        transform: scale(1.05);
+      }
+
+      .checkbox-custom:checked::after {
+        content: "\2713";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 0.875rem;
+        font-weight: bold;
+      }
+
+      .error-message {
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .success-message {
+        color: #10b981;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 69, 0, 0.6);
+        z-index: 10;
+        transition: color 0.3s ease;
+      }
+
+      .form-input.with-icon {
+        padding-left: 3rem;
+      }
+
+      .input-group:focus-within .input-icon {
+        color: #ff4500;
+      }
+
+      .logo-animation {
+        animation: logoGlow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes logoGlow {
+        from {
+          text-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+        }
+        to {
+          text-shadow: 0 0 30px rgba(255, 69, 0, 0.8),
+            0 0 40px rgba(255, 69, 0, 0.3);
+        }
+      }
+
+      .form-container {
+        background: rgba(15, 15, 15, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 69, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .form-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #ff4500, transparent);
+        animation: borderGlow 3s ease-in-out infinite;
+      }
+
+      @keyframes borderGlow {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .otp-input {
+        font-family: "Courier New", monospace;
+        font-size: 1.5rem;
+        text-align: center;
+        letter-spacing: 0.5rem;
+        font-weight: bold;
+      }
+
+      .pulse-ring {
+        position: absolute;
+        border: 3px solid rgba(255, 69, 0, 0.3);
+        border-radius: 50%;
+        animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      }
+
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.33);
+          opacity: 1;
+        }
+        80%,
+        100% {
+          transform: scale(2.4);
+          opacity: 0;
+        }
+      }
+
+      .btn-secondary {
+        background: rgba(30, 30, 30, 0.8);
+        border: 1px solid rgba(255, 69, 0, 0.3);
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 69, 0, 0.1);
+        border-color: rgba(255, 69, 0, 0.5);
+        color: #ff4500;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(255, 69, 0, 0.2);
+      }
+
+      .link-accent {
+        color: #ff4500;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .link-accent::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #ff4500, #dc143c);
+        transition: width 0.3s ease;
+      }
+
+      .link-accent:hover {
+        color: #dc143c;
+      }
+
+      .link-accent:hover::after {
+        width: 100%;
+      }
+
+      .welcome-text {
+        background: linear-gradient(135deg, #ff4500, #dc143c, #8b0000);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientText 3s ease-in-out infinite;
+      }
+
+      @keyframes gradientText {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #ffffff;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
-  <body
-    class="bg-[url('login.jpg')] bg-cover bg-center bg-no-repeat min-h-screen"
-  >
-    <div class="min-h-screen flex items-center justify-center p-4">
+  <body>
+    <!-- Floating background elements -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <div class="floating-icon"><i class="fas fa-key text-2xl"></i></div>
+      <div class="floating-icon"><i class="fas fa-shield-alt text-xl"></i></div>
+      <div class="floating-icon"><i class="fas fa-lock text-2xl"></i></div>
+      <div class="floating-icon">
+        <i class="fas fa-graduation-cap text-xl"></i>
+      </div>
+    </div>
+
+    <div
+      class="min-h-screen flex items-center justify-center p-4 relative z-10"
+    >
       <div
-        class="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row"
+        class="w-full max-w-6xl glass-card rounded-2xl overflow-hidden flex flex-col lg:flex-row shadow-2xl"
       >
-        <!-- Left side with image -->
+        <!-- Left side with hero section -->
         <div
-          class="hidden md:block md:w-1/2 bg-auth text-white p-8 flex flex-col justify-center"
+          class="lg:w-2/5 hero-section text-white p-8 lg:p-12 flex flex-col justify-center relative"
         >
-          <h1 class="text-3xl font-bold mb-4">Authentication System</h1>
-          <p class="mb-6">Sign in to continue to BUP Lost & Found</p>
-          <div class="space-y-4">
-            <div class="flex items-center">
-              <i class="fas fa-check-circle mr-2"></i>
-              <span>Reconnect with your lost items</span>
+          <div class="relative z-10">
+            <div class="mb-8">
+              <h1
+                class="text-4xl lg:text-5xl font-bold mb-4 logo-animation text-center mx-auto"
+              >
+                Authentication System
+              </h1>
+
+              <p class="text-xl opacity-90 mb-8 font-light text-center mx-auto">
+                Sign in to continue to BUP Lost & Found
+              </p>
             </div>
-            <div class="flex items-center">
-              <i class="fas fa-check-circle mr-2"></i>
-              <span>Help others find their belongings</span>
-            </div>
-            <div class="flex items-center">
-              <i class="fas fa-check-circle mr-2"></i>
-              <span>Secure campus community</span>
+
+            <div class="space-y-4">
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-search"></i>
+                </div>
+                <span class="font-medium">Reconnect with your lost items</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="font-medium"
+                  >Help others find their belongings</span
+                >
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <span class="font-medium">Secure campus community</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-bell"></i>
+                </div>
+                <span class="font-medium">Real-time notifications</span>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Right side with form -->
-        <div class="w-full md:w-1/2 p-8">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Sign In</h2>
+        <div class="lg:w-3/5 form-container p-8 lg:p-12">
+          <div class="max-w-md mx-auto">
+            <h2 class="text-3xl font-bold text-white mb-2">Sign In</h2>
+            <p class="text-gray-400 mb-8">Access your account to continue</p>
 
-          <form id="loginForm" class="space-y-4">
-            <div>
-              <label for="email" class="block text-sm font-medium text-gray-700"
-                >University Email</label
-              >
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                placeholder="studentID@student.bup.edu.bd or name@bup.edu.bd"
-              />
-              <p id="emailError" class="text-red-500 text-xs mt-1 hidden">
-                Please enter a valid university email
-              </p>
-            </div>
-
-            <div class="relative">
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700"
-                >Password</label
-              >
-              <div class="relative">
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  required
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border pr-10"
-                />
-                <button
-                  type="button"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
-                  onclick="togglePasswordVisibility('password', 'passwordToggleIcon')"
-                >
-                  <i id="passwordToggleIcon" class="fas fa-eye"></i>
-                </button>
+            <form id="loginForm" class="space-y-6">
+              <div class="input-group">
+                <label for="email" class="form-label">
+                  <i class="fas fa-envelope mr-2"></i>University Email
+                </label>
+                <div class="relative">
+                  <i class="fas fa-envelope input-icon"></i>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="form-input with-icon w-full rounded-lg p-3 text-white placeholder-gray-400"
+                    placeholder="studentID@student.bup.edu.bd"
+                  />
+                </div>
+                <p id="emailError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Please enter a valid university email
+                </p>
               </div>
-              <p id="passwordError" class="text-red-500 text-xs mt-1 hidden">
-                Please enter your password
-              </p>
-            </div>
 
-            <div class="flex items-center justify-between">
-              <div class="flex items-center">
-                <input
-                  id="remember"
-                  name="remember"
-                  type="checkbox"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label for="remember" class="ml-2 block text-sm text-gray-700"
-                  >Remember me</label
-                >
+              <div class="input-group">
+                <label for="password" class="form-label">
+                  <i class="fas fa-lock mr-2"></i>Password
+                </label>
+                <div class="relative">
+                  <i class="fas fa-lock input-icon"></i>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    class="form-input with-icon w-full rounded-lg p-3 pr-12 text-white placeholder-gray-400"
+                    placeholder="Enter your password"
+                  />
+                  <button
+                    type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+                    onclick="togglePasswordVisibility('password', 'passwordToggleIcon')"
+                  >
+                    <i id="passwordToggleIcon" class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <p id="passwordError" class="error-message hidden">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Please enter your password
+                </p>
               </div>
-              <div class="text-sm">
-                <a
-                  href="recover-password.html"
-                  class="font-medium text-blue-600 hover:text-blue-500"
-                  >Forgot password?</a
-                >
-              </div>
-            </div>
 
-            <div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <input
+                    id="remember"
+                    name="remember"
+                    type="checkbox"
+                    class="checkbox-custom"
+                  />
+                  <label for="remember" class="text-sm text-gray-300">
+                    Remember me
+                  </label>
+                </div>
+                <div class="text-sm">
+                  <a href="recover-password.html" class="link-accent">
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
+
               <button
                 type="submit"
-                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                class="btn-primary w-full py-4 px-6 rounded-lg font-semibold text-lg relative overflow-hidden transition-all duration-300"
               >
-                Sign In
+                <span class="relative z-10">Sign In</span>
               </button>
-            </div>
-          </form>
+            </form>
 
-          <div class="mt-4 text-center">
-            <p class="text-sm text-gray-600">
-              Don't have an account?
-              <a
-                href="register.html"
-                class="font-medium text-blue-600 hover:text-blue-500"
-                >Register</a
-              >
-            </p>
+            <div class="mt-8 text-center">
+              <p class="text-gray-400">
+                Don't have an account?
+                <a href="register.html" class="link-accent ml-1"> Register </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -147,50 +652,58 @@
     <!-- OTP Verification Modal -->
     <div
       id="otpModal"
-      class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden"
+      class="fixed inset-0 modal-backdrop flex items-center justify-center hidden z-50"
     >
-      <div class="bg-white rounded-lg p-6 max-w-md w-full">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">
-          Verify Your Login
-        </h3>
-        <p class="text-sm text-gray-500 mb-4">
-          We've sent a 6-digit OTP to your email. Please enter it below:
-        </p>
+      <div class="modal-content rounded-2xl p-8 max-w-md w-full m-4 relative">
+        <div class="text-center mb-6">
+          <div class="pulse-ring w-16 h-16 mx-auto mb-4"></div>
+          <div
+            class="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <i class="fas fa-key text-white text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">Verify Your Login</h3>
+          <p class="text-gray-400">
+            We've sent a 6-digit OTP to your email. Please enter it below:
+          </p>
+        </div>
 
         <form id="otpForm">
           <input type="hidden" id="userId" />
-          <div class="mb-4">
-            <label
-              for="otp"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >OTP Code</label
-            >
+          <div class="mb-6">
+            <label for="otp" class="form-label text-center block">
+              <i class="fas fa-key mr-2"></i>OTP Code
+            </label>
             <input
               type="text"
               id="otp"
               maxlength="6"
               pattern="\d{6}"
               required
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border text-center text-lg tracking-widest"
+              class="form-input otp-input w-full rounded-lg p-4 text-white placeholder-gray-400"
+              placeholder="000000"
             />
-            <p id="otpError" class="text-red-500 text-xs mt-1 hidden">
+            <p id="otpError" class="error-message hidden mt-2">
+              <i class="fas fa-exclamation-circle"></i>
               Please enter a valid 6-digit OTP
             </p>
           </div>
 
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col sm:flex-row gap-4">
             <button
               type="button"
               id="resendOtpBtn"
-              class="text-sm text-blue-600 hover:text-blue-500"
+              class="flex-1 btn-secondary py-3 px-4 rounded-lg font-medium transition-all duration-300"
             >
-              Resend OTP
+              <i class="fas fa-redo mr-2"></i>Resend OTP
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="flex-1 btn-primary py-3 px-4 rounded-lg font-medium relative overflow-hidden"
             >
-              Verify
+              <span class="relative z-10">
+                <i class="fas fa-check mr-2"></i>Verify
+              </span>
             </button>
           </div>
         </form>
@@ -241,6 +754,13 @@
             return;
           }
 
+          // Add loading state
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML =
+            '<span class="relative z-10"><i class="fas fa-spinner fa-spin mr-2"></i>Signing In...</span>';
+          submitBtn.disabled = true;
+
           try {
             const response = await fetch("/api/auth/login", {
               method: "POST",
@@ -265,6 +785,10 @@
           } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
+          } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
           }
         });
 
@@ -278,6 +802,13 @@
             document.getElementById("otpError").classList.remove("hidden");
             return;
           }
+
+          // Add loading state
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML =
+            '<span class="relative z-10"><i class="fas fa-spinner fa-spin mr-2"></i>Verifying...</span>';
+          submitBtn.disabled = true;
 
           try {
             const response = await fetch("/api/auth/verify-login", {
@@ -303,6 +834,10 @@
           } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
+          } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
           }
         });
 
@@ -310,6 +845,12 @@
         .getElementById("resendOtpBtn")
         .addEventListener("click", async function () {
           if (!userId) return;
+
+          // Add loading state
+          const originalText = this.innerHTML;
+          this.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+          this.disabled = true;
 
           try {
             const response = await fetch("/api/auth/resend-otp", {
@@ -332,6 +873,10 @@
           } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
+          } finally {
+            // Reset button state
+            this.innerHTML = originalText;
+            this.disabled = false;
           }
         });
     </script>
