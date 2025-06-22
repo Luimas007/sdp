@@ -9,22 +9,31 @@
       rel="stylesheet"
     />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
       :root {
-        --reddit-orange: #ff4500;
-        --reddit-blue: #0079d3;
-        --dark-bg: #030303;
-        --card-bg: #1a1a1b;
-        --hover-bg: #272729;
-        --text-primary: #d7dadc;
-        --text-secondary: #818384;
-        --border-color: #343536;
-        --error-color: #ea0027;
-        --success-color: #46d160;
-        --lost-accent: #ff3333;
-        --found-accent: #33ff33;
-        --warning-color: #ffa500;
+        --primary-red: #dc2626;
+        --primary-red-dark: #b91c1c;
+        --primary-red-light: #f87171;
+        --accent-red: #ef4444;
+        --dark-bg: #0a0a0a;
+        --card-bg: #1a1a1a;
+        --hover-bg: #262626;
+        --text-primary: #f5f5f5;
+        --text-secondary: #a3a3a3;
+        --text-muted: #737373;
+        --border-color: #404040;
+        --border-light: #525252;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+        --lost-accent: #dc2626;
+        --found-accent: #10b981;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        --gradient-red: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
       }
 
       * {
@@ -39,25 +48,26 @@
         color: var(--text-primary);
         line-height: 1.6;
         min-height: 100vh;
+        font-weight: 400;
       }
 
       /* Header */
       .header {
-        background: var(--card-bg);
+        background: rgba(26, 26, 26, 0.95);
         border-bottom: 1px solid var(--border-color);
-        padding: 12px 0;
+        padding: 16px 0;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         z-index: 1000;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
       }
 
       .header-content {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 16px;
+        padding: 0 24px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -69,138 +79,159 @@
         gap: 12px;
         text-decoration: none;
         color: var(--text-primary);
+        font-weight: 600;
       }
 
       .logo-icon {
-        width: 32px;
-        height: 32px;
-        background: var(--reddit-orange);
-        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        background: var(--gradient-red);
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        font-size: 16px;
+        font-size: 18px;
+        box-shadow: var(--shadow-md);
       }
 
       .logo-text {
         font-size: 20px;
-        font-weight: 600;
+        font-weight: 700;
+        letter-spacing: -0.025em;
       }
 
       .nav-actions {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
       }
 
       .nav-btn {
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 16px;
+        padding: 10px 16px;
         background: var(--hover-bg);
         border: 1px solid var(--border-color);
-        border-radius: 6px;
+        border-radius: 8px;
         color: var(--text-primary);
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
+        font-weight: 500;
+        font-size: 14px;
       }
 
       .nav-btn:hover {
         background: var(--border-color);
-        color: var(--text-primary);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
       }
 
       .nav-btn.danger:hover {
-        background: var(--error-color);
-        border-color: var(--error-color);
+        background: var(--primary-red);
+        border-color: var(--primary-red);
+        color: white;
       }
 
       /* Main Container */
       .main-container {
         max-width: 1200px;
-        margin: 80px auto 40px;
-        padding: 0 16px;
+        margin: 90px auto 40px;
+        padding: 0 24px;
       }
 
       .item-container {
         background: var(--card-bg);
-        border-radius: 12px;
+        border-radius: 16px;
         border: 1px solid var(--border-color);
         overflow: hidden;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+        box-shadow: var(--shadow-lg);
       }
 
       /* Item Header */
       .item-header {
-        padding: 24px;
+        padding: 32px;
         border-bottom: 1px solid var(--border-color);
+        background: linear-gradient(
+          135deg,
+          rgba(220, 38, 38, 0.05) 0%,
+          transparent 100%
+        );
       }
 
       .item-title {
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 12px;
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 16px;
         color: var(--text-primary);
+        letter-spacing: -0.025em;
+        line-height: 1.2;
       }
 
       .item-meta {
         display: flex;
         align-items: center;
         gap: 24px;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         flex-wrap: wrap;
       }
 
       .meta-item {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         color: var(--text-secondary);
         font-size: 14px;
+        font-weight: 500;
+      }
+
+      .meta-item i {
+        color: var(--primary-red);
       }
 
       .badge {
-        padding: 6px 12px;
-        border-radius: 20px;
+        padding: 8px 16px;
+        border-radius: 24px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.05em;
+        border: 2px solid;
       }
 
       .badge-lost {
-        background: rgba(255, 51, 51, 0.2);
+        background: rgba(220, 38, 38, 0.1);
         color: var(--lost-accent);
-        border: 1px solid var(--lost-accent);
+        border-color: var(--lost-accent);
       }
 
       .badge-found {
-        background: rgba(51, 255, 51, 0.2);
+        background: rgba(16, 185, 129, 0.1);
         color: var(--found-accent);
-        border: 1px solid var(--found-accent);
+        border-color: var(--found-accent);
       }
 
       .badge-active {
-        background: rgba(0, 121, 211, 0.2);
-        color: var(--reddit-blue);
-        border: 1px solid var(--reddit-blue);
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        border-color: #3b82f6;
       }
 
       .badge-claimed {
-        background: rgba(70, 209, 96, 0.2);
+        background: rgba(16, 185, 129, 0.1);
         color: var(--success-color);
-        border: 1px solid var(--success-color);
+        border-color: var(--success-color);
       }
 
       /* Item Content */
       .item-content {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 32px;
-        padding: 24px;
+        gap: 40px;
+        padding: 32px;
       }
 
       .item-image-section {
@@ -211,8 +242,9 @@
         width: 100%;
         height: 400px;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: 12px;
         border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
       }
 
       .no-image-placeholder {
@@ -224,13 +256,14 @@
         justify-content: center;
         background: var(--hover-bg);
         border: 2px dashed var(--border-color);
-        border-radius: 8px;
-        color: var(--text-secondary);
+        border-radius: 12px;
+        color: var(--text-muted);
       }
 
       .no-image-placeholder i {
-        font-size: 48px;
-        margin-bottom: 12px;
+        font-size: 64px;
+        margin-bottom: 16px;
+        opacity: 0.5;
       }
 
       .item-details-section {
@@ -239,49 +272,57 @@
         gap: 24px;
       }
 
-      .description-card {
+      .detail-card {
         background: var(--hover-bg);
-        padding: 20px;
-        border-radius: 8px;
+        padding: 24px;
+        border-radius: 12px;
         border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
       }
 
-      .description-title {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 12px;
+      .detail-card:hover {
+        border-color: var(--border-light);
+        box-shadow: var(--shadow-md);
+      }
+
+      .detail-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 16px;
         color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .detail-title i {
+        color: var(--primary-red);
       }
 
       .description-text {
         color: var(--text-secondary);
-        line-height: 1.6;
-      }
-
-      .posted-by-card {
-        background: var(--hover-bg);
-        padding: 20px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
+        line-height: 1.7;
+        font-size: 15px;
       }
 
       .user-info {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 16px;
       }
 
       .user-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
         object-fit: cover;
         border: 2px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
       }
 
       .user-details h4 {
-        font-size: 16px;
-        font-weight: 600;
+        font-size: 18px;
+        font-weight: 700;
         color: var(--text-primary);
         margin-bottom: 4px;
       }
@@ -289,6 +330,7 @@
       .user-details p {
         color: var(--text-secondary);
         font-size: 14px;
+        font-weight: 500;
       }
 
       /* Action Buttons */
@@ -299,26 +341,36 @@
       }
 
       .btn {
-        display: flex;
+        display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
-        padding: 12px 20px;
-        border-radius: 6px;
+        padding: 12px 24px;
+        border-radius: 8px;
         font-weight: 600;
+        font-size: 14px;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
         border: none;
-        font-size: 14px;
+        line-height: 1;
+        min-height: 44px;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
       }
 
       .btn-primary {
-        background: var(--reddit-orange);
+        background: var(--gradient-red);
         color: white;
+        border: 1px solid var(--primary-red);
       }
 
       .btn-primary:hover {
-        background: #e03e00;
+        background: var(--primary-red-dark);
+        border-color: var(--primary-red-dark);
       }
 
       .btn-secondary {
@@ -329,32 +381,44 @@
 
       .btn-secondary:hover {
         background: var(--border-color);
+        border-color: var(--border-light);
       }
 
       .btn-success {
         background: var(--success-color);
         color: white;
+        border: 1px solid var(--success-color);
       }
 
       .btn-success:hover {
-        background: #3cb050;
+        background: #059669;
+        border-color: #059669;
       }
 
       .btn-danger {
         background: var(--error-color);
         color: white;
+        border: 1px solid var(--error-color);
       }
 
       .btn-danger:hover {
-        background: #cc0020;
+        background: #dc2626;
+        border-color: #dc2626;
+      }
+
+      .btn-sm {
+        padding: 8px 16px;
+        font-size: 12px;
+        min-height: 36px;
       }
 
       /* Tabs */
       .tabs-container {
         background: var(--card-bg);
-        border-radius: 12px;
+        border-radius: 16px;
         border: 1px solid var(--border-color);
         overflow: hidden;
+        box-shadow: var(--shadow-lg);
       }
 
       .tabs-nav {
@@ -365,18 +429,28 @@
 
       .tab-btn {
         flex: 1;
-        padding: 16px 24px;
+        padding: 20px 32px;
         background: none;
         border: none;
         color: var(--text-secondary);
-        font-weight: 500;
+        font-weight: 600;
+        font-size: 16px;
         cursor: pointer;
         transition: all 0.2s ease;
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .tab-btn:hover {
+        color: var(--text-primary);
+        background: rgba(220, 38, 38, 0.05);
       }
 
       .tab-btn.active {
-        color: var(--reddit-orange);
+        color: var(--primary-red);
         background: var(--card-bg);
       }
 
@@ -386,12 +460,12 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: 2px;
-        background: var(--reddit-orange);
+        height: 3px;
+        background: var(--gradient-red);
       }
 
       .tab-content {
-        padding: 24px;
+        padding: 32px;
         display: none;
       }
 
@@ -406,109 +480,77 @@
 
       .comment-textarea {
         width: 100%;
-        min-height: 100px;
-        padding: 16px;
+        min-height: 120px;
+        padding: 20px;
         background: var(--hover-bg);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 12px;
         color: var(--text-primary);
         font-family: inherit;
+        font-size: 15px;
         resize: vertical;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
+        transition: border-color 0.2s ease;
       }
 
       .comment-textarea:focus {
         outline: none;
-        border-color: var(--reddit-orange);
+        border-color: var(--primary-red);
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
       }
 
       .comment-card {
         background: var(--hover-bg);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 16px;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        transition: all 0.2s ease;
+      }
+
+      .comment-card:hover {
+        border-color: var(--border-light);
+        box-shadow: var(--shadow-md);
       }
 
       .comment-header {
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
+        gap: 16px;
+        margin-bottom: 16px;
       }
 
       .comment-user {
-        font-weight: 600;
+        font-weight: 700;
         color: var(--text-primary);
+        font-size: 16px;
       }
 
       .comment-time {
-        color: var(--text-secondary);
-        font-size: 12px;
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 500;
       }
 
       .comment-content {
         color: var(--text-secondary);
-        line-height: 1.6;
+        line-height: 1.7;
+        font-size: 15px;
+        margin-bottom: 16px;
       }
 
       .comment-actions {
-        margin-top: 12px;
         display: flex;
         gap: 12px;
       }
 
       .comment-edit-form {
         display: none;
-        margin-top: 12px;
-      }
-
-      /* Requests */
-      .request-card {
-        background: var(--hover-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 16px;
-      }
-
-      .request-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-      }
-
-      .request-status {
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-      }
-
-      .status-pending {
-        background: rgba(255, 165, 0, 0.2);
-        color: var(--warning-color);
-        border: 1px solid var(--warning-color);
-      }
-
-      .status-approved {
-        background: rgba(70, 209, 96, 0.2);
-        color: var(--success-color);
-        border: 1px solid var(--success-color);
-      }
-
-      .status-rejected {
-        background: rgba(234, 0, 39, 0.2);
-        color: var(--error-color);
-        border: 1px solid var(--error-color);
-      }
-
-      .request-actions {
-        display: flex;
-        gap: 8px;
         margin-top: 16px;
+      }
+
+      .comment-edit-form .comment-textarea {
+        margin-bottom: 12px;
       }
 
       /* Modals */
@@ -524,29 +566,32 @@
         justify-content: center;
         z-index: 10000;
         padding: 20px;
+        backdrop-filter: blur(4px);
       }
 
       .modal {
         background: var(--card-bg);
-        border-radius: 12px;
+        border-radius: 16px;
         border: 1px solid var(--border-color);
         max-width: 500px;
         width: 100%;
         max-height: 90vh;
         overflow-y: auto;
+        box-shadow: var(--shadow-xl);
       }
 
       .modal-header {
-        padding: 20px 24px;
+        padding: 24px 32px;
         border-bottom: 1px solid var(--border-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background: var(--hover-bg);
       }
 
       .modal-title {
-        font-size: 18px;
-        font-weight: 600;
+        font-size: 20px;
+        font-weight: 700;
         color: var(--text-primary);
       }
 
@@ -554,100 +599,66 @@
         background: none;
         border: none;
         color: var(--text-secondary);
-        font-size: 20px;
+        font-size: 24px;
         cursor: pointer;
-        padding: 4px;
+        padding: 8px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
       }
 
       .modal-close:hover {
         color: var(--text-primary);
+        background: var(--border-color);
       }
 
       .modal-body {
-        padding: 24px;
+        padding: 32px;
       }
 
       .modal-footer {
-        padding: 20px 24px;
+        padding: 24px 32px;
         border-top: 1px solid var(--border-color);
         display: flex;
         gap: 12px;
         justify-content: flex-end;
+        background: var(--hover-bg);
       }
 
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
 
       .form-label {
         display: block;
         margin-bottom: 8px;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--text-primary);
+        font-size: 14px;
       }
 
       .form-input,
       .form-textarea {
         width: 100%;
-        padding: 12px 16px;
+        padding: 16px 20px;
         background: var(--hover-bg);
         border: 1px solid var(--border-color);
-        border-radius: 6px;
+        border-radius: 8px;
         color: var(--text-primary);
         font-family: inherit;
+        font-size: 15px;
+        transition: border-color 0.2s ease;
       }
 
       .form-input:focus,
       .form-textarea:focus {
         outline: none;
-        border-color: var(--reddit-orange);
+        border-color: var(--primary-red);
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
       }
 
       .form-textarea {
-        min-height: 80px;
+        min-height: 100px;
         resize: vertical;
-      }
-
-      .file-upload {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-      }
-
-      .file-input {
-        position: absolute;
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-      }
-
-      .file-upload-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 16px;
-        background: var(--hover-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        color: var(--text-primary);
-        transition: all 0.2s ease;
-      }
-
-      .file-upload:hover .file-upload-btn {
-        background: var(--border-color);
-      }
-
-      .image-preview {
-        margin-top: 12px;
-        display: none;
-      }
-
-      .preview-image {
-        max-width: 100%;
-        max-height: 200px;
-        border-radius: 6px;
-        border: 1px solid var(--border-color);
       }
 
       /* Loading */
@@ -655,15 +666,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px;
+        padding: 60px;
         color: var(--text-secondary);
+        font-weight: 500;
       }
 
       .spinner {
         width: 24px;
         height: 24px;
-        border: 2px solid var(--border-color);
-        border-top-color: var(--reddit-orange);
+        border: 3px solid var(--border-color);
+        border-top-color: var(--primary-red);
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-right: 12px;
@@ -675,16 +687,141 @@
         }
       }
 
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-secondary);
+      }
+
+      .empty-state i {
+        font-size: 64px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+        color: var(--primary-red);
+      }
+
+      .empty-state p {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      /* Contact Info */
+      .contact-info-card {
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.1) 0%,
+          transparent 100%
+        );
+        border: 1px solid var(--success-color);
+        border-radius: 12px;
+        padding: 24px;
+        margin-top: 24px;
+      }
+
+      .contact-info-title {
+        color: var(--success-color);
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .contact-item i {
+        color: var(--success-color);
+        width: 16px;
+      }
+
+      .contact-item strong {
+        color: var(--text-primary);
+        margin-right: 8px;
+      }
+
+      /* Request Cards */
+      .request-card {
+        background: var(--hover-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        transition: all 0.2s ease;
+      }
+
+      .request-card:hover {
+        border-color: var(--border-light);
+        box-shadow: var(--shadow-md);
+      }
+
+      .request-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .request-status {
+        padding: 6px 16px;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 2px solid;
+      }
+
+      .status-pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning-color);
+        border-color: var(--warning-color);
+      }
+
+      .status-approved {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success-color);
+        border-color: var(--success-color);
+      }
+
+      .status-rejected {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--error-color);
+        border-color: var(--error-color);
+      }
+
+      .request-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
       /* Responsive */
       @media (max-width: 768px) {
         .main-container {
-          margin-top: 70px;
-          padding: 0 8px;
+          margin-top: 80px;
+          padding: 0 16px;
         }
 
         .item-content {
           grid-template-columns: 1fr;
-          gap: 20px;
+          gap: 24px;
+          padding: 24px;
+        }
+
+        .item-header {
+          padding: 24px;
+        }
+
+        .item-title {
+          font-size: 24px;
         }
 
         .item-meta {
@@ -697,6 +834,10 @@
           flex-direction: column;
         }
 
+        .tab-btn {
+          padding: 16px 24px;
+        }
+
         .action-buttons {
           flex-direction: column;
         }
@@ -705,47 +846,47 @@
           margin: 20px;
           max-width: none;
         }
+
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+          padding: 20px 24px;
+        }
+
+        .nav-actions {
+          gap: 8px;
+        }
+
+        .nav-btn {
+          padding: 8px 12px;
+          font-size: 13px;
+        }
+
+        .nav-btn span {
+          display: none;
+        }
       }
 
-      .empty-state {
-        text-align: center;
-        padding: 40px 20px;
-        color: var(--text-secondary);
-      }
+      @media (max-width: 480px) {
+        .header-content {
+          padding: 0 16px;
+        }
 
-      .empty-state i {
-        font-size: 48px;
-        margin-bottom: 16px;
-        opacity: 0.5;
-      }
+        .logo-text {
+          font-size: 18px;
+        }
 
-      .contact-info-card {
-        background: var(--hover-bg);
-        border: 1px solid var(--success-color);
-        border-radius: 8px;
-        padding: 20px;
-        margin-top: 16px;
-      }
+        .item-title {
+          font-size: 20px;
+        }
 
-      .contact-info-title {
-        color: var(--success-color);
-        font-weight: 600;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
+        .detail-card {
+          padding: 20px;
+        }
 
-      .contact-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-        color: var(--text-secondary);
-      }
-
-      .contact-item strong {
-        color: var(--text-primary);
+        .tab-content {
+          padding: 24px;
+        }
       }
     </style>
   </head>
@@ -816,8 +957,8 @@
           <!-- Details Section -->
           <div class="item-details-section">
             <!-- Description -->
-            <div class="description-card">
-              <h3 class="description-title">
+            <div class="detail-card">
+              <h3 class="detail-title">
                 <i class="fas fa-align-left"></i>
                 Description
               </h3>
@@ -825,8 +966,8 @@
             </div>
 
             <!-- Posted By -->
-            <div class="posted-by-card">
-              <h3 class="description-title">
+            <div class="detail-card">
+              <h3 class="detail-title">
                 <i class="fas fa-user"></i>
                 Posted By
               </h3>
@@ -973,24 +1114,26 @@
           </div>
           <div class="form-group">
             <label class="form-label">Image (Optional)</label>
-            <div class="file-upload">
-              <input
-                type="file"
-                id="informImage"
-                class="file-input"
-                accept="image/*"
-              />
-              <div class="file-upload-btn">
-                <i class="fas fa-camera"></i>
-                <span>Upload Image</span>
-              </div>
-            </div>
-            <div id="informImagePreview" class="image-preview">
+            <input
+              type="file"
+              id="informImage"
+              class="form-input"
+              accept="image/*"
+            />
+            <div
+              id="informImagePreview"
+              style="display: none; margin-top: 12px"
+            >
               <img
                 id="informPreviewImage"
                 src=""
                 alt="Preview"
-                class="preview-image"
+                style="
+                  max-width: 100%;
+                  max-height: 200px;
+                  border-radius: 8px;
+                  border: 1px solid var(--border-color);
+                "
               />
             </div>
           </div>
@@ -1157,7 +1300,7 @@
           }
         }
         return (
-          "https://via.placeholder.com/48x48/1a1a1b/d7dadc?text=" +
+          "https://via.placeholder.com/56x56/1a1a1a/f5f5f5?text=" +
           user.firstName.charAt(0).toUpperCase() +
           user.lastName.charAt(0).toUpperCase()
         );
@@ -1296,7 +1439,7 @@
         postedByAvatarEl.src = avatarUrl;
         postedByAvatarEl.onerror = function () {
           this.src =
-            "https://via.placeholder.com/48x48/1a1a1b/d7dadc?text=" +
+            "https://via.placeholder.com/56x56/1a1a1a/f5f5f5?text=" +
             currentItem.postedBy.firstName.charAt(0).toUpperCase() +
             currentItem.postedBy.lastName.charAt(0).toUpperCase();
         };
@@ -1398,8 +1541,8 @@
                         <div class="comment-header">
                             <img src="${avatarUrl}" alt="${
               comment.postedBy.firstName
-            }" class="user-avatar" style="width: 32px; height: 32px;" 
-                                 onerror="this.src='https://via.placeholder.com/32x32/1a1a1b/d7dadc?text=${comment.postedBy.firstName
+            }" class="user-avatar" style="width: 40px; height: 40px;" 
+                                 onerror="this.src='https://via.placeholder.com/40x40/1a1a1a/f5f5f5?text=${comment.postedBy.firstName
                                    .charAt(0)
                                    .toUpperCase()}${comment.postedBy.lastName
               .charAt(0)
@@ -1482,17 +1625,14 @@
         }
 
         try {
-          const response = await fetch(
-            `/api/items/${currentItem._id}/comments/${commentId}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-              body: JSON.stringify({ content }),
-            }
-          );
+          const response = await fetch(`/api/comments/${commentId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ content }),
+          });
 
           if (!response.ok) throw new Error("Failed to update comment");
 
@@ -1508,15 +1648,12 @@
         if (!confirm("Are you sure you want to delete this comment?")) return;
 
         try {
-          const response = await fetch(
-            `/api/items/${currentItem._id}/comments/${commentId}`,
-            {
-              method: "DELETE",
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
+          const response = await fetch(`/api/comments/${commentId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
 
           if (!response.ok) throw new Error("Failed to delete comment");
 
@@ -1589,8 +1726,8 @@
                             <div class="user-info">
                                 <img src="${avatarUrl}" alt="${
               user.firstName
-            }" class="user-avatar" style="width: 40px; height: 40px;"
-                                     onerror="this.src='https://via.placeholder.com/40x40/1a1a1b/d7dadc?text=${user.firstName
+            }" class="user-avatar" style="width: 48px; height: 48px;"
+                                     onerror="this.src='https://via.placeholder.com/48x48/1a1a1a/f5f5f5?text=${user.firstName
                                        .charAt(0)
                                        .toUpperCase()}${user.lastName
               .charAt(0)
@@ -1610,15 +1747,15 @@
                             ? `
                             <div style="margin: 16px 0;">
                                 <strong>Answers to Verification Questions:</strong>
-                                <div style="margin-top: 8px;">
+                                <div style="margin-top: 12px;">
                                     ${currentItem.validityQuestions
                                       .map(
                                         (question, index) => `
-                                        <div style="margin-bottom: 12px; padding: 12px; background: var(--dark-bg); border-radius: 6px;">
+                                        <div style="margin-bottom: 12px; padding: 16px; background: var(--dark-bg); border-radius: 8px; border: 1px solid var(--border-color);">
                                             <strong>Q${index + 1}: ${
                                           question.question
                                         }</strong><br>
-                                            <span style="color: var(--text-secondary);">A: ${
+                                            <span style="color: var(--text-secondary); margin-top: 8px; display: block;">A: ${
                                               request.answers[index] ||
                                               "No answer provided"
                                             }</span>
@@ -1637,7 +1774,7 @@
                             ? `
                             <div style="margin: 16px 0;">
                                 <strong>Message:</strong>
-                                <p style="margin-top: 8px; color: var(--text-secondary);">${request.message}</p>
+                                <p style="margin-top: 8px; color: var(--text-secondary); line-height: 1.6;">${request.message}</p>
                             </div>
                         `
                             : ""
@@ -1648,7 +1785,7 @@
                             ? `
                             <div style="margin: 16px 0;">
                                 <strong>Additional Information:</strong>
-                                <p style="margin-top: 8px; color: var(--text-secondary);">${request.additionalInfo}</p>
+                                <p style="margin-top: 8px; color: var(--text-secondary); line-height: 1.6;">${request.additionalInfo}</p>
                             </div>
                         `
                             : ""
@@ -1659,7 +1796,7 @@
                             ? `
                             <div style="margin: 16px 0;">
                                 <strong>Attached Image:</strong>
-                                <img src="${request.image}" alt="Request image" style="max-width: 100%; max-height: 200px; border-radius: 6px; margin-top: 8px;">
+                                <img src="${request.image}" alt="Request image" style="max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 8px; border: 1px solid var(--border-color);">
                             </div>
                         `
                             : ""

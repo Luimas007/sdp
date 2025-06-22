@@ -17,52 +17,46 @@
 
     <style>
       :root {
-        /* Enhanced Color Palette */
-        --reddit-dark: #0b1426;
-        --reddit-darker: #030712;
-        --reddit-card: #1a1a1b;
-        --reddit-card-hover: #272729;
-        --reddit-orange: #ff4500;
-        --reddit-orange-hover: #ff5722;
-        --reddit-blue: #0079d3;
-        --reddit-blue-hover: #1484d6;
-        --reddit-text: #d7dadc;
-        --reddit-text-secondary: #818384;
-        --reddit-border: #343536;
-        --reddit-accent: #46d39c;
-        --reddit-purple: #7c3aed;
-        --reddit-red: #ef4444;
-        --reddit-green: #10b981;
-        --reddit-yellow: #f59e0b;
+        /* Professional Color Palette */
+        --primary-dark: #0a0a0a;
+        --primary-darker: #000000;
+        --card-bg: #111111;
+        --card-hover: #1a1a1a;
+        --accent-orange: #ff4500;
+        --accent-orange-hover: #ff5722;
+        --accent-blue: #0078d4;
+        --accent-blue-hover: #106ebe;
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0a0;
+        --text-muted: #666666;
+        --border-color: #333333;
+        --border-accent: #444444;
+        --success-color: #00d26a;
+        --warning-color: #ffb900;
+        --error-color: #d13438;
+        --purple-color: #8b5cf6;
 
-        /* Enhanced Gradients */
-        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --gradient-reddit: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
-        --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        --gradient-purple: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-        --gradient-card: linear-gradient(145deg, #1a1a1b 0%, #2d2d30 100%);
-        --gradient-glass: linear-gradient(
-          145deg,
-          rgba(255, 255, 255, 0.1) 0%,
-          rgba(255, 255, 255, 0.05) 100%
-        );
+        /* Professional Gradients */
+        --gradient-primary: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+        --gradient-dark: linear-gradient(135deg, #111111 0%, #1a1a1a 100%);
+        --gradient-success: linear-gradient(135deg, #00d26a 0%, #00b359 100%);
+        --gradient-error: linear-gradient(135deg, #d13438 0%, #b91c1c 100%);
+        --gradient-warning: linear-gradient(135deg, #ffb900 0%, #f59e0b 100%);
+        --gradient-purple: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
 
-        /* Enhanced Shadows */
-        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-        --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+        /* Professional Shadows */
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+        --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
         --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
-        --shadow-reddit: 0 8px 32px rgba(255, 69, 0, 0.2);
-        --shadow-glow: 0 0 20px rgba(255, 69, 0, 0.3);
-        --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        --shadow-accent: 0 8px 32px rgba(255, 69, 0, 0.3);
+        --shadow-glow: 0 0 30px rgba(255, 69, 0, 0.4);
 
         /* Animation Variables */
-        --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       * {
@@ -73,103 +67,73 @@
 
       body {
         font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-        background: var(--reddit-darker);
-        color: var(--reddit-text);
+        background: var(--primary-dark);
+        color: var(--text-primary);
         line-height: 1.6;
         overflow-x: hidden;
-        scroll-behavior: smooth;
       }
 
       /* Enhanced Scrollbar */
       ::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
       }
 
       ::-webkit-scrollbar-track {
-        background: var(--reddit-darker);
-        border-radius: 5px;
+        background: var(--primary-darker);
       }
 
       ::-webkit-scrollbar-thumb {
-        background: var(--gradient-reddit);
-        border-radius: 5px;
-        border: 2px solid var(--reddit-darker);
+        background: var(--gradient-primary);
+        border-radius: 0;
       }
 
       ::-webkit-scrollbar-thumb:hover {
-        background: var(--reddit-orange-hover);
+        background: var(--accent-orange-hover);
       }
 
-      /* Enhanced Animated Background */
-      .animated-bg {
+      /* Professional Background */
+      .professional-bg {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         z-index: -1;
-        background: radial-gradient(ellipse at top, #0b1426 0%, #030712 100%);
+        background: radial-gradient(ellipse at top, #0a0a0a 0%, #000000 100%);
         overflow: hidden;
       }
 
-      .animated-bg::before {
+      .professional-bg::before {
         content: "";
         position: absolute;
         top: 0;
         left: 0;
-        width: 200%;
-        height: 200%;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.5" fill="rgba(255,69,0,0.1)"/><circle cx="75" cy="75" r="0.5" fill="rgba(255,69,0,0.05)"/><circle cx="50" cy="10" r="0.3" fill="rgba(255,69,0,0.08)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-        animation: float 30s ease-in-out infinite;
-        opacity: 0.3;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent 50%,
+            rgba(255, 69, 0, 0.02) 50%
+          ),
+          linear-gradient(0deg, transparent 50%, rgba(255, 69, 0, 0.02) 50%);
+        background-size: 100px 100px;
+        animation: grid-move 20s linear infinite;
       }
 
-      .animated-bg::after {
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: conic-gradient(
-          from 0deg at 50% 50%,
-          transparent 0deg,
-          rgba(255, 69, 0, 0.03) 90deg,
-          transparent 180deg,
-          rgba(255, 69, 0, 0.03) 270deg,
-          transparent 360deg
-        );
-        animation: rotate 60s linear infinite;
-      }
-
-      @keyframes float {
-        0%,
+      @keyframes grid-move {
+        0% {
+          transform: translate(0, 0);
+        }
         100% {
-          transform: translateY(0px) rotate(0deg);
-        }
-        33% {
-          transform: translateY(-10px) rotate(1deg);
-        }
-        66% {
-          transform: translateY(5px) rotate(-1deg);
+          transform: translate(100px, 100px);
         }
       }
 
-      @keyframes rotate {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* Enhanced Navigation */
+      /* Professional Navigation */
       .nav-container {
-        background: rgba(11, 20, 38, 0.95);
+        background: rgba(0, 0, 0, 0.95);
         backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--reddit-border);
+        border-bottom: 1px solid var(--border-color);
         box-shadow: var(--shadow-lg);
         transition: var(--transition-normal);
         position: fixed;
@@ -180,31 +144,29 @@
 
       .nav-hidden {
         transform: translateY(-100%);
-        opacity: 0.8;
       }
 
       .nav-brand {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 16px;
         text-decoration: none;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         transition: var(--transition-normal);
       }
 
       .nav-brand:hover {
-        transform: translateY(-2px);
+        transform: translateY(-1px);
       }
 
       .nav-logo {
         width: 48px;
         height: 48px;
-        background: var(--gradient-reddit);
-        border-radius: 12px;
+        background: var(--gradient-primary);
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: var(--shadow-reddit);
+        box-shadow: var(--shadow-accent);
         transition: var(--transition-normal);
         position: relative;
         overflow: hidden;
@@ -231,7 +193,7 @@
       }
 
       .nav-logo:hover {
-        transform: scale(1.1) rotate(5deg);
+        transform: scale(1.05);
         box-shadow: var(--shadow-glow);
       }
 
@@ -244,11 +206,11 @@
       .nav-title {
         font-size: 24px;
         font-weight: 800;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         background: linear-gradient(
           135deg,
-          var(--reddit-text) 0%,
-          var(--reddit-orange) 100%
+          var(--text-primary) 0%,
+          var(--accent-orange) 100%
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -257,11 +219,13 @@
 
       .nav-subtitle {
         font-size: 12px;
-        color: var(--reddit-text-secondary);
-        font-weight: 400;
+        color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
 
-      /* Enhanced Buttons */
+      /* Professional Buttons */
       .btn {
         display: inline-flex;
         align-items: center;
@@ -270,14 +234,14 @@
         padding: 12px 24px;
         font-weight: 600;
         text-decoration: none;
-        border-radius: 12px;
+        border: none;
         transition: var(--transition-normal);
         cursor: pointer;
-        border: none;
         font-size: 14px;
         position: relative;
         overflow: hidden;
-        backdrop-filter: blur(10px);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .btn::before {
@@ -301,63 +265,59 @@
       }
 
       .btn-primary {
-        background: var(--gradient-reddit);
+        background: var(--gradient-primary);
         color: white;
-        box-shadow: var(--shadow-reddit);
-        border: 1px solid rgba(255, 69, 0, 0.3);
+        box-shadow: var(--shadow-accent);
       }
 
       .btn-primary:hover {
-        transform: translateY(-3px) scale(1.05);
+        transform: translateY(-2px) scale(1.02);
         box-shadow: 0 15px 45px rgba(255, 69, 0, 0.4);
       }
 
       .btn-secondary {
-        background: var(--gradient-glass);
-        color: var(--reddit-text);
-        border: 1px solid var(--reddit-border);
-        backdrop-filter: blur(10px);
+        background: var(--gradient-dark);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
       }
 
       .btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: var(--reddit-orange);
-        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-orange);
+        transform: translateY(-1px);
         box-shadow: var(--shadow-lg);
       }
 
       .btn-success {
         background: var(--gradient-success);
         color: white;
-        box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 210, 106, 0.2);
       }
 
       .btn-success:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 15px 45px rgba(16, 185, 129, 0.4);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 15px 45px rgba(0, 210, 106, 0.4);
       }
 
       .btn-warning {
         background: var(--gradient-warning);
         color: white;
-        box-shadow: 0 8px 32px rgba(245, 158, 11, 0.2);
+        box-shadow: 0 8px 32px rgba(255, 185, 0, 0.2);
       }
 
       .btn-warning:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 15px 45px rgba(245, 158, 11, 0.4);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 15px 45px rgba(255, 185, 0, 0.4);
       }
 
-      /* Enhanced Cards */
+      /* Professional Cards */
       .card {
-        background: var(--gradient-card);
-        border: 1px solid var(--reddit-border);
-        border-radius: 20px;
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
         box-shadow: var(--shadow-lg);
         transition: var(--transition-normal);
         overflow: hidden;
         position: relative;
-        backdrop-filter: blur(10px);
       }
 
       .card::before {
@@ -367,22 +327,22 @@
         left: 0;
         right: 0;
         height: 2px;
-        background: var(--gradient-reddit);
+        background: var(--gradient-primary);
         opacity: 0;
         transition: opacity 0.3s ease;
       }
 
       .card:hover {
-        transform: translateY(-10px) scale(1.02);
+        transform: translateY(-8px) scale(1.01);
         box-shadow: var(--shadow-2xl);
-        border-color: rgba(255, 69, 0, 0.5);
+        border-color: var(--accent-orange);
       }
 
       .card:hover::before {
         opacity: 1;
       }
 
-      /* Enhanced Stats Cards */
+      /* Professional Stats Cards */
       .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -391,16 +351,14 @@
       }
 
       .stat-card {
-        background: var(--gradient-card);
-        border: 1px solid var(--reddit-border);
-        border-radius: 20px;
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
         padding: 32px;
         text-align: center;
         transition: var(--transition-normal);
         position: relative;
         overflow: hidden;
         cursor: pointer;
-        backdrop-filter: blur(10px);
       }
 
       .stat-card::before {
@@ -422,7 +380,7 @@
         height: 100%;
         background: radial-gradient(
           circle at center,
-          rgba(255, 69, 0, 0.1) 0%,
+          rgba(255, 69, 0, 0.05) 0%,
           transparent 70%
         );
         opacity: 0;
@@ -430,10 +388,10 @@
       }
 
       .stat-card.total::before {
-        background: var(--gradient-reddit);
+        background: var(--gradient-primary);
       }
       .stat-card.lost::before {
-        background: var(--gradient-danger);
+        background: var(--gradient-error);
       }
       .stat-card.found::before {
         background: var(--gradient-success);
@@ -441,11 +399,14 @@
       .stat-card.reunited::before {
         background: var(--gradient-purple);
       }
+      .stat-card.users::before {
+        background: var(--gradient-warning);
+      }
 
       .stat-card:hover {
-        transform: translateY(-15px) scale(1.05);
+        transform: translateY(-12px) scale(1.03);
         box-shadow: var(--shadow-2xl);
-        border-color: rgba(255, 69, 0, 0.5);
+        border-color: var(--accent-orange);
       }
 
       .stat-card:hover::after {
@@ -455,7 +416,6 @@
       .stat-icon {
         width: 80px;
         height: 80px;
-        border-radius: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -488,10 +448,10 @@
       }
 
       .stat-card.total .stat-icon {
-        background: var(--gradient-reddit);
+        background: var(--gradient-primary);
       }
       .stat-card.lost .stat-icon {
-        background: var(--gradient-danger);
+        background: var(--gradient-error);
       }
       .stat-card.found .stat-icon {
         background: var(--gradient-success);
@@ -499,43 +459,44 @@
       .stat-card.reunited .stat-icon {
         background: var(--gradient-purple);
       }
+      .stat-card.users .stat-icon {
+        background: var(--gradient-warning);
+      }
 
       .stat-card:hover .stat-icon {
-        transform: scale(1.1) rotate(10deg);
+        transform: scale(1.1) rotate(5deg);
       }
 
       .stat-number {
         font-size: 56px;
         font-weight: 900;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         margin-bottom: 8px;
         transition: var(--transition-normal);
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       }
 
       .stat-card:hover .stat-number {
         transform: scale(1.1);
-        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
       }
 
       .stat-label {
         font-size: 16px;
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1px;
       }
 
-      /* Enhanced Search Section */
+      /* Professional Search Section */
       .search-container {
-        background: var(--gradient-card);
-        border: 1px solid var(--reddit-border);
-        border-radius: 24px;
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
         padding: 40px;
         margin-bottom: 48px;
         box-shadow: var(--shadow-lg);
         transition: var(--transition-normal);
-        backdrop-filter: blur(10px);
         position: relative;
         overflow: hidden;
       }
@@ -549,7 +510,7 @@
         height: 100%;
         background: radial-gradient(
           circle at top right,
-          rgba(255, 69, 0, 0.05) 0%,
+          rgba(255, 69, 0, 0.03) 0%,
           transparent 50%
         );
         pointer-events: none;
@@ -557,8 +518,8 @@
 
       .search-container:hover {
         box-shadow: var(--shadow-xl);
-        transform: translateY(-5px);
-        border-color: rgba(255, 69, 0, 0.3);
+        transform: translateY(-2px);
+        border-color: var(--accent-orange);
       }
 
       .search-input-group {
@@ -570,24 +531,22 @@
         width: 100%;
         padding: 20px 24px 20px 64px;
         background: rgba(255, 255, 255, 0.05);
-        border: 2px solid var(--reddit-border);
-        border-radius: 16px;
-        color: var(--reddit-text);
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
         font-size: 18px;
         transition: var(--transition-normal);
-        backdrop-filter: blur(10px);
       }
 
       .search-input:focus {
         outline: none;
-        border-color: var(--reddit-orange);
+        border-color: var(--accent-orange);
         box-shadow: 0 0 0 6px rgba(255, 69, 0, 0.1);
         background: rgba(255, 255, 255, 0.1);
-        transform: scale(1.02);
+        transform: scale(1.01);
       }
 
       .search-input::placeholder {
-        color: var(--reddit-text-secondary);
+        color: var(--text-muted);
       }
 
       .search-icon {
@@ -595,17 +554,17 @@
         left: 24px;
         top: 50%;
         transform: translateY(-50%);
-        color: var(--reddit-text-secondary);
+        color: var(--text-muted);
         font-size: 20px;
         transition: var(--transition-normal);
       }
 
       .search-input:focus + .search-icon {
-        color: var(--reddit-orange);
+        color: var(--accent-orange);
         transform: translateY(-50%) scale(1.1);
       }
 
-      /* Enhanced Filter Buttons */
+      /* Professional Filter Buttons */
       .filter-buttons {
         display: flex;
         flex-wrap: wrap;
@@ -615,20 +574,20 @@
 
       .filter-btn {
         padding: 16px 32px;
-        background: var(--gradient-glass);
-        border: 2px solid var(--reddit-border);
-        border-radius: 16px;
-        color: var(--reddit-text);
+        background: var(--gradient-dark);
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
         font-weight: 600;
         cursor: pointer;
         transition: var(--transition-normal);
         position: relative;
         overflow: hidden;
-        backdrop-filter: blur(10px);
         display: flex;
         align-items: center;
         gap: 12px;
         font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .filter-btn::before {
@@ -638,29 +597,29 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: var(--gradient-reddit);
+        background: var(--gradient-primary);
         opacity: 0;
         transition: opacity 0.3s ease;
         z-index: -1;
       }
 
       .filter-btn:hover {
-        transform: translateY(-3px) scale(1.05);
+        transform: translateY(-2px) scale(1.02);
         box-shadow: var(--shadow-lg);
-        border-color: var(--reddit-orange);
+        border-color: var(--accent-orange);
       }
 
       .filter-btn.active {
-        border-color: var(--reddit-orange);
+        border-color: var(--accent-orange);
         color: white;
-        box-shadow: var(--shadow-reddit);
+        box-shadow: var(--shadow-accent);
       }
 
       .filter-btn.active::before {
         opacity: 1;
       }
 
-      /* Enhanced Items Grid */
+      /* Professional Items Grid */
       .items-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -669,14 +628,24 @@
       }
 
       .item-card {
-        background: var(--gradient-card);
-        border: 1px solid var(--reddit-border);
-        border-radius: 20px;
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
         overflow: hidden;
         transition: var(--transition-normal);
         cursor: pointer;
         position: relative;
-        backdrop-filter: blur(10px);
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .item-card::before {
@@ -686,15 +655,15 @@
         left: 0;
         right: 0;
         height: 3px;
-        background: var(--gradient-reddit);
+        background: var(--gradient-primary);
         transform: scaleX(0);
         transition: transform 0.3s ease;
       }
 
       .item-card:hover {
-        transform: translateY(-15px) scale(1.03);
+        transform: translateY(-12px) scale(1.02);
         box-shadow: var(--shadow-2xl);
-        border-color: rgba(255, 69, 0, 0.5);
+        border-color: var(--accent-orange);
       }
 
       .item-card:hover::before {
@@ -723,13 +692,13 @@
         height: 100%;
         background: linear-gradient(
           135deg,
-          var(--reddit-card) 0%,
-          var(--reddit-card-hover) 100%
+          var(--card-bg) 0%,
+          var(--card-hover) 100%
         );
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--reddit-text-secondary);
+        color: var(--text-muted);
         font-size: 48px;
       }
 
@@ -745,7 +714,6 @@
 
       .item-type {
         padding: 8px 16px;
-        border-radius: 25px;
         font-size: 12px;
         font-weight: 700;
         text-transform: uppercase;
@@ -755,27 +723,28 @@
       }
 
       .item-type.lost {
-        background: var(--gradient-danger);
+        background: var(--gradient-error);
         color: white;
-        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+        box-shadow: 0 4px 16px rgba(209, 52, 56, 0.3);
       }
 
       .item-type.found {
         background: var(--gradient-success);
         color: white;
-        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 4px 16px rgba(0, 210, 106, 0.3);
       }
 
       .item-status {
         padding: 8px 16px;
-        border-radius: 25px;
         font-size: 12px;
         font-weight: 700;
         background: var(--gradient-purple);
         color: white;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .item-content {
@@ -785,13 +754,13 @@
       .item-title {
         font-size: 22px;
         font-weight: 700;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         margin-bottom: 12px;
         line-height: 1.3;
       }
 
       .item-description {
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
         margin-bottom: 20px;
         line-height: 1.6;
         display: -webkit-box;
@@ -805,9 +774,9 @@
         justify-content: space-between;
         align-items: center;
         font-size: 14px;
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
         padding-top: 16px;
-        border-top: 1px solid var(--reddit-border);
+        border-top: 1px solid var(--border-color);
       }
 
       .item-location {
@@ -821,7 +790,54 @@
         font-weight: 500;
       }
 
-      /* Enhanced Profile Section */
+      /* Image Preview Modal */
+      .image-preview {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        z-index: 1000;
+        max-width: 90vw;
+        max-height: 90vh;
+        transition: var(--transition-normal);
+        opacity: 0;
+        pointer-events: none;
+        border: 2px solid var(--accent-orange);
+        box-shadow: var(--shadow-2xl);
+      }
+
+      .image-preview.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: var(--primary-dark);
+      }
+
+      .image-preview-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: var(--transition-normal);
+      }
+
+      .image-preview-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Professional Profile Section */
       .profile-section {
         display: flex;
         align-items: center;
@@ -833,28 +849,25 @@
         align-items: center;
         gap: 12px;
         text-decoration: none;
-        color: var(--reddit-text);
-        background: var(--gradient-glass);
+        color: var(--text-primary);
+        background: var(--gradient-dark);
         padding: 12px 16px;
-        border-radius: 16px;
-        border: 1px solid var(--reddit-border);
+        border: 1px solid var(--border-color);
         transition: var(--transition-normal);
-        backdrop-filter: blur(10px);
       }
 
       .profile-link:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: var(--reddit-orange);
-        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-orange);
+        transform: translateY(-1px);
         box-shadow: var(--shadow-lg);
       }
 
       .profile-avatar {
         width: 44px;
         height: 44px;
-        border-radius: 50%;
         object-fit: cover;
-        border: 2px solid var(--reddit-border);
+        border: 2px solid var(--border-color);
         position: relative;
         transition: var(--transition-normal);
       }
@@ -866,14 +879,13 @@
         right: -2px;
         width: 14px;
         height: 14px;
-        background: var(--reddit-green);
-        border: 3px solid var(--reddit-card);
-        border-radius: 50%;
+        background: var(--success-color);
+        border: 3px solid var(--card-bg);
       }
 
       .profile-link:hover .profile-avatar {
         transform: scale(1.1);
-        border-color: var(--reddit-orange);
+        border-color: var(--accent-orange);
       }
 
       .profile-info {
@@ -889,10 +901,12 @@
 
       .profile-label {
         font-size: 12px;
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
-      /* Enhanced Section Headers */
+      /* Professional Section Headers */
       .section-header {
         display: flex;
         justify-content: space-between;
@@ -903,7 +917,7 @@
       .section-title {
         font-size: 36px;
         font-weight: 800;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         display: flex;
         align-items: center;
         gap: 20px;
@@ -912,34 +926,33 @@
       .section-accent {
         width: 6px;
         height: 40px;
-        background: var(--gradient-reddit);
-        border-radius: 3px;
+        background: var(--gradient-primary);
         box-shadow: 0 0 20px rgba(255, 69, 0, 0.3);
       }
 
       .view-all-btn {
-        background: var(--gradient-glass);
-        border: 1px solid var(--reddit-border);
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
         padding: 14px 24px;
-        border-radius: 12px;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         text-decoration: none;
         font-weight: 600;
         display: flex;
         align-items: center;
         gap: 10px;
         transition: var(--transition-normal);
-        backdrop-filter: blur(10px);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .view-all-btn:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: var(--reddit-orange);
-        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-orange);
+        transform: translateY(-1px);
         box-shadow: var(--shadow-lg);
       }
 
-      /* Enhanced Hero Section */
+      /* Professional Hero Section */
       .hero-section {
         text-align: center;
         margin-bottom: 80px;
@@ -950,44 +963,71 @@
       .hero-title {
         font-size: clamp(48px, 8vw, 84px);
         font-weight: 900;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         margin-bottom: 24px;
         line-height: 1.1;
         background: linear-gradient(
           135deg,
-          var(--reddit-text) 0%,
-          var(--reddit-orange) 50%,
-          var(--reddit-purple) 100%
+          var(--text-primary) 0%,
+          var(--accent-orange) 50%,
+          var(--purple-color) 100%
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
       }
 
       .hero-subtitle {
         font-size: clamp(20px, 4vw, 28px);
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
         margin-bottom: 20px;
-        font-weight: 400;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 2px;
       }
 
       .hero-description {
         font-size: 20px;
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
         max-width: 700px;
         margin: 0 auto;
         line-height: 1.6;
       }
 
+      /* Total Users Display */
+      .users-count {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 32px;
+        padding: 16px 32px;
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
+        display: inline-flex;
+        font-weight: 600;
+        color: var(--text-primary);
+        transition: var(--transition-normal);
+      }
+
+      .users-count:hover {
+        border-color: var(--accent-orange);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .users-count-icon {
+        color: var(--accent-orange);
+        font-size: 18px;
+      }
+
       /* Reunited Logs Section */
       .reunited-logs {
-        background: var(--gradient-card);
-        border: 1px solid var(--reddit-border);
-        border-radius: 24px;
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
         padding: 40px;
         margin-bottom: 48px;
-        backdrop-filter: blur(10px);
         display: none;
       }
 
@@ -1008,9 +1048,8 @@
       }
 
       .log-item {
-        background: var(--gradient-glass);
-        border: 1px solid var(--reddit-border);
-        border-radius: 16px;
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
         padding: 24px;
         margin-bottom: 20px;
         transition: var(--transition-normal);
@@ -1034,7 +1073,7 @@
       .log-item:hover {
         transform: translateY(-4px);
         box-shadow: var(--shadow-lg);
-        border-color: var(--reddit-orange);
+        border-color: var(--accent-orange);
       }
 
       .log-item:hover::before {
@@ -1053,7 +1092,7 @@
       .log-title {
         font-size: 20px;
         font-weight: 700;
-        color: var(--reddit-text);
+        color: var(--text-primary);
         display: flex;
         align-items: center;
         gap: 12px;
@@ -1063,21 +1102,19 @@
 
       .log-date {
         font-size: 14px;
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
         background: rgba(255, 255, 255, 0.05);
         padding: 6px 12px;
-        border-radius: 8px;
         white-space: nowrap;
       }
 
       .log-details {
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
         line-height: 1.6;
         margin-bottom: 20px;
         background: rgba(255, 255, 255, 0.03);
         padding: 16px;
-        border-radius: 12px;
-        border-left: 4px solid var(--reddit-orange);
+        border-left: 4px solid var(--accent-orange);
       }
 
       .log-participants {
@@ -1093,8 +1130,7 @@
         gap: 8px;
         padding: 10px 16px;
         background: rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        border: 1px solid var(--reddit-border);
+        border: 1px solid var(--border-color);
         transition: var(--transition-normal);
         flex: 1;
         min-width: 200px;
@@ -1102,39 +1138,38 @@
 
       .participant:hover {
         background: rgba(255, 255, 255, 0.12);
-        border-color: var(--reddit-orange);
+        border-color: var(--accent-orange);
       }
 
       .participant i {
-        color: var(--reddit-orange);
+        color: var(--accent-orange);
         font-size: 16px;
       }
 
       .participant-role {
         font-weight: 600;
-        color: var(--reddit-text);
+        color: var(--text-primary);
       }
 
       .participant-name {
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
       }
 
-      /* Enhanced Loading States */
+      /* Professional Loading States */
       .loading {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 80px 32px;
-        color: var(--reddit-text-secondary);
+        color: var(--text-secondary);
       }
 
       .spinner {
         width: 56px;
         height: 56px;
-        border: 5px solid var(--reddit-border);
-        border-top: 5px solid var(--reddit-orange);
-        border-radius: 50%;
+        border: 5px solid var(--border-color);
+        border-top: 5px solid var(--accent-orange);
         animation: spin 1s linear infinite;
         margin-bottom: 20px;
       }
@@ -1148,20 +1183,18 @@
         }
       }
 
-      /* Enhanced Toast Notifications */
+      /* Professional Toast Notifications */
       .toast {
         position: fixed;
         bottom: 32px;
         right: 32px;
         padding: 20px 28px;
-        border-radius: 16px;
         color: white;
         font-weight: 600;
         box-shadow: var(--shadow-xl);
         transform: translateX(400px);
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1000;
-        backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         max-width: 400px;
       }
@@ -1175,14 +1208,178 @@
       }
 
       .toast.error {
-        background: var(--gradient-danger);
+        background: var(--gradient-error);
       }
 
       .toast.warning {
         background: var(--gradient-warning);
       }
 
-      /* Enhanced Responsive Design */
+      /* Tab Navigation */
+      .tab-navigation {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 32px;
+        background: var(--gradient-dark);
+        padding: 8px;
+        border: 1px solid var(--border-color);
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 16px 24px;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition-normal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .tab-btn.active {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: var(--shadow-accent);
+      }
+
+      .tab-btn:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+      }
+
+      /* Suggestions Section */
+      .suggestions-section {
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
+        padding: 40px;
+        margin-bottom: 48px;
+        display: none;
+      }
+
+      .suggestions-section.active {
+        display: block;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      .suggestion-form {
+        margin-bottom: 32px;
+      }
+
+      .suggestion-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid var(--border-color);
+        padding: 16px 20px;
+        color: var(--text-primary);
+        font-size: 16px;
+        resize: vertical;
+        min-height: 120px;
+        transition: var(--transition-normal);
+        font-family: inherit;
+      }
+
+      .suggestion-input:focus {
+        outline: none;
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 0 4px rgba(255, 69, 0, 0.1);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .suggestion-input::placeholder {
+        color: var(--text-muted);
+      }
+
+      .user-avatar {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid var(--border-color);
+      }
+
+      .suggestion-card {
+        background: var(--gradient-dark);
+        border: 1px solid var(--border-color);
+        padding: 24px;
+        margin-bottom: 20px;
+        transition: var(--transition-normal);
+      }
+
+      .suggestion-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--accent-orange);
+      }
+
+      .suggestion-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .suggestion-author {
+        flex: 1;
+      }
+
+      .suggestion-author-name {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .suggestion-time {
+        color: var(--text-secondary);
+        font-size: 14px;
+      }
+
+      .suggestion-content {
+        color: var(--text-primary);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .suggestion-actions {
+        display: flex;
+        gap: 16px;
+      }
+
+      .suggestion-action-btn {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: var(--transition-normal);
+        padding: 6px 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .suggestion-action-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+      }
+
+      .suggestion-action-btn.edit:hover {
+        color: var(--accent-blue);
+      }
+
+      .suggestion-action-btn.delete:hover {
+        color: var(--error-color);
+      }
+
+      /* Responsive Design */
       @media (max-width: 768px) {
         .stats-grid {
           grid-template-columns: repeat(2, 1fr);
@@ -1278,179 +1475,22 @@
         display: none !important;
       }
 
-      /* Tab Navigation */
-      .tab-navigation {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 32px;
-        background: var(--gradient-glass);
-        padding: 8px;
-        border-radius: 16px;
-        border: 1px solid var(--reddit-border);
-        backdrop-filter: blur(10px);
+      /* Scroll Reveal Animation */
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: var(--transition-slow);
       }
 
-      .tab-btn {
-        flex: 1;
-        padding: 16px 24px;
-        background: transparent;
-        border: none;
-        border-radius: 12px;
-        color: var(--reddit-text-secondary);
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition-normal);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-      }
-
-      .tab-btn.active {
-        background: var(--gradient-reddit);
-        color: white;
-        box-shadow: var(--shadow-reddit);
-      }
-
-      .tab-btn:hover:not(.active) {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--reddit-text);
-      }
-
-      /* Suggestions Section */
-      .suggestions-section {
-        background: var(--gradient-card);
-        border: 1px solid var(--reddit-border);
-        border-radius: 24px;
-        padding: 40px;
-        margin-bottom: 48px;
-        backdrop-filter: blur(10px);
-        display: none;
-      }
-
-      .suggestions-section.active {
-        display: block;
-        animation: slideIn 0.5s ease-out;
-      }
-
-      .suggestion-form {
-        margin-bottom: 32px;
-      }
-
-      .suggestion-input {
-        width: 100%;
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid var(--reddit-border);
-        border-radius: 12px;
-        padding: 16px 20px;
-        color: var(--reddit-text);
-        font-size: 16px;
-        resize: vertical;
-        min-height: 120px;
-        transition: var(--transition-normal);
-        font-family: inherit;
-      }
-
-      .suggestion-input:focus {
-        outline: none;
-        border-color: var(--reddit-orange);
-        box-shadow: 0 0 0 4px rgba(255, 69, 0, 0.1);
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      .suggestion-input::placeholder {
-        color: var(--reddit-text-secondary);
-      }
-
-      .user-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        object-fit: cover;
-        flex-shrink: 0;
-        border: 2px solid var(--reddit-border);
-      }
-
-      .suggestion-card {
-        background: var(--gradient-glass);
-        border: 1px solid var(--reddit-border);
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 20px;
-        transition: var(--transition-normal);
-      }
-
-      .suggestion-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg);
-        border-color: var(--reddit-orange);
-      }
-
-      .suggestion-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 16px;
-      }
-
-      .suggestion-author {
-        flex: 1;
-      }
-
-      .suggestion-author-name {
-        color: var(--reddit-text);
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-
-      .suggestion-time {
-        color: var(--reddit-text-secondary);
-        font-size: 14px;
-      }
-
-      .suggestion-content {
-        color: var(--reddit-text);
-        line-height: 1.6;
-        margin-bottom: 16px;
-      }
-
-      .suggestion-actions {
-        display: flex;
-        gap: 16px;
-      }
-
-      .suggestion-action-btn {
-        background: none;
-        border: none;
-        color: var(--reddit-text-secondary);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 14px;
-        font-weight: 500;
-        transition: var(--transition-normal);
-        padding: 6px 12px;
-        border-radius: 8px;
-      }
-
-      .suggestion-action-btn:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--reddit-text);
-      }
-
-      .suggestion-action-btn.edit:hover {
-        color: var(--reddit-blue);
-      }
-
-      .suggestion-action-btn.delete:hover {
-        color: var(--reddit-red);
+      [data-reveal].revealed {
+        opacity: 1;
+        transform: translateY(0);
       }
     </style>
   </head>
   <body>
-    <!-- Animated Background -->
-    <div class="animated-bg"></div>
+    <!-- Professional Background -->
+    <div class="professional-bg"></div>
 
     <!-- Navigation Bar -->
     <nav id="navbar" class="nav-container">
@@ -1499,17 +1539,21 @@
     <!-- Main Content -->
     <main class="container pt-nav">
       <!-- Hero Section -->
-      <section class="hero-section">
+      <section class="hero-section" data-reveal>
         <h1 class="hero-title">Campus Lost & Found</h1>
-        <p class="hero-subtitle">Reuniting Items with Owners</p>
+        <p class="hero-subtitle">Professional Reunion System</p>
         <p class="hero-description">
           Advanced bulletin system for Bangladesh University of Professionals
           community. Connect, share, and help each other find what's been lost.
         </p>
+        <div class="users-count" id="usersCountDisplay">
+          <i class="fas fa-users users-count-icon"></i>
+          <span id="totalUsersText">Loading community...</span>
+        </div>
       </section>
 
       <!-- Tab Navigation -->
-      <div class="tab-navigation">
+      <div class="tab-navigation" data-reveal>
         <button id="tabItems" class="tab-btn active">
           <i class="fas fa-th-large"></i>
           Items Dashboard
@@ -1527,7 +1571,7 @@
       <!-- Items Dashboard Tab -->
       <div id="itemsTab" class="tab-content">
         <!-- Search and Filter Section -->
-        <section class="search-container">
+        <section class="search-container" data-reveal>
           <div class="search-input-group">
             <input
               type="text"
@@ -1559,7 +1603,7 @@
         </section>
 
         <!-- Statistics Cards -->
-        <section class="stats-grid">
+        <section class="stats-grid" data-reveal>
           <div class="stat-card total" data-filter="all">
             <div class="stat-icon">
               <i class="fas fa-boxes"></i>
@@ -1591,10 +1635,18 @@
             <div class="stat-number" id="reunitedItems">0</div>
             <div class="stat-label">Reunited</div>
           </div>
+
+          <div class="stat-card users" data-filter="users">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number" id="totalUsersCount">0</div>
+            <div class="stat-label">Total Users</div>
+          </div>
         </section>
 
         <!-- Items Section -->
-        <section class="mb-16">
+        <section class="mb-16" data-reveal>
           <div class="section-header">
             <h2 class="section-title">
               <div class="section-accent"></div>
@@ -1697,6 +1749,12 @@
       </div>
     </main>
 
+    <!-- Image Preview Modal -->
+    <div class="image-preview-overlay" id="imagePreviewOverlay"></div>
+    <div class="image-preview" id="imagePreview">
+      <img id="previewImage" src="" alt="Preview" />
+    </div>
+
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
@@ -1725,6 +1783,8 @@
       const lostItems = document.getElementById("lostItems");
       const foundItems = document.getElementById("foundItems");
       const reunitedItems = document.getElementById("reunitedItems");
+      const totalUsersCount = document.getElementById("totalUsersCount");
+      const totalUsersText = document.getElementById("totalUsersText");
       const itemsContainer = document.getElementById("itemsContainer");
       const suggestionInput = document.getElementById("suggestionInput");
       const postSuggestionBtn = document.getElementById("postSuggestionBtn");
@@ -1740,6 +1800,11 @@
         "reunitedLogsContainer"
       );
       const refreshLogsBtn = document.getElementById("refreshLogsBtn");
+      const imagePreview = document.getElementById("imagePreview");
+      const imagePreviewOverlay = document.getElementById(
+        "imagePreviewOverlay"
+      );
+      const previewImage = document.getElementById("previewImage");
 
       // Tab elements
       const tabItems = document.getElementById("tabItems");
@@ -1754,10 +1819,13 @@
         await checkAuth();
         await loadUserData();
         await loadStats();
+        await loadTotalUsers();
         await loadItems();
         await loadSuggestions();
         setupEventListeners();
         setupNavbarScroll();
+        setupScrollReveal();
+        setupImagePreview();
       });
 
       // Check authentication
@@ -1838,6 +1906,21 @@
         }
       }
 
+      // Load total users count
+      async function loadTotalUsers() {
+        try {
+          const response = await apiCall("/api/users/total-count");
+          const total = response.totalUsers;
+
+          animateValue(totalUsersCount, 0, total, 1500);
+          totalUsersText.textContent = `${total} Active Users`;
+        } catch (error) {
+          console.error("Error loading total users:", error);
+          totalUsersCount.textContent = "--";
+          totalUsersText.textContent = "Community Loading...";
+        }
+      }
+
       // Load statistics
       async function loadStats() {
         try {
@@ -1904,12 +1987,11 @@
         }
       }
 
-      // Load reunited logs - FIXED VERSION
+      // Load reunited logs
       async function loadReunitedLogs() {
         try {
           showLoading(reunitedLogsContainer, "Loading reunited logs...");
 
-          // Use the new dedicated reunited endpoint
           const response = await apiCall("/api/items/reunited");
           renderReunitedLogs(response.items);
         } catch (error) {
@@ -1921,19 +2003,19 @@
         }
       }
 
-      // Render reunited logs with enhanced design
+      // Render reunited logs
       function renderReunitedLogs(items) {
         if (items.length === 0) {
           reunitedLogsContainer.innerHTML = `
             <div class="loading">
-              <div style="color: var(--reddit-purple); font-size: 64px; margin-bottom: 24px;">
+              <div style="color: var(--purple-color); font-size: 64px; margin-bottom: 24px;">
                 <i class="fas fa-heart"></i>
               </div>
-              <h3 style="color: var(--reddit-text); margin-bottom: 12px; font-size: 24px; font-weight: 600;">No reunited items yet</h3>
-              <p style="color: var(--reddit-text-secondary); font-size: 16px; margin-bottom: 8px;">
+              <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 24px; font-weight: 600;">No reunited items yet</h3>
+              <p style="color: var(--text-secondary); font-size: 16px; margin-bottom: 8px;">
                 When items are successfully reunited, they'll appear here as success stories
               </p>
-              <p style="color: var(--reddit-text-secondary); font-size: 14px;">
+              <p style="color: var(--text-secondary); font-size: 14px;">
                 Help make the first reunion happen! 🎉
               </p>
             </div>
@@ -1947,7 +2029,7 @@
           <div class="log-item" onclick="viewItem('${item._id}')">
             <div class="log-header">
               <div class="log-title">
-                <i class="fas fa-check-circle" style="color: var(--reddit-green);"></i>
+                <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
                 ${item.title}
               </div>
               <div class="log-date">
@@ -1960,19 +2042,19 @@
               <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
                 <span style="background: ${
                   item.type === "lost"
-                    ? "var(--gradient-danger)"
+                    ? "var(--gradient-error)"
                     : "var(--gradient-success)"
-                }; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                }; color: white; padding: 4px 12px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
                   ${item.type === "lost" ? "Lost Item" : "Found Item"}
                 </span>
-                <span style="color: var(--reddit-text-secondary);">•</span>
-                <span style="color: var(--reddit-text-secondary);">
+                <span style="color: var(--text-secondary);">•</span>
+                <span style="color: var(--text-secondary);">
                   <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i>
                   ${item.location}
                 </span>
               </div>
               <p style="margin-bottom: 0; line-height: 1.5;">
-                <strong style="color: var(--reddit-text);">Description:</strong> ${
+                <strong style="color: var(--text-primary);">Description:</strong> ${
                   item.description
                 }
               </p>
@@ -2003,12 +2085,12 @@
               }
             </div>
             
-            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--reddit-border); display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--reddit-text-secondary);">
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--text-secondary);">
               <span>
                 <i class="fas fa-eye" style="margin-right: 6px;"></i>
                 Click to view details
               </span>
-              <span style="background: var(--gradient-purple); color: white; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;">
+              <span style="background: var(--gradient-purple); color: white; padding: 4px 8px; font-size: 12px; font-weight: 600;">
                 <i class="fas fa-trophy" style="margin-right: 4px;"></i>
                 SUCCESS STORY
               </span>
@@ -2064,7 +2146,7 @@
       function showError(container, message) {
         container.innerHTML = `
           <div class="loading" style="grid-column: 1 / -1;">
-            <div style="color: var(--reddit-red); font-size: 48px; margin-bottom: 16px;">
+            <div style="color: var(--error-color); font-size: 48px; margin-bottom: 16px;">
               <i class="fas fa-exclamation-triangle"></i>
             </div>
             <p style="margin-bottom: 16px;">${message}</p>
@@ -2081,14 +2163,14 @@
         if (items.length === 0) {
           itemsContainer.innerHTML = `
             <div class="loading" style="grid-column: 1 / -1;">
-              <div style="color: var(--reddit-text-secondary); font-size: 48px; margin-bottom: 16px;">
+              <div style="color: var(--text-secondary); font-size: 48px; margin-bottom: 16px;">
                 <i class="fas fa-box-open"></i>
               </div>
               <p>No items found</p>
               ${
                 currentSearchTerm
-                  ? `<p style="color: var(--reddit-text-secondary); font-size: 14px; margin-top: 8px;">Try a different search term</p>`
-                  : `<p style="color: var(--reddit-text-secondary); font-size: 14px; margin-top: 8px;">Be the first to post an item!</p>`
+                  ? `<p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Try a different search term</p>`
+                  : `<p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Be the first to post an item!</p>`
               }
             </div>
           `;
@@ -2102,7 +2184,7 @@
             <div class="item-image-container">
               ${
                 item.image
-                  ? `<img src="${API_BASE}${item.image}" alt="${item.title}" class="item-image">`
+                  ? `<img src="${API_BASE}${item.image}" alt="${item.title}" class="item-image" data-preview="${API_BASE}${item.image}">`
                   : `<div class="item-image-placeholder">
                    <i class="fas fa-image"></i>
                  </div>`
@@ -2138,11 +2220,55 @@
 
         // Add click handlers
         document.querySelectorAll(".item-card").forEach((card) => {
-          card.addEventListener("click", () => {
+          card.addEventListener("click", (e) => {
+            // Don't navigate if clicking on an image with preview
+            if (e.target.hasAttribute("data-preview")) {
+              return;
+            }
             const itemId = card.getAttribute("data-id");
             window.location.href = `item.html?id=${itemId}`;
           });
         });
+
+        // Setup image preview for new items
+        setupImagePreview();
+      }
+
+      // Setup image preview functionality
+      function setupImagePreview() {
+        // Remove existing event listeners
+        document.querySelectorAll("[data-preview]").forEach((img) => {
+          img.removeEventListener("mouseenter", showImagePreview);
+          img.removeEventListener("mouseleave", hideImagePreview);
+        });
+
+        // Add event listeners to images with preview data
+        document.querySelectorAll("[data-preview]").forEach((img) => {
+          img.addEventListener("mouseenter", showImagePreview);
+          img.addEventListener("mouseleave", hideImagePreview);
+        });
+
+        // Close preview when clicking overlay
+        imagePreviewOverlay.addEventListener("click", hideImagePreview);
+      }
+
+      // Show image preview
+      function showImagePreview(e) {
+        const imageUrl = e.target.getAttribute("data-preview");
+        if (imageUrl) {
+          previewImage.src = imageUrl;
+          imagePreviewOverlay.classList.add("show");
+          imagePreview.classList.add("show");
+        }
+      }
+
+      // Hide image preview
+      function hideImagePreview() {
+        imagePreviewOverlay.classList.remove("show");
+        imagePreview.classList.remove("show");
+        setTimeout(() => {
+          previewImage.src = "";
+        }, 300);
       }
 
       // Load suggestions
@@ -2166,7 +2292,7 @@
         if (suggestions.length === 0) {
           suggestionsContainer.innerHTML = `
             <div class="loading">
-              <div style="color: var(--reddit-text-secondary); font-size: 48px; margin-bottom: 16px;">
+              <div style="color: var(--text-secondary); font-size: 48px; margin-bottom: 16px;">
                 <i class="fas fa-comment-slash"></i>
               </div>
               <p>No suggestions yet. Be the first to share!</p>
@@ -2310,7 +2436,7 @@
         const originalContent = contentElement.textContent.trim();
 
         contentElement.innerHTML = `
-          <textarea style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 2px solid var(--reddit-border); border-radius: 12px; padding: 16px 20px; color: var(--reddit-text); font-size: 16px; resize: vertical; min-height: 80px; margin-bottom: 16px; font-family: inherit;" rows="3">${originalContent}</textarea>
+          <textarea style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 2px solid var(--border-color); padding: 16px 20px; color: var(--text-primary); font-size: 16px; resize: vertical; min-height: 80px; margin-bottom: 16px; font-family: inherit;" rows="3">${originalContent}</textarea>
           <div style="display: flex; justify-content: flex-end; gap: 12px;">
             <button class="save-edit-btn btn btn-primary" style="padding: 8px 16px; font-size: 14px;">
               <i class="fas fa-save"></i> Save
@@ -2462,6 +2588,26 @@
         }
       }
 
+      // Setup scroll reveal
+      function setupScrollReveal() {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: "0px 0px -50px 0px",
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("revealed");
+            }
+          });
+        }, observerOptions);
+
+        document.querySelectorAll("[data-reveal]").forEach((el) => {
+          observer.observe(el);
+        });
+      }
+
       // Setup event listeners
       function setupEventListeners() {
         // Tab navigation
@@ -2518,6 +2664,12 @@
             const filter = card.getAttribute("data-filter");
             if (filter === "reunited") {
               switchTab("reunited");
+            } else if (filter === "users") {
+              // Show total users info
+              showToast(
+                `${totalUsersCount.textContent} total users in the community`,
+                "success"
+              );
             } else {
               currentFilter = filter;
               updateFilterButtons();
