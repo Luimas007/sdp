@@ -87,8 +87,8 @@
                 "100%": { transform: "scale(1)", opacity: "1" },
               },
               glow: {
-                "0%": { boxShadow: "0 0 5px rgba(239, 68, 68, 0.5)" },
-                "100%": { boxShadow: "0 0 20px rgba(239, 68, 68, 0.8)" },
+                "0%": { boxShadow: "0 0 5px rgba(220, 38, 38, 0.5)" },
+                "100%": { boxShadow: "0 0 20px rgba(220, 38, 38, 0.8)" },
               },
               shimmer: {
                 "0%": { backgroundPosition: "-200% 0" },
@@ -111,9 +111,10 @@
               xs: "2px",
             },
             boxShadow: {
-              glow: "0 0 20px rgba(239, 68, 68, 0.3)",
-              "glow-lg": "0 0 40px rgba(239, 68, 68, 0.4)",
-              "inner-glow": "inset 0 0 20px rgba(239, 68, 68, 0.1)",
+              glow: "0 0 20px rgba(220, 38, 38, 0.3)",
+              "glow-lg": "0 0 40px rgba(220, 38, 38, 0.4)",
+              "inner-glow": "inset 0 0 20px rgba(220, 38, 38, 0.1)",
+              "red-glow": "0 0 30px rgba(220, 38, 38, 0.5)",
             },
           },
         },
@@ -124,32 +125,30 @@
         font-family: "Inter", system-ui, sans-serif;
         background: linear-gradient(
           135deg,
-          #0f172a 0%,
-          #020617 50%,
-          #1e293b 100%
+          #0f0f0f 0%,
+          #1a0000 50%,
+          #000000 100%
         );
         min-height: 100vh;
         color: #f1f5f9;
       }
 
-      .glass-card {
-        background: rgba(30, 41, 59, 0.7);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(148, 163, 184, 0.1);
+      .professional-card {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border: 2px solid #dc2626;
+        box-shadow: 0 8px 32px rgba(220, 38, 38, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .glass-card:hover {
-        background: rgba(51, 65, 85, 0.8);
-        border-color: rgba(239, 68, 68, 0.3);
+      .professional-card:hover {
+        border-color: #ef4444;
+        box-shadow: 0 12px 40px rgba(220, 38, 38, 0.3);
         transform: translateY(-2px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
-          0 0 20px rgba(239, 68, 68, 0.1);
       }
 
       .btn-primary {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        border: none;
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        border: 2px solid #dc2626;
         color: white;
         font-weight: 600;
         transition: all 0.3s ease;
@@ -158,57 +157,40 @@
       }
 
       .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-      }
-
-      .btn-primary::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.2),
-          transparent
-        );
-        transition: left 0.5s;
-      }
-
-      .btn-primary:hover::before {
-        left: 100%;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border-color: #ef4444;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
       }
 
       .btn-secondary {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border: 2px solid #666666;
         color: #f1f5f9;
         font-weight: 600;
         transition: all 0.3s ease;
       }
 
       .btn-secondary:hover {
-        background: linear-gradient(135deg, #334155 0%, #475569 100%);
-        border-color: rgba(239, 68, 68, 0.3);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #2d1b1b 0%, #3d2b2b 100%);
+        border-color: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
       }
 
       .btn-danger {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-        border: none;
+        background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+        border: 2px solid #991b1b;
         color: white;
         font-weight: 600;
         transition: all 0.3s ease;
       }
 
       .btn-danger:hover {
-        background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        border-color: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px rgba(153, 27, 27, 0.4);
       }
 
       .tab-button {
@@ -220,13 +202,15 @@
       }
 
       .tab-button.active {
-        background: rgba(239, 68, 68, 0.1);
-        border-color: #ef4444;
-        color: #ef4444;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border-color: #dc2626;
+        color: #dc2626;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
       }
 
       .tab-button:hover:not(.active) {
-        background: rgba(239, 68, 68, 0.05);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border-color: #666666;
         color: #f1f5f9;
       }
 
@@ -236,101 +220,107 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        border: 2px solid;
       }
 
       .status-lost {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        border-color: #dc2626;
         color: white;
       }
 
       .status-found {
         background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        border-color: #059669;
         color: white;
       }
 
       .status-active {
         background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border-color: #3b82f6;
         color: white;
       }
 
       .status-claimed {
         background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        border-color: #7c3aed;
         color: white;
       }
 
       .notification-item {
-        background: rgba(30, 41, 59, 0.8);
-        border: 1px solid rgba(148, 163, 184, 0.1);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border: 2px solid #333333;
         transition: all 0.3s ease;
       }
 
       .notification-item:hover {
-        background: rgba(51, 65, 85, 0.9);
-        border-color: rgba(239, 68, 68, 0.3);
+        border-color: #dc2626;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
       }
 
       .notification-item.unread {
-        background: rgba(239, 68, 68, 0.05);
-        border-color: rgba(239, 68, 68, 0.3);
+        background: linear-gradient(135deg, #2d1b1b 0%, #3d2b2b 100%);
+        border-color: #dc2626;
       }
 
       .notification-badge {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
         animation: pulse-soft 2s infinite;
       }
 
       .profile-avatar {
-        box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
-        border: 3px solid rgba(239, 68, 68, 0.5);
+        box-shadow: 0 0 30px rgba(220, 38, 38, 0.4);
+        border: 3px solid #dc2626;
       }
 
       .modal-backdrop {
         backdrop-filter: blur(10px);
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.9);
       }
 
       .loading-shimmer {
         background: linear-gradient(
           90deg,
-          #1e293b 25%,
-          #334155 50%,
-          #1e293b 75%
+          #1a1a1a 25%,
+          #2d1b1b 50%,
+          #1a1a1a 75%
         );
         background-size: 200% 100%;
         animation: shimmer 2s infinite;
       }
 
       .message-bubble-sent {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
         color: white;
+        border: 2px solid #dc2626;
       }
 
       .message-bubble-received {
-        background: rgba(51, 65, 85, 0.8);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
         color: #f1f5f9;
-        border: 1px solid rgba(148, 163, 184, 0.2);
+        border: 2px solid #666666;
       }
 
       .contact-info-card {
         background: linear-gradient(
           135deg,
-          rgba(16, 185, 129, 0.1) 0%,
-          rgba(5, 150, 105, 0.05) 100%
+          rgba(5, 150, 105, 0.1) 0%,
+          rgba(4, 120, 87, 0.05) 100%
         );
-        border: 1px solid rgba(16, 185, 129, 0.3);
+        border: 2px solid #059669;
       }
 
       .input-field {
-        background: rgba(30, 41, 59, 0.8);
-        border: 2px solid rgba(148, 163, 184, 0.2);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border: 2px solid #666666;
         color: #f1f5f9;
         transition: all 0.3s ease;
       }
 
       .input-field:focus {
-        background: rgba(51, 65, 85, 0.9);
-        border-color: #ef4444;
-        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        background: linear-gradient(135deg, #2d1b1b 0%, #3d2b2b 100%);
+        border-color: #dc2626;
+        box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
         outline: none;
       }
 
@@ -343,21 +333,21 @@
       }
 
       ::-webkit-scrollbar-track {
-        background: rgba(30, 41, 59, 0.5);
+        background: #1a1a1a;
       }
 
       ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        border-radius: 4px;
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
       }
 
       ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
       }
 
       .header-blur {
         backdrop-filter: blur(20px);
-        background: rgba(15, 23, 42, 0.8);
+        background: rgba(15, 15, 15, 0.9);
+        border-bottom: 2px solid #dc2626;
       }
 
       .floating-element {
@@ -365,7 +355,7 @@
       }
 
       .gradient-text {
-        background: linear-gradient(135deg, #f1f5f9 0%, #ef4444 100%);
+        background: linear-gradient(135deg, #f1f5f9 0%, #dc2626 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -376,17 +366,72 @@
       }
 
       .glow-on-hover:hover {
-        box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+      }
+
+      .answer-comparison {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border: 2px solid #666666;
+        transition: all 0.3s ease;
+      }
+
+      .answer-correct {
+        border-color: #059669;
+        background: linear-gradient(
+          135deg,
+          rgba(5, 150, 105, 0.1) 0%,
+          rgba(4, 120, 87, 0.05) 100%
+        );
+      }
+
+      .answer-incorrect {
+        border-color: #dc2626;
+        background: linear-gradient(
+          135deg,
+          rgba(220, 38, 38, 0.1) 0%,
+          rgba(153, 27, 27, 0.05) 100%
+        );
+      }
+
+      .conversation-container {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a0000 100%);
+        border: 2px solid #dc2626;
+      }
+
+      .message-container {
+        max-height: 60vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #dc2626 #1a1a1a;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #dc2626;
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      }
+
+      .analytics-card {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 100%);
+        border: 2px solid #dc2626;
+        box-shadow: 0 8px 32px rgba(220, 38, 38, 0.2);
+      }
+
+      .stats-number {
+        color: #dc2626;
+        font-weight: 800;
+        text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
       }
     </style>
   </head>
-  <body class="bg-dark-950 min-h-screen">
+  <body class="bg-black min-h-screen">
     <!-- Header -->
     <header
       id="header"
       class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
     >
-      <div class="header-blur border-b border-dark-700">
+      <div class="header-blur">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-16">
             <div
@@ -394,17 +439,16 @@
               onclick="goHome()"
             >
               <div
-                class="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center mr-3 shadow-glow floating-element"
+                class="w-10 h-10 bg-gradient-to-r from-primary-600 to-primary-700 flex items-center justify-center mr-3 shadow-red-glow floating-element"
               >
                 <span class="text-white font-bold text-lg">BUP</span>
               </div>
               <h1 class="text-xl font-bold gradient-text">Lost & Found</h1>
             </div>
             <nav class="flex items-center space-x-4">
-              <!-- Home Button -->
               <button
                 onclick="goHome()"
-                class="btn-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                class="btn-secondary px-6 py-2 font-medium transition-all duration-200"
               >
                 <svg
                   class="w-5 h-5 inline mr-2"
@@ -418,7 +462,6 @@
                 Home
               </button>
 
-              <!-- Notification Button -->
               <button
                 onclick="toggleNotifications()"
                 class="relative p-2 text-dark-400 hover:text-primary-500 transition-colors duration-200 glow-on-hover"
@@ -431,22 +474,20 @@
                 </svg>
                 <span
                   id="notificationBadge"
-                  class="absolute -top-1 -right-1 w-5 h-5 notification-badge text-white text-xs rounded-full flex items-center justify-center hidden"
+                  class="absolute -top-1 -right-1 w-5 h-5 notification-badge text-white text-xs flex items-center justify-center hidden"
                 ></span>
               </button>
 
-              <!-- Update Profile Button -->
               <button
                 onclick="showUpdateProfile()"
-                class="btn-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                class="btn-secondary px-6 py-2 font-medium transition-all duration-200"
               >
                 Update Profile
               </button>
 
-              <!-- Logout Button -->
               <button
                 onclick="logout()"
-                class="btn-primary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                class="btn-primary px-6 py-2 font-medium transition-all duration-200"
               >
                 Logout
               </button>
@@ -458,7 +499,7 @@
       <!-- Notification Dropdown -->
       <div
         id="notificationDropdown"
-        class="absolute top-16 right-4 w-80 glass-card rounded-2xl shadow-2xl hidden z-50 max-h-96 overflow-y-auto"
+        class="absolute top-16 right-4 w-80 professional-card shadow-2xl hidden z-50 max-h-96 overflow-y-auto"
       >
         <div class="p-4 border-b border-dark-600">
           <div class="flex items-center justify-between">
@@ -471,9 +512,7 @@
             </button>
           </div>
         </div>
-        <div id="notificationList" class="p-2">
-          <!-- Notifications will be loaded here -->
-        </div>
+        <div id="notificationList" class="p-2"></div>
       </div>
     </header>
 
@@ -483,14 +522,14 @@
         <!-- Profile Header -->
         <div
           id="profileHeader"
-          class="glass-card rounded-2xl p-8 mb-8 animate-fade-in"
+          class="professional-card p-8 mb-8 animate-fade-in"
         >
           <div
             class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8"
           >
             <div class="relative">
               <div
-                class="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-primary-600 flex-shrink-0 shadow-2xl profile-avatar"
+                class="w-32 h-32 overflow-hidden bg-gradient-to-br from-primary-500 to-primary-600 flex-shrink-0 shadow-2xl profile-avatar"
               >
                 <img
                   id="profileImage"
@@ -500,9 +539,9 @@
                 />
               </div>
               <div
-                class="absolute -bottom-2 -right-2 w-8 h-8 bg-accent-500 rounded-full border-4 border-dark-950 shadow-lg flex items-center justify-center animate-glow"
+                class="absolute -bottom-2 -right-2 w-8 h-8 bg-accent-500 border-4 border-black shadow-lg flex items-center justify-center animate-glow"
               >
-                <div class="w-3 h-3 bg-white rounded-full"></div>
+                <div class="w-3 h-3 bg-white"></div>
               </div>
             </div>
             <div class="flex-grow text-center md:text-left">
@@ -513,18 +552,18 @@
               <p id="userEmail" class="text-dark-400 mb-2 text-lg"></p>
               <p
                 id="userDepartment"
-                class="text-sm text-dark-200 font-medium px-4 py-2 bg-primary-500/20 rounded-full inline-block border border-primary-500/30"
+                class="text-sm text-dark-200 font-medium px-4 py-2 bg-primary-500/20 inline-block border-2 border-primary-500/30"
               ></p>
             </div>
           </div>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="glass-card rounded-2xl mb-8">
+        <div class="professional-card mb-8">
           <nav class="flex overflow-x-auto p-2 space-x-2">
             <button
               onclick="switchTab('posted')"
-              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap"
               data-tab="posted"
             >
               <span class="flex items-center space-x-2">
@@ -541,7 +580,7 @@
             </button>
             <button
               onclick="switchTab('claimed')"
-              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap"
               data-tab="claimed"
             >
               <span class="flex items-center space-x-2">
@@ -557,7 +596,7 @@
             </button>
             <button
               onclick="switchTab('comments')"
-              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap"
               data-tab="comments"
             >
               <span class="flex items-center space-x-2">
@@ -573,7 +612,7 @@
             </button>
             <button
               onclick="switchTab('suggestions')"
-              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap"
               data-tab="suggestions"
             >
               <span class="flex items-center space-x-2">
@@ -587,7 +626,7 @@
             </button>
             <button
               onclick="switchTab('messages')"
-              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold rounded-xl whitespace-nowrap"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap"
               data-tab="messages"
             >
               <span class="flex items-center space-x-2">
@@ -602,23 +641,34 @@
                 <span>Messages</span>
               </span>
             </button>
+            <button
+              onclick="switchTab('analytics')"
+              class="tab-button flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap"
+              data-tab="analytics"
+            >
+              <span class="flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
+                  ></path>
+                </svg>
+                <span>Analytics</span>
+              </span>
+            </button>
           </nav>
         </div>
 
         <!-- Tab Content -->
         <div id="tabContent" class="animate-fade-in">
-          <!-- Loading State -->
           <div id="loadingState" class="flex justify-center items-center py-20">
             <div class="relative">
               <div
-                class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500"
+                class="animate-spin h-16 w-16 border-b-4 border-primary-500"
               ></div>
               <div
                 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               >
-                <div
-                  class="w-4 h-4 bg-primary-500 rounded-full animate-glow"
-                ></div>
+                <div class="w-4 h-4 bg-primary-500 animate-glow"></div>
               </div>
             </div>
           </div>
@@ -632,7 +682,7 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="professional-card max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <h3 class="text-2xl font-bold mb-6 gradient-text">Update Profile</h3>
         <p class="text-dark-400 mb-6 leading-relaxed">
@@ -642,13 +692,13 @@
         <div class="flex gap-4">
           <button
             onclick="window.location.href='update-profile.html'"
-            class="flex-1 btn-primary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-primary py-3 font-semibold"
           >
             Continue
           </button>
           <button
             onclick="hideUpdateProfile()"
-            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 font-semibold"
           >
             Cancel
           </button>
@@ -662,7 +712,7 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
+        class="professional-card max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
       >
         <h3 class="text-2xl font-bold mb-6 gradient-text">Edit Item</h3>
         <form id="editItemForm" enctype="multipart/form-data">
@@ -675,7 +725,7 @@
               <input
                 type="text"
                 id="editTitle"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
                 required
               />
             </div>
@@ -685,7 +735,7 @@
               >
               <textarea
                 id="editDescription"
-                class="w-full input-field rounded-xl px-4 py-3 h-32 resize-none"
+                class="w-full input-field px-4 py-3 h-32 resize-none"
                 required
               ></textarea>
             </div>
@@ -696,7 +746,7 @@
               <input
                 type="text"
                 id="editLocation"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
                 required
               />
             </div>
@@ -708,10 +758,9 @@
                 type="file"
                 id="editImage"
                 accept="image/*"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
               />
             </div>
-            <!-- Validity Questions Section for Found Items -->
             <div id="editValidityQuestionsSection" class="hidden">
               <label class="block text-sm font-semibold mb-2 text-dark-200"
                 >Validity Questions</label
@@ -720,23 +769,20 @@
               <button
                 type="button"
                 onclick="addEditValidityQuestion()"
-                class="mt-3 btn-secondary px-4 py-2 rounded-lg text-sm"
+                class="mt-3 btn-secondary px-4 py-2 text-sm"
               >
                 Add Question
               </button>
             </div>
           </div>
           <div class="flex gap-4 mt-8">
-            <button
-              type="submit"
-              class="flex-1 btn-primary py-3 rounded-xl font-semibold"
-            >
+            <button type="submit" class="flex-1 btn-primary py-3 font-semibold">
               Update Item
             </button>
             <button
               type="button"
               onclick="hideEditItem()"
-              class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
+              class="flex-1 btn-secondary py-3 font-semibold"
             >
               Cancel
             </button>
@@ -751,7 +797,7 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-5xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
+        class="professional-card max-w-5xl w-full p-8 max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in"
       >
         <h3
           id="requestsModalTitle"
@@ -762,7 +808,7 @@
         <div id="requestsContent"></div>
         <button
           onclick="hideRequests()"
-          class="mt-6 btn-secondary px-8 py-3 rounded-xl font-semibold"
+          class="mt-6 btn-secondary px-8 py-3 font-semibold"
         >
           Close
         </button>
@@ -775,7 +821,7 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="professional-card max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <h3 class="text-2xl font-bold mb-6 gradient-text">
           Provide Contact Information
@@ -789,7 +835,7 @@
               <input
                 type="tel"
                 id="contactPhone"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
                 required
                 placeholder="01XXXXXXXXX"
               />
@@ -801,7 +847,7 @@
               <input
                 type="tel"
                 id="contactAlternatePhone"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
                 placeholder="01XXXXXXXXX"
               />
             </div>
@@ -812,7 +858,7 @@
               <input
                 type="email"
                 id="contactEmail"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
                 placeholder="your.email@example.com"
               />
             </div>
@@ -823,7 +869,7 @@
               <input
                 type="text"
                 id="contactLocation"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
                 placeholder="e.g., Library entrance, Cafeteria"
               />
             </div>
@@ -834,7 +880,7 @@
               <input
                 type="text"
                 id="contactTime"
-                class="w-full input-field rounded-xl px-4 py-3"
+                class="w-full input-field px-4 py-3"
                 placeholder="e.g., Tomorrow 2 PM, After 5 PM"
               />
             </div>
@@ -844,22 +890,19 @@
               >
               <textarea
                 id="contactNotes"
-                class="w-full input-field rounded-xl px-4 py-3 h-24 resize-none"
+                class="w-full input-field px-4 py-3 h-24 resize-none"
                 placeholder="Any additional information..."
               ></textarea>
             </div>
           </div>
           <div class="flex gap-4 mt-6">
-            <button
-              type="submit"
-              class="flex-1 btn-primary py-3 rounded-xl font-semibold"
-            >
+            <button type="submit" class="flex-1 btn-primary py-3 font-semibold">
               Approve & Share Contact
             </button>
             <button
               type="button"
               onclick="hideContactInfo()"
-              class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
+              class="flex-1 btn-secondary py-3 font-semibold"
             >
               Cancel
             </button>
@@ -874,10 +917,10 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="professional-card max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <div
-          class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full"
+          class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 border-2 border-red-500"
         >
           <svg
             class="w-8 h-8 text-red-500"
@@ -898,13 +941,13 @@
         <div class="flex gap-4">
           <button
             id="confirmBlockButton"
-            class="flex-1 btn-danger py-3 rounded-xl font-semibold"
+            class="flex-1 btn-danger py-3 font-semibold"
           >
             Block User
           </button>
           <button
             onclick="hideBlockUser()"
-            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 font-semibold"
           >
             Cancel
           </button>
@@ -918,10 +961,10 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="professional-card max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <div
-          class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full"
+          class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-500/20 border-2 border-red-500"
         >
           <svg
             class="w-8 h-8 text-red-500"
@@ -942,13 +985,13 @@
         <div class="flex gap-4">
           <button
             id="confirmDeleteButton"
-            class="flex-1 btn-danger py-3 rounded-xl font-semibold"
+            class="flex-1 btn-danger py-3 font-semibold"
           >
             Delete
           </button>
           <button
             onclick="hideDeleteConfirm()"
-            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 font-semibold"
           >
             Cancel
           </button>
@@ -962,27 +1005,27 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="professional-card max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <h3 id="editModalTitle" class="text-2xl font-bold mb-6 gradient-text">
           Edit
         </h3>
         <textarea
           id="editContent"
-          class="w-full input-field rounded-xl px-4 py-3 h-32 resize-none"
+          class="w-full input-field px-4 py-3 h-32 resize-none"
           required
           placeholder="Enter your content here..."
         ></textarea>
         <div class="flex gap-4 mt-6">
           <button
             onclick="saveEdit()"
-            class="flex-1 btn-primary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-primary py-3 font-semibold"
           >
             Save Changes
           </button>
           <button
             onclick="hideEditModal()"
-            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 font-semibold"
           >
             Cancel
           </button>
@@ -996,25 +1039,25 @@
       class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4"
     >
       <div
-        class="glass-card rounded-2xl max-w-md w-full p-8 shadow-2xl animate-scale-in"
+        class="professional-card max-w-md w-full p-8 shadow-2xl animate-scale-in"
       >
         <h3 class="text-2xl font-bold mb-6 gradient-text">Reject Request</h3>
         <textarea
           id="rejectionReason"
-          class="w-full input-field rounded-xl px-4 py-3 h-32 resize-none"
+          class="w-full input-field px-4 py-3 h-32 resize-none"
           required
           placeholder="Please provide a reason for rejection..."
         ></textarea>
         <div class="flex gap-4 mt-6">
           <button
             onclick="submitRejection()"
-            class="flex-1 btn-danger py-3 rounded-xl font-semibold"
+            class="flex-1 btn-danger py-3 font-semibold"
           >
             Reject Request
           </button>
           <button
             onclick="hideRejectionModal()"
-            class="flex-1 btn-secondary py-3 rounded-xl font-semibold"
+            class="flex-1 btn-secondary py-3 font-semibold"
           >
             Cancel
           </button>
@@ -1072,7 +1115,6 @@
           lastScrollY = currentScrollY;
         });
 
-        // Close notification dropdown when clicking outside
         document.addEventListener("click", (e) => {
           const dropdown = document.getElementById("notificationDropdown");
           const button = document.getElementById("notificationButton");
@@ -1081,6 +1123,46 @@
             dropdown.classList.add("hidden");
           }
         });
+      }
+
+      // Enhanced image creation with proper fallback
+      function createImageWithFallback(
+        src,
+        alt,
+        className = "",
+        fallbackInitials = null
+      ) {
+        const img = document.createElement("img");
+        img.className = className;
+        img.alt = alt;
+
+        const handleError = () => {
+          if (fallbackInitials) {
+            img.src = generateProfileInitials(
+              fallbackInitials.firstName,
+              fallbackInitials.lastName
+            );
+          } else {
+            img.src =
+              "data:image/svg+xml;base64," +
+              btoa(`
+              <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100" height="100" fill="#dc2626"/>
+                <text x="50" y="50" font-family="Arial" font-size="14" fill="white" text-anchor="middle" dy=".3em">No Image</text>
+              </svg>
+            `);
+          }
+        };
+
+        img.onerror = handleError;
+
+        if (src && src.trim()) {
+          img.src = getFullImageUrl(src);
+        } else {
+          handleError();
+        }
+
+        return img;
       }
 
       // Load user profile
@@ -1139,7 +1221,7 @@
           firstName
         )}+${encodeURIComponent(
           lastName
-        )}&background=ef4444&color=fff&size=128&rounded=true&bold=true`;
+        )}&background=dc2626&color=fff&size=128&bold=true`;
       }
 
       // Get full image URL
@@ -1174,7 +1256,7 @@
         if (!notifications || notifications.length === 0) {
           notificationList.innerHTML = `
             <div class="text-center py-8">
-              <div class="w-16 h-16 mx-auto mb-4 bg-dark-600/20 rounded-full flex items-center justify-center">
+              <div class="w-16 h-16 mx-auto mb-4 bg-dark-600/20 flex items-center justify-center">
                 <svg class="w-8 h-8 text-dark-400" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
                 </svg>
@@ -1190,7 +1272,7 @@
             (notification) => `
             <div class="notification-item ${
               notification.read ? "" : "unread"
-            } p-4 rounded-lg mb-2 cursor-pointer" 
+            } p-4 mb-2 cursor-pointer" 
                  onclick="markNotificationAsRead('${notification._id}')">
               <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0">
@@ -1209,7 +1291,7 @@
                 </div>
                 ${
                   !notification.read
-                    ? '<div class="w-2 h-2 bg-primary-500 rounded-full flex-shrink-0"></div>'
+                    ? '<div class="w-2 h-2 bg-primary-500 flex-shrink-0"></div>'
                     : ""
                 }
               </div>
@@ -1222,19 +1304,19 @@
       function getNotificationIcon(type) {
         const iconClasses = "w-6 h-6";
         switch (type) {
-          case "claim_request":
-          case "inform_request":
+          case "claim_request_submitted":
+          case "inform_request_submitted":
             return `<svg class="${iconClasses} text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                       <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
                     </svg>`;
-          case "claim_approved":
-          case "inform_approved":
+          case "claim_request_approved":
+          case "inform_request_approved":
             return `<svg class="${iconClasses} text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>`;
-          case "claim_rejected":
-          case "inform_rejected":
+          case "claim_request_rejected":
+          case "inform_request_rejected":
             return `<svg class="${iconClasses} text-red-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>`;
@@ -1297,7 +1379,6 @@
       }
 
       function startNotificationPolling() {
-        // Poll for new notifications every 30 seconds
         notificationPollingInterval = setInterval(() => {
           loadNotifications();
         }, 30000);
@@ -1320,7 +1401,6 @@
       function switchTab(tab) {
         currentTab = tab;
 
-        // Update tab buttons
         document.querySelectorAll(".tab-button").forEach((btn) => {
           btn.classList.remove("active");
         });
@@ -1330,7 +1410,6 @@
           activeBtn.classList.add("active");
         }
 
-        // Load tab content
         loadTabContent(tab);
       }
 
@@ -1340,9 +1419,9 @@
         container.innerHTML = `
           <div class="flex justify-center items-center py-20">
             <div class="relative">
-              <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500"></div>
+              <div class="animate-spin h-16 w-16 border-b-4 border-primary-500"></div>
               <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div class="w-4 h-4 bg-primary-500 rounded-full animate-glow"></div>
+                <div class="w-4 h-4 bg-primary-500 animate-glow"></div>
               </div>
             </div>
           </div>
@@ -1365,11 +1444,14 @@
             case "messages":
               await loadMessages();
               break;
+            case "analytics":
+              await loadAnalytics();
+              break;
           }
         } catch (error) {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
+              <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 border-2 border-red-500 flex items-center justify-center">
                 <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                 </svg>
@@ -1399,24 +1481,24 @@
               ${data.items
                 .map(
                   (item) => `
-                  <div class="glass-card rounded-2xl overflow-hidden glow-on-hover">
+                  <div class="professional-card overflow-hidden glow-on-hover">
                     <div class="relative">
                       ${
                         item.image
                           ? `<img src="${getFullImageUrl(item.image)}" alt="${
                               item.title
-                            }" class="w-full h-56 object-cover">`
-                          : `<div class="w-full h-56 bg-gradient-to-br from-dark-800 to-dark-700 flex items-center justify-center">
-                              <svg class="w-16 h-16 text-dark-500" fill="currentColor" viewBox="0 0 20 20">
+                            }" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml;base64,' + btoa('<svg width=\\'100\\' height=\\'100\\' xmlns=\\'http://www.w3.org/2000/svg\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'#dc2626\\'/><text x=\\'50\\' y=\\'50\\' font-family=\\'Arial\\' font-size=\\'14\\' fill=\\'white\\' text-anchor=\\'middle\\' dy=\\'.3em\\'>No Image</text></svg>')">`
+                          : `<div class="w-full h-56 bg-gradient-to-br from-dark-800 to-dark-700 flex items-center justify-center border-2 border-primary-600">
+                              <svg class="w-16 h-16 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
                               </svg>
                             </div>`
                       }
                       <div class="absolute top-4 left-4 flex space-x-2">
-                        <span class="status-badge px-3 py-1 text-xs font-bold rounded-full ${
+                        <span class="status-badge px-3 py-1 text-xs font-bold ${
                           item.type === "lost" ? "status-lost" : "status-found"
                         }">${item.type.toUpperCase()}</span>
-                        <span class="status-badge px-3 py-1 text-xs font-bold rounded-full ${getStatusClass(
+                        <span class="status-badge px-3 py-1 text-xs font-bold ${getStatusClass(
                           item.status
                         )}">${item.status.toUpperCase()}</span>
                       </div>
@@ -1437,7 +1519,7 @@
                       <div class="flex gap-2">
                         <button onclick="editItem('${
                           item._id
-                        }')" class="flex-1 btn-secondary text-white py-2 px-4 rounded-lg text-sm font-medium">
+                        }')" class="flex-1 btn-secondary text-white py-2 px-4 text-sm font-medium">
                           Edit
                         </button>
                         ${getRequestButtonsForItem(item)}
@@ -1445,7 +1527,7 @@
                           item._id
                         }', '${
                     item.title
-                  }')" class="btn-danger py-2 px-4 rounded-lg text-sm font-medium">
+                  }')" class="btn-danger py-2 px-4 text-sm font-medium">
                           Delete
                         </button>
                       </div>
@@ -1459,7 +1541,7 @@
         } else {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-primary-500/20 rounded-full flex items-center justify-center floating-element">
+              <div class="w-24 h-24 mx-auto mb-6 bg-primary-500/20 border-2 border-primary-500 flex items-center justify-center floating-element">
                 <svg class="w-12 h-12 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                   <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
@@ -1467,7 +1549,7 @@
               </div>
               <h3 class="text-xl font-semibold text-dark-100 mb-2">No Items Posted Yet</h3>
               <p class="text-dark-400 mb-6">Start by posting your first lost or found item</p>
-              <button onclick="window.location.href='post-item.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
+              <button onclick="window.location.href='post-item.html'" class="btn-primary px-8 py-3 font-semibold">
                 Post an Item
               </button>
             </div>
@@ -1484,7 +1566,7 @@
           item.claimRequests &&
           item.claimRequests.length > 0
         ) {
-          buttons += `<button onclick="viewRequests('${item._id}', 'claim')" class="flex-1 btn-primary text-white py-2 px-4 rounded-lg text-sm font-medium">
+          buttons += `<button onclick="viewRequests('${item._id}', 'claim')" class="flex-1 btn-primary text-white py-2 px-4 text-sm font-medium">
                         Claims (${item.claimRequests.length})
                       </button>`;
         }
@@ -1494,7 +1576,7 @@
           item.informRequests &&
           item.informRequests.length > 0
         ) {
-          buttons += `<button onclick="viewRequests('${item._id}', 'inform')" class="flex-1 btn-primary text-white py-2 px-4 rounded-lg text-sm font-medium">
+          buttons += `<button onclick="viewRequests('${item._id}', 'inform')" class="flex-1 btn-primary text-white py-2 px-4 text-sm font-medium">
                         Info (${item.informRequests.length})
                       </button>`;
         }
@@ -1502,7 +1584,7 @@
         return buttons;
       }
 
-      // FIXED: Load claimed items using the correct endpoint with proper error handling
+      // Load claimed items
       async function loadClaimedItems() {
         try {
           const response = await fetch("/api/items/my-claimed", {
@@ -1519,7 +1601,6 @@
               <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 ${data.items
                   .map((item) => {
-                    // FIXED: Safely generate claim details with proper null checks
                     let claimDetails = null;
 
                     if (!currentUser || !currentUser._id) {
@@ -1528,7 +1609,6 @@
                     }
 
                     if (item.type === "found" && item.claimRequests) {
-                      // Find the approved claim request for the current user
                       const approvedClaim = item.claimRequests.find(
                         (req) =>
                           req &&
@@ -1548,7 +1628,6 @@
                         };
                       }
                     } else if (item.type === "lost" && item.informRequests) {
-                      // Find the approved inform request for the current user
                       const approvedInform = item.informRequests.find(
                         (req) =>
                           req &&
@@ -1570,7 +1649,7 @@
                     }
 
                     return `
-                      <div class="glass-card rounded-2xl overflow-hidden glow-on-hover">
+                      <div class="professional-card overflow-hidden glow-on-hover">
                         <div class="relative">
                           ${
                             item.image
@@ -1578,23 +1657,23 @@
                                   item.image
                                 )}" alt="${
                                   item.title
-                                }" class="w-full h-56 object-cover">`
-                              : `<div class="w-full h-56 bg-gradient-to-br from-dark-800 to-dark-700 flex items-center justify-center">
-                                  <svg class="w-16 h-16 text-dark-500" fill="currentColor" viewBox="0 0 20 20">
+                                }" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml;base64,' + btoa('<svg width=\\'100\\' height=\\'100\\' xmlns=\\'http://www.w3.org/2000/svg\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'#dc2626\\'/><text x=\\'50\\' y=\\'50\\' font-family=\\'Arial\\' font-size=\\'14\\' fill=\\'white\\' text-anchor=\\'middle\\' dy=\\'.3em\\'>No Image</text></svg>')">`
+                              : `<div class="w-full h-56 bg-gradient-to-br from-dark-800 to-dark-700 flex items-center justify-center border-2 border-primary-600">
+                                  <svg class="w-16 h-16 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
                                   </svg>
                                 </div>`
                           }
                           <div class="absolute top-4 left-4 flex space-x-2">
-                            <span class="status-badge px-3 py-1 text-xs font-bold rounded-full ${
+                            <span class="status-badge px-3 py-1 text-xs font-bold ${
                               item.type === "lost"
                                 ? "status-lost"
                                 : "status-found"
                             }">${item.type.toUpperCase()}</span>
-                            <span class="status-badge px-3 py-1 text-xs font-bold rounded-full status-claimed">CLAIMED</span>
+                            <span class="status-badge px-3 py-1 text-xs font-bold status-claimed">CLAIMED</span>
                             ${
                               claimDetails && claimDetails.claimDate
-                                ? `<span class="status-badge px-3 py-1 text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                ? `<span class="status-badge px-3 py-1 text-xs font-bold bg-blue-500/20 text-blue-400 border-2 border-blue-500/30">
                                      ${new Date(
                                        claimDetails.claimDate
                                      ).toLocaleDateString("en-US", {
@@ -1620,11 +1699,10 @@
                             ${item.location}
                           </div>
                           
-                          <!-- Enhanced Display for Claim Details -->
                           ${
                             claimDetails
                               ? `
-                            <div class="bg-accent-500/10 border border-accent-500/30 rounded-lg p-4 mb-4">
+                            <div class="bg-accent-500/10 border-2 border-accent-500/30 p-4 mb-4">
                               <div class="flex items-center space-x-2 mb-2">
                                 <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
@@ -1658,7 +1736,7 @@
                           }
 
                           <div class="flex items-center space-x-2 text-sm text-dark-400 mb-4">
-                            <div class="w-6 h-6 rounded-full overflow-hidden bg-primary-500">
+                            <div class="w-6 h-6 overflow-hidden bg-primary-500">
                               <img src="${getProfileImageUrl(
                                 item.postedBy
                               )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1678,7 +1756,7 @@
                           <div class="flex gap-2">
                             <button onclick="viewContactInfo('${
                               item._id
-                            }')" class="flex-1 btn-primary py-2 px-4 rounded-lg text-sm font-medium">
+                            }')" class="flex-1 btn-primary py-2 px-4 text-sm font-medium">
                               View Contact Info
                             </button>
                             ${
@@ -1688,7 +1766,7 @@
                                   }', ${JSON.stringify(claimDetails).replace(
                                     /"/g,
                                     "&quot;"
-                                  )})" class="btn-secondary py-2 px-4 rounded-lg text-sm font-medium">
+                                  )})" class="btn-secondary py-2 px-4 text-sm font-medium">
                                      Details
                                    </button>`
                                 : ""
@@ -1704,14 +1782,14 @@
           } else {
             container.innerHTML = `
               <div class="text-center py-20">
-                <div class="w-24 h-24 mx-auto mb-6 bg-accent-500/20 rounded-full flex items-center justify-center floating-element">
+                <div class="w-24 h-24 mx-auto mb-6 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center floating-element">
                   <svg class="w-12 h-12 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
                 <h3 class="text-xl font-semibold text-dark-100 mb-2">No Items Claimed Yet</h3>
                 <p class="text-dark-400 mb-6">Items you've successfully claimed will appear here</p>
-                <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
+                <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 font-semibold">
                   Browse Items
                 </button>
               </div>
@@ -1722,7 +1800,7 @@
           const container = document.getElementById("tabContent");
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
+              <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 border-2 border-red-500 flex items-center justify-center">
                 <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                 </svg>
@@ -1735,20 +1813,20 @@
         }
       }
 
-      // NEW: Show claim details modal
+      // Show claim details modal
       function showClaimDetailsModal(itemId, claimDetails) {
         const modal = document.createElement("div");
         modal.className =
           "fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
         modal.innerHTML = `
-          <div class="glass-card rounded-2xl max-w-lg w-full p-8 shadow-2xl animate-scale-in">
+          <div class="professional-card max-w-lg w-full p-8 shadow-2xl animate-scale-in">
             <h3 class="text-2xl font-bold mb-6 gradient-text">
               Claim Details
             </h3>
-            <div class="contact-info-card p-6 rounded-xl mb-6">
+            <div class="contact-info-card p-6 mb-6">
               <div class="space-y-4">
                 <div class="text-center mb-4">
-                  <div class="w-16 h-16 mx-auto mb-3 bg-accent-500/20 rounded-full flex items-center justify-center">
+                  <div class="w-16 h-16 mx-auto mb-3 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center">
                     <svg class="w-8 h-8 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>
@@ -1780,8 +1858,8 @@
                 ${
                   claimDetails.originalPoster
                     ? `
-                  <div class="flex items-center space-x-3 p-3 bg-dark-800/50 rounded-lg">
-                    <div class="w-10 h-10 rounded-full overflow-hidden bg-primary-500">
+                  <div class="flex items-center space-x-3 p-3 bg-dark-800/50">
+                    <div class="w-10 h-10 overflow-hidden bg-primary-500">
                       <img src="${getProfileImageUrl(
                         claimDetails.originalPoster
                       )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1809,7 +1887,7 @@
                 }
               </div>
             </div>
-            <button onclick="this.closest('.modal-backdrop').remove()" class="w-full btn-primary py-3 rounded-xl font-semibold">
+            <button onclick="this.closest('.modal-backdrop').remove()" class="w-full btn-primary py-3 font-semibold">
               Close
             </button>
           </div>
@@ -1834,11 +1912,11 @@
               ${data.comments
                 .map(
                   (comment) => `
-                  <div class="glass-card rounded-2xl p-6 glow-on-hover">
+                  <div class="professional-card p-6 glow-on-hover">
                     <div class="flex items-start justify-between">
                       <div class="flex-1">
                         <div class="flex items-center space-x-3 mb-3">
-                          <div class="w-10 h-10 rounded-full overflow-hidden bg-primary-500">
+                          <div class="w-10 h-10 overflow-hidden bg-primary-500">
                             <img src="${getProfileImageUrl(
                               comment.postedBy
                             )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1864,7 +1942,7 @@
                         <p class="text-dark-200 mb-3 leading-relaxed">${
                           comment.content
                         }</p>
-                        <div class="inline-flex items-center px-3 py-1 bg-blue-500/20 text-blue-400 text-sm rounded-full border border-blue-500/30">
+                        <div class="inline-flex items-center px-3 py-1 bg-blue-500/20 text-blue-400 text-sm border-2 border-blue-500/30">
                           <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                             <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
@@ -1878,14 +1956,14 @@
                         }', '${comment.content.replace(
                     /'/g,
                     "\\'"
-                  )}'" class="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 rounded-lg transition-all duration-200">
+                  )}')" class="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                           </svg>
                         </button>
                         <button onclick="confirmDelete('comment', '${
                           comment._id
-                        }', 'this comment')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
+                        }', 'this comment')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                           </svg>
@@ -1901,14 +1979,14 @@
         } else {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center floating-element">
+              <div class="w-24 h-24 mx-auto mb-6 bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center floating-element">
                 <svg class="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
                 </svg>
               </div>
               <h3 class="text-xl font-semibold text-dark-100 mb-2">No Comments Yet</h3>
               <p class="text-dark-400 mb-6">Your comments on items will appear here</p>
-              <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
+              <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 font-semibold">
                 Browse Items
               </button>
             </div>
@@ -1933,11 +2011,11 @@
               ${data.suggestions
                 .map(
                   (suggestion) => `
-                  <div class="glass-card rounded-2xl p-6 glow-on-hover">
+                  <div class="professional-card p-6 glow-on-hover">
                     <div class="flex items-start justify-between">
                       <div class="flex-1">
                         <div class="flex items-center space-x-3 mb-3">
-                          <div class="w-10 h-10 rounded-full overflow-hidden bg-primary-500">
+                          <div class="w-10 h-10 overflow-hidden bg-primary-500">
                             <img src="${getProfileImageUrl(
                               suggestion.postedBy
                             )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -1970,14 +2048,14 @@
                         }', '${suggestion.content.replace(
                     /'/g,
                     "\\'"
-                  )}'" class="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 rounded-lg transition-all duration-200">
+                  )}')" class="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                           </svg>
                         </button>
                         <button onclick="confirmDelete('suggestion', '${
                           suggestion._id
-                        }', 'this suggestion')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
+                        }', 'this suggestion')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 transition-all duration-200">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                           </svg>
@@ -1993,14 +2071,14 @@
         } else {
           container.innerHTML = `
             <div class="text-center py-20">
-              <div class="w-24 h-24 mx-auto mb-6 bg-primary-500/20 rounded-full flex items-center justify-center floating-element">
+              <div class="w-24 h-24 mx-auto mb-6 bg-primary-500/20 border-2 border-primary-500 flex items-center justify-center floating-element">
                 <svg class="w-12 h-12 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                 </svg>
               </div>
               <h3 class="text-xl font-semibold text-dark-100 mb-2">No Suggestions Yet</h3>
               <p class="text-dark-400 mb-6">Your suggestions for improving the platform will appear here</p>
-              <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
+              <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 font-semibold">
                 Go to Home
               </button>
             </div>
@@ -2008,7 +2086,7 @@
         }
       }
 
-      // Enhanced Messages Loading with Better UI
+      // Enhanced Messages Loading with Better UI and Fixed Image Loading
       async function loadMessages() {
         const response = await fetch("/api/messages", {
           headers: {
@@ -2020,13 +2098,11 @@
         const container = document.getElementById("tabContent");
 
         if (data.messages && data.messages.length > 0) {
-          // Filter out messages sent to self
           const filteredMessages = data.messages.filter(
             (message) => message.sender._id !== message.receiver._id
           );
 
           if (filteredMessages.length > 0) {
-            // Group messages by conversation
             const conversations = {};
             filteredMessages.forEach((message) => {
               const otherUserId =
@@ -2048,7 +2124,6 @@
               }
               conversations[otherUserId].messages.push(message);
 
-              // Set last message for preview
               if (
                 !conversations[otherUserId].lastMessage ||
                 new Date(message.createdAt) >
@@ -2057,13 +2132,11 @@
                 conversations[otherUserId].lastMessage = message;
               }
 
-              // Count unread messages from other user
               if (message.receiver._id === currentUser._id && !message.read) {
                 conversations[otherUserId].unreadCount++;
               }
             });
 
-            // Sort conversations by last message time
             const sortedConversations = Object.values(conversations).sort(
               (a, b) =>
                 new Date(b.lastMessage.createdAt) -
@@ -2075,7 +2148,7 @@
                 ${sortedConversations
                   .map(
                     (conversation) => `
-                    <div class="glass-card rounded-2xl p-6 cursor-pointer glow-on-hover" onclick="openConversation('${
+                    <div class="professional-card p-6 cursor-pointer glow-on-hover" onclick="openConversation('${
                       conversation.user._id
                     }', '${conversation.user.firstName} ${
                       conversation.user.lastName
@@ -2083,7 +2156,7 @@
                       <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center space-x-4">
                           <div class="relative">
-                            <div class="w-14 h-14 rounded-full overflow-hidden bg-primary-500">
+                            <div class="user-avatar overflow-hidden">
                               <img src="${getProfileImageUrl(
                                 conversation.user
                               )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -2091,7 +2164,7 @@
                       conversation.user.lastName
                     )}'">
                             </div>
-                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-500 rounded-full border-2 border-dark-950 animate-pulse-soft"></div>
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-500 border-2 border-black animate-pulse-soft"></div>
                           </div>
                           <div class="flex-1">
                             <h4 class="font-bold text-lg text-dark-100">${
@@ -2110,7 +2183,7 @@
                         <div class="flex flex-col items-end space-y-2">
                           ${
                             conversation.unreadCount > 0
-                              ? `<div class="notification-badge w-6 h-6 text-white text-xs rounded-full flex items-center justify-center">
+                              ? `<div class="notification-badge w-6 h-6 text-white text-xs flex items-center justify-center">
                                    ${
                                      conversation.unreadCount > 99
                                        ? "99+"
@@ -2120,9 +2193,8 @@
                               : ""
                           }
                           ${
-                            // Prevent blocking self
                             conversation.user._id !== currentUser._id
-                              ? `<button onclick="event.stopPropagation(); confirmBlockUser('${conversation.user._id}', '${conversation.user.firstName} ${conversation.user.lastName}')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 rounded-lg transition-all duration-200">
+                              ? `<button onclick="event.stopPropagation(); confirmBlockUser('${conversation.user._id}', '${conversation.user.firstName} ${conversation.user.lastName}')" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 transition-all duration-200">
                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                      <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"></path>
                                    </svg>
@@ -2132,10 +2204,9 @@
                         </div>
                       </div>
                       
-                      <!-- Last Message Preview -->
-                      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600/50">
+                      <div class="bg-dark-800/50 p-3 border-2 border-dark-600/50">
                         <div class="flex items-start space-x-2">
-                          <div class="w-6 h-6 rounded-full overflow-hidden bg-primary-500 flex-shrink-0">
+                          <div class="w-6 h-6 overflow-hidden bg-primary-500 flex-shrink-0">
                             <img src="${getProfileImageUrl(
                               conversation.lastMessage.sender
                             )}" alt="Sender" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -2164,7 +2235,6 @@
                         </div>
                       </div>
                       
-                      <!-- Message Count -->
                       <div class="mt-3 flex items-center justify-between text-xs text-dark-500">
                         <span>${conversation.messages.length} message${
                       conversation.messages.length !== 1 ? "s" : ""
@@ -2185,38 +2255,38 @@
         }
       }
 
-      // Open conversation in modal
+      // Enhanced conversation interface with better image handling
       function openConversation(userId, userName) {
         const modal = document.createElement("div");
         modal.className =
           "fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
         modal.innerHTML = `
-          <div class="glass-card rounded-2xl max-w-4xl w-full h-[80vh] shadow-2xl animate-scale-in flex flex-col">
-            <div class="flex items-center justify-between p-6 border-b border-dark-600">
+          <div class="conversation-container max-w-4xl w-full h-[80vh] shadow-2xl animate-scale-in flex flex-col">
+            <div class="flex items-center justify-between p-6 border-b-2 border-primary-600">
               <h3 class="text-xl font-bold text-dark-100">Conversation with ${userName}</h3>
-              <button onclick="this.closest('.modal-backdrop').remove()" class="text-dark-400 hover:text-dark-200 p-2 rounded-lg hover:bg-dark-700 transition-all duration-200">
+              <button onclick="this.closest('.modal-backdrop').remove()" class="text-dark-400 hover:text-dark-200 p-2 hover:bg-dark-700 transition-all duration-200">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                 </svg>
               </button>
             </div>
-            <div id="conversationMessages" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div id="conversationMessages" class="message-container flex-1 p-6 space-y-4">
               <div class="flex justify-center items-center py-8">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+                <div class="animate-spin h-8 w-8 border-b-2 border-primary-500"></div>
               </div>
             </div>
-            <div class="p-6 border-t border-dark-600">
+            <div class="p-6 border-t-2 border-primary-600">
               <div class="flex space-x-4">
                 <input
                   type="text"
                   id="newMessageInput"
                   placeholder="Type your message..."
-                  class="flex-1 input-field rounded-xl px-4 py-3"
+                  class="flex-1 input-field px-4 py-3"
                   onkeypress="handleMessageKeyPress(event, '${userId}')"
                 />
                 <button
                   onclick="sendMessage('${userId}')"
-                  class="btn-primary px-6 py-3 rounded-xl font-semibold"
+                  class="btn-primary px-6 py-3 font-semibold"
                 >
                   Send
                 </button>
@@ -2226,16 +2296,14 @@
         `;
         document.body.appendChild(modal);
 
-        // Load conversation messages
         loadConversationMessages(userId);
 
-        // Focus on input
         setTimeout(() => {
           document.getElementById("newMessageInput").focus();
         }, 100);
       }
 
-      // Load conversation messages
+      // Enhanced conversation message loading with proper image handling
       async function loadConversationMessages(userId) {
         try {
           const response = await fetch(`/api/messages?userId=${userId}`, {
@@ -2261,7 +2329,7 @@
                       ? "flex-row-reverse space-x-reverse"
                       : ""
                   }">
-                    <div class="w-8 h-8 rounded-full overflow-hidden bg-primary-500 flex-shrink-0">
+                    <div class="user-avatar overflow-hidden flex-shrink-0">
                       <img src="${getProfileImageUrl(
                         message.sender
                       )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -2269,7 +2337,7 @@
                   message.sender.lastName
                 )}'">
                     </div>
-                    <div class="px-4 py-3 rounded-2xl ${
+                    <div class="px-4 py-3 ${
                       message.sender._id === currentUser._id
                         ? "message-bubble-sent"
                         : "message-bubble-received"
@@ -2290,7 +2358,6 @@
               )
               .join("");
 
-            // Scroll to bottom
             container.scrollTop = container.scrollHeight;
           } else {
             container.innerHTML = `
@@ -2309,7 +2376,6 @@
         }
       }
 
-      // Handle message input keypress
       function handleMessageKeyPress(event, userId) {
         if (event.key === "Enter" && !event.shiftKey) {
           event.preventDefault();
@@ -2317,7 +2383,6 @@
         }
       }
 
-      // Send message
       async function sendMessage(userId) {
         const input = document.getElementById("newMessageInput");
         const content = input.value.trim();
@@ -2349,11 +2414,10 @@
         }
       }
 
-      // Template for no messages state
       function getNoMessagesTemplate() {
         return `
           <div class="text-center py-20">
-            <div class="w-24 h-24 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center floating-element">
+            <div class="w-24 h-24 mx-auto mb-6 bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center floating-element">
               <svg class="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
@@ -2361,14 +2425,188 @@
             </div>
             <h3 class="text-xl font-semibold text-dark-100 mb-2">No Messages Yet</h3>
             <p class="text-dark-400 mb-6">Your conversations will appear here</p>
-            <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 rounded-xl font-semibold">
+            <button onclick="window.location.href='home.html'" class="btn-primary px-8 py-3 font-semibold">
               Browse Items
             </button>
           </div>
         `;
       }
 
-      // Helper function to get status class
+      // NEW: Load analytics data
+      async function loadAnalytics() {
+        try {
+          const [statsResponse, analyticsResponse] = await Promise.all([
+            fetch("/api/stats", {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }),
+            fetch("/api/analytics/overview", {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }),
+          ]);
+
+          const statsData = await statsResponse.json();
+          const analyticsData = await analyticsResponse.json();
+
+          const container = document.getElementById("tabContent");
+
+          container.innerHTML = `
+            <div class="space-y-8">
+              <!-- Personal Stats -->
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="analytics-card p-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-sm font-medium text-dark-400">Lost Items</p>
+                      <p class="stats-number text-3xl font-bold">${
+                        statsData.stats.lostCount
+                      }</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-500/20 border-2 border-red-500 flex items-center justify-center">
+                      <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="analytics-card p-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-sm font-medium text-dark-400">Found Items</p>
+                      <p class="stats-number text-3xl font-bold">${
+                        statsData.stats.foundCount
+                      }</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-500/20 border-2 border-green-500 flex items-center justify-center">
+                      <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="analytics-card p-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-sm font-medium text-dark-400">Reunited Items</p>
+                      <p class="stats-number text-3xl font-bold">${
+                        statsData.stats.reunitedCount
+                      }</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-500/20 border-2 border-purple-500 flex items-center justify-center">
+                      <svg class="w-6 h-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="analytics-card p-6">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-sm font-medium text-dark-400">My Claims</p>
+                      <p class="stats-number text-3xl font-bold">${
+                        statsData.stats.myClaimedCount
+                      }</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center">
+                      <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- System Overview -->
+              <div class="analytics-card p-8">
+                <h3 class="text-xl font-bold mb-6 gradient-text">System Overview</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div class="text-center">
+                    <p class="stats-number text-2xl font-bold">${
+                      analyticsData.analytics.totalUsers
+                    }</p>
+                    <p class="text-sm text-dark-400">Total Users</p>
+                  </div>
+                  <div class="text-center">
+                    <p class="stats-number text-2xl font-bold">${
+                      analyticsData.analytics.totalItems
+                    }</p>
+                    <p class="text-sm text-dark-400">Total Items</p>
+                  </div>
+                  <div class="text-center">
+                    <p class="stats-number text-2xl font-bold">${
+                      analyticsData.analytics.totalComments
+                    }</p>
+                    <p class="text-sm text-dark-400">Total Comments</p>
+                  </div>
+                  <div class="text-center">
+                    <p class="stats-number text-2xl font-bold">${
+                      analyticsData.analytics.totalMessages
+                    }</p>
+                    <p class="text-sm text-dark-400">Total Messages</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Items by Type and Status -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="analytics-card p-6">
+                  <h4 class="text-lg font-bold mb-4 text-dark-100">Items by Type</h4>
+                  <div class="space-y-3">
+                    ${analyticsData.analytics.itemsByType
+                      .map(
+                        (item) => `
+                      <div class="flex items-center justify-between">
+                        <span class="text-dark-300 capitalize">${item._id}</span>
+                        <span class="stats-number font-bold">${item.count}</span>
+                      </div>
+                    `
+                      )
+                      .join("")}
+                  </div>
+                </div>
+
+                <div class="analytics-card p-6">
+                  <h4 class="text-lg font-bold mb-4 text-dark-100">Items by Status</h4>
+                  <div class="space-y-3">
+                    ${analyticsData.analytics.itemsByStatus
+                      .map(
+                        (item) => `
+                      <div class="flex items-center justify-between">
+                        <span class="text-dark-300 capitalize">${item._id}</span>
+                        <span class="stats-number font-bold">${item.count}</span>
+                      </div>
+                    `
+                      )
+                      .join("")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } catch (error) {
+          console.error("Error loading analytics:", error);
+          const container = document.getElementById("tabContent");
+          container.innerHTML = `
+            <div class="text-center py-20">
+              <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 border-2 border-red-500 flex items-center justify-center">
+                <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-red-500 mb-2">Error Loading Analytics</h3>
+              <p class="text-dark-400">Please try refreshing the page</p>
+            </div>
+          `;
+        }
+      }
+
       function getStatusClass(status) {
         switch (status) {
           case "active":
@@ -2399,7 +2637,6 @@
             document.getElementById("editDescription").value = item.description;
             document.getElementById("editLocation").value = item.location;
 
-            // Handle validity questions for found items
             if (item.type === "found") {
               document
                 .getElementById("editValidityQuestionsSection")
@@ -2420,7 +2657,6 @@
         }
       }
 
-      // Load validity questions for editing
       function loadEditValidityQuestions(questions) {
         const container = document.getElementById("editValidityQuestionsList");
         editValidityQuestionCount = 0;
@@ -2435,17 +2671,16 @@
         }
       }
 
-      // Add validity question for editing
       function addEditValidityQuestion(question = "", answer = "") {
         const container = document.getElementById("editValidityQuestionsList");
         const questionDiv = document.createElement("div");
-        questionDiv.className = "glass-card p-4 rounded-lg";
+        questionDiv.className = "professional-card p-4";
         questionDiv.innerHTML = `
           <div class="flex items-center justify-between mb-3">
             <h4 class="font-semibold text-dark-200">Question ${
               editValidityQuestionCount + 1
             }</h4>
-            <button type="button" onclick="this.closest('.glass-card').remove()" class="text-red-400 hover:text-red-300 p-1 rounded">
+            <button type="button" onclick="this.closest('.professional-card').remove()" class="text-red-400 hover:text-red-300 p-1">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
@@ -2456,14 +2691,14 @@
               type="text"
               placeholder="Enter verification question"
               value="${question}"
-              class="w-full input-field rounded-lg px-3 py-2 text-sm validity-question"
+              class="w-full input-field px-3 py-2 text-sm validity-question"
               required
             />
             <input
               type="text"
               placeholder="Enter correct answer"
               value="${answer}"
-              class="w-full input-field rounded-lg px-3 py-2 text-sm validity-answer"
+              class="w-full input-field px-3 py-2 text-sm validity-answer"
               required
             />
           </div>
@@ -2472,7 +2707,6 @@
         editValidityQuestionCount++;
       }
 
-      // Handle edit item form submission
       document
         .getElementById("editItemForm")
         .addEventListener("submit", async function (e) {
@@ -2496,7 +2730,6 @@
             formData.append("image", imageFile);
           }
 
-          // Handle validity questions for found items
           const validityQuestionsSection = document.getElementById(
             "editValidityQuestionsSection"
           );
@@ -2541,34 +2774,44 @@
           }
         });
 
-      // View requests (both claim and inform requests) with enhanced UI and image support
+      // Enhanced view requests with proper question/answer comparison
       async function viewRequests(itemId, type) {
         try {
           showToast("Loading requests...", "info");
           const endpoint =
             type === "claim" ? "claim-requests" : "inform-requests";
-          const response = await fetch(`/api/items/${itemId}/${endpoint}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
+          const [requestsResponse, itemResponse] = await Promise.all([
+            fetch(`/api/items/${itemId}/${endpoint}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }),
+            fetch(`/api/items/${itemId}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }),
+          ]);
 
-          if (response.ok) {
-            const data = await response.json();
+          if (requestsResponse.ok && itemResponse.ok) {
+            const requestsData = await requestsResponse.json();
+            const itemData = await itemResponse.json();
             const content = document.getElementById("requestsContent");
             const title = document.getElementById("requestsModalTitle");
 
             title.textContent =
               type === "claim" ? "Claim Requests" : "Inform Requests";
             const requests =
-              type === "claim" ? data.claimRequests : data.informRequests;
+              type === "claim"
+                ? requestsData.claimRequests
+                : requestsData.informRequests;
 
             if (requests && requests.length > 0) {
               content.innerHTML = `
                 <div class="space-y-6">
                   ${requests
                     .map((request) =>
-                      generateRequestCard(request, itemId, type)
+                      generateRequestCard(request, itemId, type, itemData.item)
                     )
                     .join("")}
                 </div>
@@ -2576,7 +2819,7 @@
             } else {
               content.innerHTML = `
                 <div class="text-center py-12">
-                  <div class="w-16 h-16 mx-auto mb-4 bg-dark-600/20 rounded-full flex items-center justify-center">
+                  <div class="w-16 h-16 mx-auto mb-4 bg-dark-600/20 border-2 border-dark-600 flex items-center justify-center">
                     <svg class="w-8 h-8 text-dark-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
                     </svg>
@@ -2595,16 +2838,16 @@
         }
       }
 
-      // Generate request card HTML with enhanced UI and proper image loading
-      function generateRequestCard(request, itemId, type) {
+      // Enhanced request card generation with proper question/answer comparison
+      function generateRequestCard(request, itemId, type, item) {
         const userKey = type === "claim" ? "requestedBy" : "informedBy";
         const user = request[userKey];
 
         return `
-          <div class="glass-card rounded-2xl p-6 glow-on-hover">
+          <div class="professional-card p-6 glow-on-hover">
             <div class="flex items-center justify-between mb-6">
               <div class="flex items-center space-x-4">
-                <div class="w-14 h-14 rounded-full overflow-hidden bg-primary-500">
+                <div class="user-avatar overflow-hidden">
                   <img src="${getProfileImageUrl(
                     user
                   )}" alt="Profile" class="w-full h-full object-cover" onerror="this.src='${generateProfileInitials(
@@ -2622,32 +2865,76 @@
                   </p>
                 </div>
               </div>
-              <span class="status-badge px-4 py-2 text-sm font-bold rounded-full ${getRequestStatusClass(
+              <span class="status-badge px-4 py-2 text-sm font-bold ${getRequestStatusClass(
                 request.status
               )}">${request.status.toUpperCase()}</span>
             </div>
             
             ${
-              type === "claim" && request.answers && request.answers.length > 0
+              type === "claim" &&
+              request.answers &&
+              request.answers.length > 0 &&
+              item.validityQuestions
                 ? `
               <div class="mb-6">
                 <h5 class="font-semibold mb-3 text-dark-200 flex items-center">
                   <svg class="w-5 h-5 mr-2 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                   </svg>
-                  Answers to Verification Questions:
+                  Verification Questions & Answers:
                 </h5>
-                <div class="space-y-3">
-                  ${request.answers
-                    .map(
-                      (answer, index) =>
-                        `<div class="bg-dark-800/70 p-4 rounded-lg border border-dark-600/50">
-                           <p class="text-sm font-medium text-blue-400 mb-1">Question ${
-                             index + 1
-                           }:</p>
-                           <p class="text-sm text-dark-200">${answer}</p>
-                         </div>`
-                    )
+                <div class="space-y-4">
+                  ${item.validityQuestions
+                    .map((validityQ, index) => {
+                      const userAnswer =
+                        request.answers[index] || "No answer provided";
+                      const isCorrect =
+                        userAnswer.toLowerCase().trim() ===
+                        validityQ.answer.toLowerCase().trim();
+
+                      return `
+                      <div class="answer-comparison p-4 ${
+                        isCorrect ? "answer-correct" : "answer-incorrect"
+                      }">
+                        <div class="flex items-start justify-between mb-2">
+                          <p class="text-sm font-medium text-blue-400">Question ${
+                            index + 1
+                          }:</p>
+                          <div class="flex items-center space-x-1">
+                            <svg class="w-4 h-4 ${
+                              isCorrect ? "text-green-400" : "text-red-400"
+                            }" fill="currentColor" viewBox="0 0 20 20">
+                              ${
+                                isCorrect
+                                  ? '<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>'
+                                  : '<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>'
+                              }
+                            </svg>
+                            <span class="text-xs font-medium ${
+                              isCorrect ? "text-green-400" : "text-red-400"
+                            }">
+                              ${isCorrect ? "Correct" : "Incorrect"}
+                            </span>
+                          </div>
+                        </div>
+                        <p class="text-sm text-dark-200 mb-3">${
+                          validityQ.question
+                        }</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <p class="text-xs font-medium text-green-400 mb-1">Expected Answer:</p>
+                            <p class="text-sm text-dark-300 bg-green-500/10 p-2 border border-green-500/30">${
+                              validityQ.answer
+                            }</p>
+                          </div>
+                          <div>
+                            <p class="text-xs font-medium text-blue-400 mb-1">User's Answer:</p>
+                            <p class="text-sm text-dark-300 bg-blue-500/10 p-2 border border-blue-500/30">${userAnswer}</p>
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                    })
                     .join("")}
                 </div>
               </div>
@@ -2665,7 +2952,7 @@
                   </svg>
                   Finder's Message:
                 </h5>
-                <div class="bg-dark-800/70 p-4 rounded-lg border border-dark-600/50">
+                <div class="bg-dark-800/70 p-4 border-2 border-dark-600/50">
                   <p class="text-sm text-dark-200 leading-relaxed">${request.message}</p>
                 </div>
               </div>
@@ -2686,13 +2973,12 @@
                 <div class="relative">
                   <img 
                     src="${getFullImageUrl(request.image)}" 
-                
                     alt="Found item" 
-                    class="max-w-full h-64 object-cover rounded-lg cursor-pointer glow-on-hover"
+                    class="max-w-full h-64 object-cover cursor-pointer glow-on-hover border-2 border-primary-600"
                     onclick="showImageModal('${getFullImageUrl(
                       request.image
                     )}')"
-                    onerror="this.parentElement.innerHTML='<div class=\\'w-full h-64 bg-dark-800 rounded-lg border border-dark-600 flex items-center justify-center\\'>
+                    onerror="this.parentElement.innerHTML='<div class=\\'w-full h-64 bg-dark-800 border-2 border-dark-600 flex items-center justify-center\\'>
                       <div class=\\'text-center\\'>
                         <svg class=\\'w-12 h-12 text-dark-500 mx-auto mb-2\\' fill=\\'currentColor\\' viewBox=\\'0 0 20 20\\'>
                           <path fill-rule=\\'evenodd\\' d=\\'M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z\\' clip-rule=\\'evenodd\\'></path>
@@ -2701,7 +2987,7 @@
                       </div>
                     </div>'"
                   >
-                  <div class="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+                  <div class="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 text-xs">
                     Click to enlarge
                   </div>
                 </div>
@@ -2720,7 +3006,7 @@
                   </svg>
                   Additional Information:
                 </h5>
-                <div class="bg-dark-800/70 p-4 rounded-lg border border-dark-600/50">
+                <div class="bg-dark-800/70 p-4 border-2 border-dark-600/50">
                   <p class="text-sm text-dark-200 leading-relaxed">${request.additionalInfo}</p>
                 </div>
               </div>
@@ -2731,7 +3017,7 @@
             ${
               request.status === "approved" && request.contactInfo
                 ? `
-              <div class="contact-info-card p-6 rounded-xl mb-6">
+              <div class="contact-info-card p-6 mb-6">
                 <h5 class="font-semibold mb-4 text-accent-400 flex items-center text-lg">
                   <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
@@ -2819,7 +3105,7 @@
             ${
               request.status === "rejected" && request.rejectionReason
                 ? `
-              <div class="bg-red-500/10 border border-red-500/30 p-4 rounded-xl mb-6">
+              <div class="bg-red-500/10 border-2 border-red-500/30 p-4 mb-6">
                 <h5 class="font-semibold mb-2 text-red-400 flex items-center">
                   <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
@@ -2836,10 +3122,10 @@
               request.status === "pending"
                 ? `
               <div class="flex gap-4 mt-6">
-                <button onclick="showContactInfo('${itemId}', '${request._id}', '${type}')" class="flex-1 btn-primary py-3 rounded-xl text-sm font-semibold">
+                <button onclick="showContactInfo('${itemId}', '${request._id}', '${type}')" class="flex-1 btn-primary py-3 text-sm font-semibold">
                   Approve Request
                 </button>
-                <button onclick="showRejectionModal('${itemId}', '${request._id}', '${type}')" class="flex-1 btn-danger py-3 rounded-xl text-sm font-semibold">
+                <button onclick="showRejectionModal('${itemId}', '${request._id}', '${type}')" class="flex-1 btn-danger py-3 text-sm font-semibold">
                   Reject Request
                 </button>
               </div>
@@ -2850,7 +3136,6 @@
         `;
       }
 
-      // Show image in modal
       function showImageModal(imageSrc) {
         const modal = document.createElement("div");
         modal.className =
@@ -2859,7 +3144,7 @@
           <div class="relative max-w-4xl max-h-[90vh] w-full">
             <button 
               onclick="this.closest('.modal-backdrop').remove()" 
-              class="absolute top-4 right-4 z-10 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-all duration-200"
+              class="absolute top-4 right-4 z-10 bg-black/50 text-white p-2 hover:bg-black/70 transition-all duration-200"
             >
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -2868,42 +3153,38 @@
             <img 
               src="${imageSrc}" 
               alt="Full size image" 
-              class="w-full h-full object-contain rounded-lg shadow-2xl"
+              class="w-full h-full object-contain shadow-2xl border-2 border-primary-600"
             >
           </div>
         `;
         document.body.appendChild(modal);
       }
 
-      // Get request status class
       function getRequestStatusClass(status) {
         switch (status) {
           case "pending":
-            return "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30";
+            return "bg-yellow-500/20 text-yellow-400 border-2 border-yellow-500/30";
           case "approved":
             return "status-found";
           case "rejected":
-            return "bg-red-500/20 text-red-400 border border-red-500/30";
+            return "bg-red-500/20 text-red-400 border-2 border-red-500/30";
           default:
-            return "bg-gray-500/20 text-gray-400 border border-gray-500/30";
+            return "bg-gray-500/20 text-gray-400 border-2 border-gray-500/30";
         }
       }
 
-      // Show contact info modal (updated to handle both types)
       function showContactInfo(itemId, requestId, type) {
         pendingApproval = { itemId, requestId, type };
         document.getElementById("contactInfoModal").classList.remove("hidden");
         document.getElementById("contactPhone").focus();
       }
 
-      // Hide contact info modal
       function hideContactInfo() {
         document.getElementById("contactInfoModal").classList.add("hidden");
         document.getElementById("contactInfoForm").reset();
         pendingApproval = null;
       }
 
-      // Handle contact info form submission (updated to handle both types)
       document
         .getElementById("contactInfoForm")
         .addEventListener("submit", async function (e) {
@@ -2962,7 +3243,6 @@
           }
         });
 
-      // View contact info for claimed items with enhanced formatting
       async function viewContactInfo(itemId) {
         try {
           showToast("Loading contact information...", "info");
@@ -2976,21 +3256,20 @@
             const data = await response.json();
             const contactInfo = data.contactInfo;
 
-            // Create a modal to display contact info
             const modal = document.createElement("div");
             modal.className =
               "fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
             modal.innerHTML = `
-              <div class="glass-card rounded-2xl max-w-lg w-full p-8 shadow-2xl animate-scale-in">
+              <div class="professional-card max-w-lg w-full p-8 shadow-2xl animate-scale-in">
                 <h3 class="text-2xl font-bold mb-6 gradient-text">
                   Contact Information
                 </h3>
-                <div class="contact-info-card p-6 rounded-xl mb-6">
+                <div class="contact-info-card p-6 mb-6">
                   <div class="space-y-4">
                     ${
                       contactInfo.phone
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                             <div class="w-10 h-10 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center">
                                <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                                </svg>
@@ -3005,7 +3284,7 @@
                     ${
                       contactInfo.alternatePhone
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                             <div class="w-10 h-10 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center">
                                <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                                </svg>
@@ -3020,7 +3299,7 @@
                     ${
                       contactInfo.email
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                             <div class="w-10 h-10 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center">
                                <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                                </svg>
@@ -3035,7 +3314,7 @@
                     ${
                       contactInfo.meetingLocation
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                             <div class="w-10 h-10 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center">
                                <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                                </svg>
@@ -3050,7 +3329,7 @@
                     ${
                       contactInfo.meetingTime
                         ? `<div class="flex items-center space-x-3">
-                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                             <div class="w-10 h-10 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center">
                                <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                </svg>
@@ -3065,7 +3344,7 @@
                     ${
                       contactInfo.additionalNotes
                         ? `<div class="flex items-start space-x-3">
-                             <div class="w-10 h-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                             <div class="w-10 h-10 bg-accent-500/20 border-2 border-accent-500 flex items-center justify-center">
                                <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                                  <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path>
                                </svg>
@@ -3079,7 +3358,7 @@
                     }
                   </div>
                 </div>
-                <button onclick="this.closest('.modal-backdrop').remove()" class="w-full btn-primary py-3 rounded-xl font-semibold">
+                <button onclick="this.closest('.modal-backdrop').remove()" class="w-full btn-primary py-3 font-semibold">
                   Close
                 </button>
               </div>
@@ -3096,21 +3375,18 @@
         }
       }
 
-      // Show rejection modal (updated to handle both types)
       function showRejectionModal(itemId, requestId, type) {
         pendingRejection = { itemId, requestId, type };
         document.getElementById("rejectionModal").classList.remove("hidden");
         document.getElementById("rejectionReason").focus();
       }
 
-      // Hide rejection modal
       function hideRejectionModal() {
         document.getElementById("rejectionModal").classList.add("hidden");
         document.getElementById("rejectionReason").value = "";
         pendingRejection = null;
       }
 
-      // Submit rejection (updated to handle both types)
       async function submitRejection() {
         const reason = document.getElementById("rejectionReason").value.trim();
         if (!reason) {
@@ -3151,9 +3427,7 @@
         }
       }
 
-      // Confirm block user (FIXED: Prevent self-blocking)
       function confirmBlockUser(userId, userName) {
-        // FIXED: Check if user is trying to block themselves
         if (userId === currentUser._id) {
           showToast("You cannot block yourself", "warning");
           return;
@@ -3170,7 +3444,6 @@
         document.getElementById("blockUserModal").classList.remove("hidden");
       }
 
-      // Block user
       async function blockUser(userId) {
         try {
           showToast("Blocking user...", "info");
@@ -3183,7 +3456,7 @@
 
           if (response.ok) {
             showToast("User blocked successfully!", "success");
-            switchTab("messages"); // Refresh messages
+            switchTab("messages");
           } else {
             throw new Error("Failed to block user");
           }
@@ -3192,13 +3465,11 @@
         }
       }
 
-      // Hide block user modal
       function hideBlockUser() {
         document.getElementById("blockUserModal").classList.add("hidden");
         pendingBlock = null;
       }
 
-      // Confirm delete function
       function confirmDelete(type, id, name) {
         deleteCallback = () => {
           switch (type) {
@@ -3226,7 +3497,6 @@
           .classList.remove("hidden");
       }
 
-      // Delete item
       async function deleteItem(itemId) {
         try {
           showToast("Deleting item...", "info");
@@ -3248,7 +3518,6 @@
         }
       }
 
-      // Edit comment
       function editComment(commentId, content) {
         editingType = "comment";
         editingId = commentId;
@@ -3257,7 +3526,6 @@
         document.getElementById("editModal").classList.remove("hidden");
       }
 
-      // Edit suggestion
       function editSuggestion(suggestionId, content) {
         editingType = "suggestion";
         editingId = suggestionId;
@@ -3267,7 +3535,6 @@
         document.getElementById("editModal").classList.remove("hidden");
       }
 
-      // Save edit
       async function saveEdit() {
         const content = document.getElementById("editContent").value.trim();
         if (!content) {
@@ -3310,7 +3577,6 @@
         }
       }
 
-      // Delete comment
       async function deleteComment(commentId) {
         try {
           showToast("Deleting comment...", "info");
@@ -3332,7 +3598,6 @@
         }
       }
 
-      // Delete suggestion
       async function deleteSuggestion(suggestionId) {
         try {
           showToast("Deleting suggestion...", "info");
@@ -3384,13 +3649,11 @@
         deleteCallback = null;
       }
 
-      // Navigation functions
       function goHome() {
         window.location.href = "home.html";
       }
 
       function logout() {
-        // Clear notification polling
         if (notificationPollingInterval) {
           clearInterval(notificationPollingInterval);
         }
@@ -3402,7 +3665,6 @@
         }, 1000);
       }
 
-      // Show toast function with enhanced styling
       function showToast(message, type = "info") {
         const container = document.getElementById("toastContainer");
         const toastDiv = document.createElement("div");
@@ -3421,7 +3683,7 @@
           info: `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>`,
         };
 
-        toastDiv.className = `${colors[type]} text-white px-6 py-4 rounded-2xl shadow-2xl transform transition-all duration-300 flex items-center space-x-3 max-w-md animate-slide-down`;
+        toastDiv.className = `${colors[type]} text-white px-6 py-4 shadow-2xl transform transition-all duration-300 flex items-center space-x-3 max-w-md animate-slide-down border-2 border-white/20`;
         toastDiv.innerHTML = `
           ${icons[type]}
           <span class="font-medium">${message}</span>
@@ -3439,7 +3701,6 @@
         }, 4000);
       }
 
-      // Cleanup on page unload
       window.addEventListener("beforeunload", () => {
         if (notificationPollingInterval) {
           clearInterval(notificationPollingInterval);
