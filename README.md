@@ -6,20 +6,26 @@ A simple Node.js-powered authentication system for managing lost & found reports
 
 ## 🚀 Getting Started
 
-Follow the steps below to run the project locally:
+Follow the steps below to run the project locally or via Docker:
 
 ---
 
 ### ✅ Prerequisites
 
-- [Node.js](https://nodejs.org/) must be installed  
-- Use **MongoDB Atlas** _or_ install **MongoDB locally**
+- [Node.js](https://nodejs.org/) must be installed *(for manual/local setup)*
+- [Docker](https://www.docker.com/) must be installed *(for Docker-based setup)*
+- Use **MongoDB Atlas** _or_ install **MongoDB locally** if not using Docker
 
 ---
 
-### 📦 Installation Steps
+### 📦 Manual Installation Steps
 
-1. **Clone the repository** (or download the source)
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/your-username/bup-lost-found-bulletin.git
+   cd bup-lost-found-bulletin
+   ```
 
 2. **Set up MongoDB**
 
@@ -44,6 +50,40 @@ Follow the steps below to run the project locally:
    ```
 
 > 💡 All commands must be run from the **project root directory**.
+
+---
+
+### 🐳 Dockerized Setup (Recommended)
+
+If you have Docker installed, you can skip manual MongoDB setup.
+
+#### 📥 Clone and Run the Project via Docker
+
+```bash
+git clone https://github.com/your-username/bup-lost-found-bulletin.git
+cd bup-lost-found-bulletin
+docker-compose up --build
+```
+
+#### 🛑 Stop the Running App
+
+```bash
+docker-compose down
+```
+
+#### 🧨 Stop and Wipe MongoDB Data
+
+```bash
+docker-compose down -v
+```
+
+#### 🔁 Rebuild the App from Scratch
+
+```bash
+docker-compose up --build --force-recreate
+```
+
+> 📌 MongoDB and Node.js will run in isolated containers. The data will persist unless you wipe volumes.
 
 ---
 
@@ -72,7 +112,10 @@ project-root/
 │
 ├── server.js
 ├── .env
+├── Dockerfile
+├── docker-compose.yml
 ├── package.json
+├── public/
 └── ...
 ```
 
@@ -81,7 +124,6 @@ project-root/
 ### ✅ You're all set!
 
 Now go ahead and build out your **Lost & Found** platform 🚀
-
 
 ---
 
@@ -92,4 +134,3 @@ Once the server is running, open your browser and visit:
 👉 [http://localhost:5000](http://localhost:5000)
 
 This is where the BUP Lost-Found Bulletin will be accessible locally.
-
