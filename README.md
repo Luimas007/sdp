@@ -12,8 +12,8 @@ Follow the steps below to run the project locally or via Docker:
 
 ### ✅ Prerequisites
 
-- [Node.js](https://nodejs.org/) must be installed *(for manual/local setup)*
-- [Docker](https://www.docker.com/) must be installed *(for Docker-based setup)*
+- [Node.js](https://nodejs.org/) must be installed _(for manual/local setup)_
+- [Docker](https://www.docker.com/) must be installed _(for Docker-based setup)_
 - Use **MongoDB Atlas** _or_ install **MongoDB locally** if not using Docker
 
 ---
@@ -29,8 +29,8 @@ Follow the steps below to run the project locally or via Docker:
 
 2. **Set up MongoDB**
 
-   - **Option A**: Use a **MongoDB Atlas** connection string  
-   - **Option B**: Install **MongoDB locally**, then ensure it's running  
+   - **Option A**: Use a **MongoDB Atlas** connection string
+   - **Option B**: Install **MongoDB locally**, then ensure it's running
    - Replace the default MongoDB URL in your `.env` file like so:
 
      ```env
@@ -60,8 +60,7 @@ If you have Docker installed, you can skip manual MongoDB setup.
 #### 📥 Clone and Run the Project via Docker
 
 ```bash
-git clone https://github.com/your-username/bup-lost-found-bulletin.git
-cd bup-lost-found-bulletin
+git clone https://github.com/Luimas007/sdp.git
 docker-compose up --build
 ```
 
