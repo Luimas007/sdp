@@ -71,6 +71,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Helper function to format names to title case
+const toTitleCase = (str) => {
+  if (!str) return str;
+  return str.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+};
+
 // Models
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -208,6 +214,7 @@ const ItemSchema = new mongoose.Schema({
   },
   tags: [{ type: String }],
   viewCount: { type: Number, default: 0 },
+  viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Track who has viewed this item
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
@@ -566,10 +573,10 @@ app.post(
       const otp = generateOTP();
       const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-      // Create new user with idCardImage as initial profileImage
+      // Create new user with idCardImage as initial profileImage and format names to title case
       const user = new User({
-        firstName,
-        lastName,
+        firstName: toTitleCase(firstName),
+        lastName: toTitleCase(lastName),
         email,
         phone,
         department,
@@ -589,7 +596,7 @@ app.post(
       await createNotification(
         user._id,
         "Welcome to Campus Lost & Found!",
-        `Welcome ${firstName}! Please verify your email to complete registration.`,
+        `Welcome ${user.firstName}! Please verify your email to complete registration.`,
         "user_registered",
         user._id,
         true
@@ -701,6 +708,7 @@ app.post("/api/auth/resend-otp", async (req, res) => {
   }
 });
 
+// UPDATED: Modified login route to handle unverified users better
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -712,17 +720,27 @@ app.post("/api/auth/login", async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    if (!user.isVerified) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Please verify your email first" });
-    }
-
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid credentials" });
+    }
+
+    // NEW: If user is not verified, return specific response with user info
+    if (!user.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email first",
+        requiresVerification: true,
+        userId: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profileImage: user.profileImage
+          ? `/uploads/${user.profileImage}`
+          : `/uploads/${user.idCardImage}`,
+      });
     }
 
     // Generate OTP for login
@@ -743,6 +761,116 @@ app.post("/api/auth/login", async (req, res) => {
       profileImage: user.profileImage
         ? `/uploads/${user.profileImage}`
         : `/uploads/${user.idCardImage}`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Send verification OTP for unverified users trying to login
+app.post("/api/auth/send-verification-otp", async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User is already verified" });
+    }
+
+    // Generate new OTP for verification
+    const otp = generateOTP();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    user.otp = otp;
+    user.otpExpires = otpExpires;
+    await user.save();
+
+    // Log OTP to console immediately
+    console.log(`Verification OTP for ${user.email}: ${otp}`);
+
+    // Create notification for verification OTP sent
+    await createNotification(
+      user._id,
+      "Verification OTP Sent",
+      "Please verify your email to continue using Campus Lost & Found.",
+      "system",
+      user._id,
+      true
+    );
+
+    res.status(200).json({
+      success: true,
+      message:
+        "Verification OTP sent to your email. Please verify to continue.",
+      userId: user._id,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// NEW: Verify email for login (specifically for unverified users)
+app.post("/api/auth/verify-for-login", async (req, res) => {
+  try {
+    const { userId, otp } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User is already verified" });
+    }
+
+    // Use enhanced OTP verification
+    if (!verifyOTP(otp, user.otp, user.otpExpires)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired OTP" });
+    }
+
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+
+    // Create notification for successful verification
+    await createNotification(
+      user._id,
+      "Email Verified Successfully!",
+      "Your email has been verified. You can now login to Campus Lost & Found.",
+      "system",
+      user._id
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully. You can now login.",
+      canProceedToLogin: true,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        profileImage: user.profileImage
+          ? `/uploads/${user.profileImage}`
+          : `/uploads/${user.idCardImage}`,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -971,9 +1099,9 @@ app.put(
           .json({ success: false, message: "Current password is incorrect" });
       }
 
-      // Update user details
-      user.firstName = firstName || user.firstName;
-      user.lastName = lastName || user.lastName;
+      // Update user details with title case formatting
+      user.firstName = firstName ? toTitleCase(firstName) : user.firstName;
+      user.lastName = lastName ? toTitleCase(lastName) : user.lastName;
       user.phone = phone || user.phone;
       user.department = department || user.department;
 
@@ -1428,9 +1556,12 @@ app.get("/api/items/:id", authenticate, async (req, res) => {
         .json({ success: false, message: "Item not found" });
     }
 
-    // Increment view count
-    item.viewCount += 1;
-    await item.save();
+    // Only increment view count if the user hasn't viewed this item before
+    if (!item.viewedBy.includes(req.user._id)) {
+      item.viewCount += 1;
+      item.viewedBy.push(req.user._id);
+      await item.save();
+    }
 
     const itemObj = item.toObject();
     if (itemObj.image) {
@@ -2730,10 +2861,18 @@ app.post("/api/comments/:id/like", authenticate, async (req, res) => {
   }
 });
 
-// Message Routes
+// Message Routes - UPDATED WITH SELF-MESSAGE PREVENTION
 app.post("/api/messages", authenticate, async (req, res) => {
   try {
     const { receiver, content } = req.body;
+
+    // Check if the user is trying to send message to themselves
+    if (receiver === req.user._id.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot send a message to yourself",
+      });
+    }
 
     // Check if receiver exists
     const receiverUser = await User.findById(receiver);

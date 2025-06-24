@@ -488,6 +488,30 @@
           transform: rotate(360deg);
         }
       }
+
+      .warning-message {
+        color: #f59e0b;
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .info-message {
+        color: #3b82f6;
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
     </style>
   </head>
   <body>
@@ -649,9 +673,140 @@
       </div>
     </div>
 
-    <!-- OTP Verification Modal -->
+    <!-- Email Verification Required Modal -->
     <div
-      id="otpModal"
+      id="verificationRequiredModal"
+      class="fixed inset-0 modal-backdrop flex items-center justify-center hidden z-50"
+    >
+      <div class="modal-content rounded-2xl p-8 max-w-md w-full m-4 relative">
+        <div class="text-center mb-6">
+          <div
+            class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">
+            Email Verification Required
+          </h3>
+          <p class="text-gray-400">
+            Your account is not verified yet. Please verify your email address
+            to continue.
+          </p>
+        </div>
+
+        <div class="warning-message">
+          <i class="fas fa-info-circle text-xl"></i>
+          <div>
+            <p class="font-medium">Account Found</p>
+            <p class="text-sm opacity-90">
+              We found your account but it needs to be verified first.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <button
+            id="sendVerificationBtn"
+            class="btn-primary py-3 px-4 rounded-lg font-medium relative overflow-hidden"
+          >
+            <span class="relative z-10">
+              <i class="fas fa-envelope mr-2"></i>Send Verification Email
+            </span>
+          </button>
+          <button
+            id="backToLoginBtn"
+            class="btn-secondary py-3 px-4 rounded-lg font-medium transition-all duration-300"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>Back to Login
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Verification OTP Modal -->
+    <div
+      id="emailVerificationModal"
+      class="fixed inset-0 modal-backdrop flex items-center justify-center hidden z-50"
+    >
+      <div class="modal-content rounded-2xl p-8 max-w-md w-full m-4 relative">
+        <div class="text-center mb-6">
+          <div class="pulse-ring w-16 h-16 mx-auto mb-4"></div>
+          <div
+            class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <i class="fas fa-envelope-open text-white text-2xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">Verify Your Email</h3>
+          <p class="text-gray-400">
+            We've sent a 6-digit verification code to your email. Please enter
+            it below:
+          </p>
+        </div>
+
+        <div class="info-message">
+          <i class="fas fa-lightbulb text-xl"></i>
+          <div>
+            <p class="font-medium">Check Your Email</p>
+            <p class="text-sm opacity-90">
+              The verification code should arrive within a few minutes.
+            </p>
+          </div>
+        </div>
+
+        <form id="emailVerificationForm">
+          <input type="hidden" id="verificationUserId" />
+          <div class="mb-6">
+            <label for="verificationOtp" class="form-label text-center block">
+              <i class="fas fa-key mr-2"></i>Verification Code
+            </label>
+            <input
+              type="text"
+              id="verificationOtp"
+              maxlength="6"
+              pattern="\d{6}"
+              required
+              class="form-input otp-input w-full rounded-lg p-4 text-white placeholder-gray-400"
+              placeholder="000000"
+            />
+            <p id="verificationOtpError" class="error-message hidden mt-2">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter a valid 6-digit verification code
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button
+              type="button"
+              id="resendVerificationBtn"
+              class="flex-1 btn-secondary py-3 px-4 rounded-lg font-medium transition-all duration-300"
+            >
+              <i class="fas fa-redo mr-2"></i>Resend Code
+            </button>
+            <button
+              type="submit"
+              class="flex-1 btn-primary py-3 px-4 rounded-lg font-medium relative overflow-hidden"
+            >
+              <span class="relative z-10">
+                <i class="fas fa-check mr-2"></i>Verify Email
+              </span>
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-4 text-center">
+          <button
+            id="backToVerificationRequiredBtn"
+            class="text-gray-400 hover:text-white transition-colors text-sm"
+          >
+            <i class="fas fa-arrow-left mr-1"></i>Back
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login OTP Verification Modal -->
+    <div
+      id="loginOtpModal"
       class="fixed inset-0 modal-backdrop flex items-center justify-center hidden z-50"
     >
       <div class="modal-content rounded-2xl p-8 max-w-md w-full m-4 relative">
@@ -668,22 +823,22 @@
           </p>
         </div>
 
-        <form id="otpForm">
-          <input type="hidden" id="userId" />
+        <form id="loginOtpForm">
+          <input type="hidden" id="loginUserId" />
           <div class="mb-6">
-            <label for="otp" class="form-label text-center block">
+            <label for="loginOtp" class="form-label text-center block">
               <i class="fas fa-key mr-2"></i>OTP Code
             </label>
             <input
               type="text"
-              id="otp"
+              id="loginOtp"
               maxlength="6"
               pattern="\d{6}"
               required
               class="form-input otp-input w-full rounded-lg p-4 text-white placeholder-gray-400"
               placeholder="000000"
             />
-            <p id="otpError" class="error-message hidden mt-2">
+            <p id="loginOtpError" class="error-message hidden mt-2">
               <i class="fas fa-exclamation-circle"></i>
               Please enter a valid 6-digit OTP
             </p>
@@ -692,7 +847,7 @@
           <div class="flex flex-col sm:flex-row gap-4">
             <button
               type="button"
-              id="resendOtpBtn"
+              id="resendLoginOtpBtn"
               class="flex-1 btn-secondary py-3 px-4 rounded-lg font-medium transition-all duration-300"
             >
               <i class="fas fa-redo mr-2"></i>Resend OTP
@@ -702,7 +857,7 @@
               class="flex-1 btn-primary py-3 px-4 rounded-lg font-medium relative overflow-hidden"
             >
               <span class="relative z-10">
-                <i class="fas fa-check mr-2"></i>Verify
+                <i class="fas fa-check mr-2"></i>Verify & Login
               </span>
             </button>
           </div>
@@ -711,7 +866,8 @@
     </div>
 
     <script>
-      let userId = null;
+      let currentUserId = null;
+      let userEmail = null;
 
       function togglePasswordVisibility(fieldId, iconId) {
         const field = document.getElementById(fieldId);
@@ -733,6 +889,25 @@
         return re.test(email);
       }
 
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.remove("hidden");
+      }
+
+      function hideModal(modalId) {
+        document.getElementById(modalId).classList.add("hidden");
+      }
+
+      function hideAllModals() {
+        hideModal("verificationRequiredModal");
+        hideModal("emailVerificationModal");
+        hideModal("loginOtpModal");
+      }
+
+      function showAlert(message, type = "info") {
+        alert(message); // You can replace this with a better notification system
+      }
+
+      // Main login form submission
       document
         .getElementById("loginForm")
         .addEventListener("submit", async function (e) {
@@ -753,6 +928,8 @@
             document.getElementById("passwordError").classList.remove("hidden");
             return;
           }
+
+          userEmail = email;
 
           // Add loading state
           const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -775,16 +952,28 @@
 
             const data = await response.json();
 
-            if (data.success) {
-              userId = data.userId;
-              document.getElementById("userId").value = userId;
-              document.getElementById("otpModal").classList.remove("hidden");
+            if (response.status === 403 && data.requiresVerification) {
+              // User exists but is not verified
+              currentUserId = data.userId;
+              document.getElementById("verificationUserId").value =
+                currentUserId;
+              hideAllModals();
+              showModal("verificationRequiredModal");
+            } else if (data.success) {
+              // User is verified, proceed with login OTP
+              currentUserId = data.userId;
+              document.getElementById("loginUserId").value = currentUserId;
+              hideAllModals();
+              showModal("loginOtpModal");
             } else {
-              alert(data.message || "Login failed. Please try again.");
+              showAlert(
+                data.message || "Login failed. Please try again.",
+                "error"
+              );
             }
           } catch (error) {
             console.error("Error:", error);
-            alert("An error occurred. Please try again.");
+            showAlert("An error occurred. Please try again.", "error");
           } finally {
             // Reset button state
             submitBtn.innerHTML = originalText;
@@ -792,14 +981,119 @@
           }
         });
 
+      // Send verification email button
       document
-        .getElementById("otpForm")
+        .getElementById("sendVerificationBtn")
+        .addEventListener("click", async function () {
+          if (!currentUserId) return;
+
+          // Add loading state
+          const originalText = this.innerHTML;
+          this.innerHTML =
+            '<span class="relative z-10"><i class="fas fa-spinner fa-spin mr-2"></i>Sending...</span>';
+          this.disabled = true;
+
+          try {
+            const response = await fetch("/api/auth/send-verification-otp", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userId: currentUserId,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              hideModal("verificationRequiredModal");
+              showModal("emailVerificationModal");
+            } else {
+              showAlert(
+                data.message ||
+                  "Failed to send verification email. Please try again.",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            showAlert("An error occurred. Please try again.", "error");
+          } finally {
+            // Reset button state
+            this.innerHTML = originalText;
+            this.disabled = false;
+          }
+        });
+
+      // Email verification form submission
+      document
+        .getElementById("emailVerificationForm")
         .addEventListener("submit", async function (e) {
           e.preventDefault();
 
-          const otp = document.getElementById("otp").value.trim();
+          const otp = document.getElementById("verificationOtp").value.trim();
           if (!otp || otp.length !== 6 || !/^\d+$/.test(otp)) {
-            document.getElementById("otpError").classList.remove("hidden");
+            document
+              .getElementById("verificationOtpError")
+              .classList.remove("hidden");
+            return;
+          }
+
+          // Add loading state
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML =
+            '<span class="relative z-10"><i class="fas fa-spinner fa-spin mr-2"></i>Verifying...</span>';
+          submitBtn.disabled = true;
+
+          try {
+            const response = await fetch("/api/auth/verify-for-login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userId: document.getElementById("verificationUserId").value,
+                otp: otp,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              hideAllModals();
+              showAlert(
+                "Email verified successfully! You can now login.",
+                "success"
+              );
+              // Reset the form to allow user to login again
+              document.getElementById("loginForm").reset();
+            } else {
+              showAlert(
+                data.message || "Verification failed. Please try again.",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            showAlert("An error occurred. Please try again.", "error");
+          } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          }
+        });
+
+      // Login OTP form submission
+      document
+        .getElementById("loginOtpForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const otp = document.getElementById("loginOtp").value.trim();
+          if (!otp || otp.length !== 6 || !/^\d+$/.test(otp)) {
+            document.getElementById("loginOtpError").classList.remove("hidden");
             return;
           }
 
@@ -817,7 +1111,7 @@
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                userId: document.getElementById("userId").value,
+                userId: document.getElementById("loginUserId").value,
                 otp: otp,
               }),
             });
@@ -829,11 +1123,14 @@
               localStorage.setItem("user", JSON.stringify(data.user));
               window.location.href = "home.html";
             } else {
-              alert(data.message || "Verification failed. Please try again.");
+              showAlert(
+                data.message || "Verification failed. Please try again.",
+                "error"
+              );
             }
           } catch (error) {
             console.error("Error:", error);
-            alert("An error occurred. Please try again.");
+            showAlert("An error occurred. Please try again.", "error");
           } finally {
             // Reset button state
             submitBtn.innerHTML = originalText;
@@ -841,10 +1138,58 @@
           }
         });
 
+      // Resend verification OTP button
       document
-        .getElementById("resendOtpBtn")
+        .getElementById("resendVerificationBtn")
         .addEventListener("click", async function () {
-          if (!userId) return;
+          if (!currentUserId) return;
+
+          // Add loading state
+          const originalText = this.innerHTML;
+          this.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+          this.disabled = true;
+
+          try {
+            const response = await fetch("/api/auth/send-verification-otp", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userId: currentUserId,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              showAlert(
+                "New verification code has been sent to your email.",
+                "success"
+              );
+            } else {
+              showAlert(
+                data.message ||
+                  "Failed to resend verification code. Please try again.",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            showAlert("An error occurred. Please try again.", "error");
+          } finally {
+            // Reset button state
+            this.innerHTML = originalText;
+            this.disabled = false;
+          }
+        });
+
+      // Resend login OTP button
+      document
+        .getElementById("resendLoginOtpBtn")
+        .addEventListener("click", async function () {
+          if (!currentUserId) return;
 
           // Add loading state
           const originalText = this.innerHTML;
@@ -859,26 +1204,76 @@
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                userId: userId,
+                userId: currentUserId,
               }),
             });
 
             const data = await response.json();
 
             if (data.success) {
-              alert("New OTP has been sent to your email.");
+              showAlert("New OTP has been sent to your email.", "success");
             } else {
-              alert(data.message || "Failed to resend OTP. Please try again.");
+              showAlert(
+                data.message || "Failed to resend OTP. Please try again.",
+                "error"
+              );
             }
           } catch (error) {
             console.error("Error:", error);
-            alert("An error occurred. Please try again.");
+            showAlert("An error occurred. Please try again.", "error");
           } finally {
             // Reset button state
             this.innerHTML = originalText;
             this.disabled = false;
           }
         });
+
+      // Back button handlers
+      document
+        .getElementById("backToLoginBtn")
+        .addEventListener("click", function () {
+          hideAllModals();
+          currentUserId = null;
+          userEmail = null;
+        });
+
+      document
+        .getElementById("backToVerificationRequiredBtn")
+        .addEventListener("click", function () {
+          hideModal("emailVerificationModal");
+          showModal("verificationRequiredModal");
+        });
+
+      // Clear error messages when user starts typing
+      document
+        .getElementById("verificationOtp")
+        .addEventListener("input", function () {
+          document
+            .getElementById("verificationOtpError")
+            .classList.add("hidden");
+        });
+
+      document
+        .getElementById("loginOtp")
+        .addEventListener("input", function () {
+          document.getElementById("loginOtpError").classList.add("hidden");
+        });
+
+      // Auto-format OTP inputs
+      function formatOtpInput(input) {
+        input.addEventListener("input", function (e) {
+          // Remove any non-digit characters
+          this.value = this.value.replace(/\D/g, "");
+
+          // Limit to 6 digits
+          if (this.value.length > 6) {
+            this.value = this.value.slice(0, 6);
+          }
+        });
+      }
+
+      formatOtpInput(document.getElementById("verificationOtp"));
+      formatOtpInput(document.getElementById("loginOtp"));
     </script>
   </body>
 </html>
