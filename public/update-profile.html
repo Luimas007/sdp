@@ -314,7 +314,7 @@
               <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
             </li>
             <li>
-              <a href="logout.html"
+              <a href="#" id="logoutLink"
                 ><i class="fas fa-sign-out-alt"></i> Logout</a
               >
             </li>
@@ -598,6 +598,21 @@
           .addEventListener("click", function () {
             window.location.href = "profile.html";
           });
+
+        // Logout link
+        document
+          .getElementById("logoutLink")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            logout();
+          });
+      }
+
+      function logout() {
+        // Clear the token from localStorage
+        localStorage.removeItem("token");
+        // Redirect to login page
+        window.location.href = "login.html";
       }
 
       function setupPasswordToggle(toggleId, inputId) {
