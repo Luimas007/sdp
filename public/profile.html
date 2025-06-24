@@ -580,6 +580,20 @@
               </button>
 
               <button
+                onclick="showUpdateProfile()"
+                class="btn-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+              >
+                Update Profile
+              </button>
+
+              <button
+                onclick="postItem()"
+                class="btn-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
+              >
+                Post Item
+              </button>
+
+              <button
                 onclick="toggleNotifications()"
                 class="relative p-2 text-reddit-text hover:text-reddit-orange transition-colors duration-200 glow-on-hover rounded-lg"
                 id="notificationButton"
@@ -593,13 +607,6 @@
                   id="notificationBadge"
                   class="absolute -top-1 -right-1 w-5 h-5 notification-badge text-white text-xs rounded-full flex items-center justify-center hidden"
                 ></span>
-              </button>
-
-              <button
-                onclick="showUpdateProfile()"
-                class="btn-secondary px-6 py-2 rounded-lg font-medium transition-all duration-200"
-              >
-                Update Profile
               </button>
 
               <button
@@ -1400,7 +1407,7 @@
             (notification) => `
             <div class="notification-item ${
               notification.read ? "" : "unread"
-            } p-4 mb-2 cursor-pointer rounded-lg" 
+            } p-4 mb-2 cursor-pointer rounded-lg"
                  onclick="markNotificationAsRead('${notification._id}')">
               <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0">
@@ -1826,7 +1833,7 @@
                             </svg>
                             ${item.location}
                           </div>
-                          
+
                           ${
                             claimDetails
                               ? `
@@ -1880,7 +1887,7 @@
                     }
                             </span>
                           </div>
-                          
+
                           <div class="flex gap-2">
                             <button onclick="viewContactInfo('${
                               item._id
@@ -1982,7 +1989,7 @@
                       : ""
                   }
                 </div>
-                
+
                 ${
                   claimDetails.originalPoster
                     ? `
@@ -2331,7 +2338,7 @@
                           }
                         </div>
                       </div>
-                      
+
                       <div class="bg-reddit-dark/50 rounded-lg p-3 border border-reddit-border/50">
                         <div class="flex items-start space-x-2">
                           <div class="w-6 h-6 rounded-full overflow-hidden bg-reddit-orange flex-shrink-0">
@@ -2362,7 +2369,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                       <div class="mt-3 flex items-center justify-between text-xs text-reddit-muted">
                         <span>${conversation.messages.length} message${
                       conversation.messages.length !== 1 ? "s" : ""
@@ -3034,7 +3041,7 @@
                 request.status
               )}">${request.status.toUpperCase()}</span>
             </div>
-            
+
             ${
               type === "claim" &&
               request.answers &&
@@ -3106,7 +3113,7 @@
             `
                 : ""
             }
-            
+
             ${
               type === "inform" && request.message
                 ? `
@@ -3124,7 +3131,7 @@
             `
                 : ""
             }
-            
+
             ${
               type === "inform" && request.image
                 ? `
@@ -3136,9 +3143,9 @@
                   Found Item Image:
                 </h5>
                 <div class="relative">
-                  <img 
-                    src="${getFullImageUrl(request.image)}" 
-                    alt="Found item" 
+                  <img
+                    src="${getFullImageUrl(request.image)}"
+                    alt="Found item"
                     class="max-w-full h-64 object-cover cursor-pointer glow-on-hover rounded-lg border border-reddit-orange"
                     onclick="showImageModal('${getFullImageUrl(
                       request.image
@@ -3160,7 +3167,7 @@
             `
                 : ""
             }
-            
+
             ${
               type === "claim"
                 ? request.additionalInfo
@@ -3199,7 +3206,7 @@
                            <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                            </svg>
-                           <span class="font-medium">Phone:</span> 
+                           <span class="font-medium">Phone:</span>
                            <span class="text-accent-400">${request.contactInfo.phone}</span>
                          </div>`
                       : ""
@@ -3210,7 +3217,7 @@
                            <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                            </svg>
-                           <span class="font-medium">Alt Phone:</span> 
+                           <span class="font-medium">Alt Phone:</span>
                            <span class="text-accent-400">${request.contactInfo.alternatePhone}</span>
                          </div>`
                       : ""
@@ -3221,7 +3228,7 @@
                            <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                            </svg>
-                           <span class="font-medium">Email:</span> 
+                           <span class="font-medium">Email:</span>
                            <span class="text-accent-400">${request.contactInfo.email}</span>
                          </div>`
                       : ""
@@ -3232,7 +3239,7 @@
                            <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                            </svg>
-                           <span class="font-medium">Location:</span> 
+                           <span class="font-medium">Location:</span>
                            <span class="text-reddit-text">${request.contactInfo.meetingLocation}</span>
                          </div>`
                       : ""
@@ -3243,7 +3250,7 @@
                            <svg class="w-4 h-4 text-accent-400" fill="currentColor" viewBox="0 0 20 20">
                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                            </svg>
-                           <span class="font-medium">Time:</span> 
+                           <span class="font-medium">Time:</span>
                            <span class="text-reddit-text">${request.contactInfo.meetingTime}</span>
                          </div>`
                       : ""
@@ -3268,7 +3275,7 @@
             `
                 : ""
             }
-            
+
             ${
               request.status === "rejected" && request.rejectionReason
                 ? `
@@ -3284,7 +3291,7 @@
             `
                 : ""
             }
-            
+
             ${
               request.status === "pending"
                 ? `
@@ -3309,17 +3316,17 @@
           "fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4";
         modal.innerHTML = `
           <div class="relative max-w-4xl max-h-[90vh] w-full">
-            <button 
-              onclick="this.closest('.modal-backdrop').remove()" 
+            <button
+              onclick="this.closest('.modal-backdrop').remove()"
               class="absolute top-4 right-4 z-10 bg-black/50 text-white p-2 hover:bg-black/70 rounded-lg transition-all duration-200"
             >
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
-            <img 
-              src="${imageSrc}" 
-              alt="Full size image" 
+            <img
+              src="${imageSrc}"
+              alt="Full size image"
               class="w-full h-full object-contain shadow-2xl rounded-lg border border-reddit-orange"
             >
           </div>
@@ -3818,6 +3825,10 @@
 
       function goHome() {
         window.location.href = "home.html";
+      }
+
+      function postItem() {
+        window.location.href = "post-item.html";
       }
 
       function logout() {

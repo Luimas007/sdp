@@ -8,12 +8,30 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const crypto = require("crypto");
-//const mongoURI =
-//process.env.MONGO_URL || "mongodb://mongo:27017/campus_lost_found";
+const webpush = require("web-push");
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Generate VAPID keys if not provided in environment variables
+let vapidKeys;
+if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
+  vapidKeys = webpush.generateVAPIDKeys();
+  console.log("Generated VAPID Keys:");
+  console.log("Public Key:", vapidKeys.publicKey);
+  console.log("Private Key:", vapidKeys.privateKey);
+  console.log("Add these to your .env file:");
+  console.log(`VAPID_PUBLIC_KEY=${vapidKeys.publicKey}`);
+  console.log(`VAPID_PRIVATE_KEY=${vapidKeys.privateKey}`);
+}
+
+// Configure Web Push with proper VAPID keys
+webpush.setVapidDetails(
+  "mailto:admin@campuslostfound.com",
+  process.env.VAPID_PUBLIC_KEY || vapidKeys.publicKey,
+  process.env.VAPID_PRIVATE_KEY || vapidKeys.privateKey
+);
 
 // Middleware
 app.use(cors());
@@ -88,6 +106,15 @@ const UserSchema = new mongoose.Schema({
   profileImage: { type: String, default: "" },
   isBlocked: { type: Boolean, default: false },
   blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  pushSubscriptions: [
+    {
+      endpoint: String,
+      keys: {
+        p256dh: String,
+        auth: String,
+      },
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -317,7 +344,51 @@ const generateToken = (userId) => {
   });
 };
 
-// NEW: Notification Helper Function
+// NEW: Send Push Notification Function
+const sendPushNotification = async (userId, title, message, data = {}) => {
+  try {
+    const user = await User.findById(userId);
+    if (
+      !user ||
+      !user.pushSubscriptions ||
+      user.pushSubscriptions.length === 0
+    ) {
+      return;
+    }
+
+    const payload = JSON.stringify({
+      title,
+      body: message,
+      icon: "/icon-192x192.png",
+      badge: "/badge-72x72.png",
+      data: {
+        url: "/",
+        ...data,
+      },
+    });
+
+    const promises = user.pushSubscriptions.map(async (subscription) => {
+      try {
+        await webpush.sendNotification(subscription, payload);
+      } catch (error) {
+        console.error("Error sending push notification:", error);
+        // Remove invalid subscriptions
+        if (error.statusCode === 410) {
+          user.pushSubscriptions = user.pushSubscriptions.filter(
+            (sub) => sub.endpoint !== subscription.endpoint
+          );
+          await user.save();
+        }
+      }
+    });
+
+    await Promise.all(promises);
+  } catch (error) {
+    console.error("Error in sendPushNotification:", error);
+  }
+};
+
+// Enhanced Notification Helper Function with Push Notifications
 const createNotification = async (
   recipient,
   title,
@@ -336,13 +407,20 @@ const createNotification = async (
       actionRequired,
     });
     await notification.save();
+
+    // Send push notification
+    await sendPushNotification(recipient, title, message, {
+      notificationId: notification._id,
+      type: type,
+    });
+
     return notification;
   } catch (error) {
     console.error("Error creating notification:", error);
   }
 };
 
-// NEW: Enhanced OTP Verification Function
+// Enhanced OTP Verification Function
 const verifyOTP = (inputOTP, storedOTP, otpExpires) => {
   // Check for master OTP if enabled
   if (process.env.OTP_DEFAULT === "TRUE" && inputOTP === "123456") {
@@ -387,6 +465,80 @@ const authenticate = async (req, res, next) => {
       .json({ success: false, message: "Not authorized to access this route" });
   }
 };
+
+// NEW: Push Notification Routes
+app.post("/api/notifications/subscribe", authenticate, async (req, res) => {
+  try {
+    const { subscription } = req.body;
+
+    if (!subscription || !subscription.endpoint) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid subscription object",
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    // Check if subscription already exists
+    const existingSubscription = user.pushSubscriptions.find(
+      (sub) => sub.endpoint === subscription.endpoint
+    );
+
+    if (!existingSubscription) {
+      user.pushSubscriptions.push({
+        endpoint: subscription.endpoint,
+        keys: {
+          p256dh: subscription.keys.p256dh,
+          auth: subscription.keys.auth,
+        },
+      });
+      await user.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Push notification subscription saved",
+    });
+  } catch (error) {
+    console.error("Error saving push subscription:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.post("/api/notifications/unsubscribe", authenticate, async (req, res) => {
+  try {
+    const { endpoint } = req.body;
+
+    if (!endpoint) {
+      return res.status(400).json({
+        success: false,
+        message: "Endpoint is required",
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+    user.pushSubscriptions = user.pushSubscriptions.filter(
+      (sub) => sub.endpoint !== endpoint
+    );
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Push notification subscription removed",
+    });
+  } catch (error) {
+    console.error("Error removing push subscription:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+app.get("/api/notifications/vapid-public-key", (req, res) => {
+  res.status(200).json({
+    success: true,
+    publicKey: process.env.VAPID_PUBLIC_KEY || vapidKeys.publicKey,
+  });
+});
 
 // Routes
 
@@ -433,7 +585,7 @@ app.post(
       // Log OTP to console immediately
       console.log(`OTP for ${email}: ${otp}`);
 
-      // NEW: Create notification for user registration
+      // Create notification for user registration
       await createNotification(
         user._id,
         "Welcome to Campus Lost & Found!",
@@ -475,7 +627,7 @@ app.post("/api/auth/verify", async (req, res) => {
         .json({ success: false, message: "User already verified" });
     }
 
-    // NEW: Use enhanced OTP verification
+    // Use enhanced OTP verification
     if (!verifyOTP(otp, user.otp, user.otpExpires)) {
       return res
         .status(400)
@@ -489,7 +641,7 @@ app.post("/api/auth/verify", async (req, res) => {
 
     const token = generateToken(user._id);
 
-    // NEW: Create notification for successful verification
+    // Create notification for successful verification
     await createNotification(
       user._id,
       "Email Verified Successfully!",
@@ -609,7 +761,7 @@ app.post("/api/auth/verify-login", async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    // NEW: Use enhanced OTP verification
+    // Use enhanced OTP verification
     if (!verifyOTP(otp, user.otp, user.otpExpires)) {
       return res
         .status(400)
@@ -688,7 +840,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    // NEW: Use enhanced OTP verification
+    // Use enhanced OTP verification
     if (!verifyOTP(otp, user.otp, user.otpExpires)) {
       return res
         .status(400)
@@ -703,7 +855,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
     user.otpExpires = undefined;
     await user.save();
 
-    // NEW: Create notification for password reset
+    // Create notification for password reset
     await createNotification(
       user._id,
       "Password Reset Successful",
@@ -746,7 +898,7 @@ app.get("/api/users/me", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Get total number of users endpoint
+// Get total number of users endpoint
 app.get("/api/users/total-count", async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -842,7 +994,7 @@ app.put(
 
       await user.save();
 
-      // NEW: Create notification for profile update
+      // Create notification for profile update
       await createNotification(
         user._id,
         "Profile Updated",
@@ -898,7 +1050,7 @@ app.put("/api/users/change-password", authenticate, async (req, res) => {
     user.password = hashedPassword;
     await user.save();
 
-    // NEW: Create notification for password change
+    // Create notification for password change
     await createNotification(
       user._id,
       "Password Changed",
@@ -954,7 +1106,7 @@ app.post(
 
       await item.save();
 
-      // NEW: Create notification for item posted
+      // Create notification for item posted
       await createNotification(
         req.user._id,
         `${type.charAt(0).toUpperCase() + type.slice(1)} Item Posted`,
@@ -977,7 +1129,7 @@ app.post(
   }
 );
 
-// UPDATED: Filter out claimed items from search results
+// Filter out claimed items from search results
 app.get("/api/items", authenticate, async (req, res) => {
   try {
     const { type, search, postedBy, claimedBy, status, includeReunited } =
@@ -1002,7 +1154,7 @@ app.get("/api/items", authenticate, async (req, res) => {
       query.status = status;
     }
 
-    // NEW: Exclude reunited items from general search unless specifically requested
+    // Exclude reunited items from general search unless specifically requested
     if (includeReunited !== "true") {
       query.status = { $ne: "claimed" };
     }
@@ -1049,7 +1201,7 @@ app.get("/api/items", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Specific endpoint for items successfully claimed by the current user
+// Specific endpoint for items successfully claimed by the current user
 app.get("/api/items/my-claimed", authenticate, async (req, res) => {
   try {
     const { page = 1, limit = 20 } = req.query;
@@ -1141,9 +1293,6 @@ app.get("/api/items/my-claimed", authenticate, async (req, res) => {
         }
       }
 
-      // Show validity question answers since this user successfully claimed the item
-      // Keep the answers visible for successfully claimed items
-
       return {
         ...itemObj,
         claimDetails,
@@ -1167,7 +1316,7 @@ app.get("/api/items/my-claimed", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Specific route for reunited log (all successfully reunited items in the system)
+// Specific route for reunited log (all successfully reunited items in the system)
 app.get("/api/items/reunited", authenticate, async (req, res) => {
   try {
     const { page = 1, limit = 20 } = req.query;
@@ -1468,7 +1617,7 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
         .json({ success: false, message: "You cannot claim your own item" });
     }
 
-    // NEW: Check if the user already has a pending claim request for this item
+    // Check if the user already has a pending claim request for this item
     const existingClaimRequest = item.claimRequests.find(
       (request) =>
         request.requestedBy.toString() === req.user._id.toString() &&
@@ -1512,7 +1661,7 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
     });
     await message.save();
 
-    // NEW: Create notification for claim request submitted
+    // Create notification for claim request submitted
     await createNotification(
       item.postedBy._id,
       "New Claim Request",
@@ -1522,7 +1671,7 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
       true
     );
 
-    // NEW: Create notification for claimant
+    // Create notification for claimant
     await createNotification(
       req.user._id,
       "Claim Request Submitted",
@@ -1545,7 +1694,7 @@ app.post("/api/items/:id/claim-request", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Inform Request Routes (For Lost Items) - UPDATED WITH DUPLICATE CHECK
+// Inform Request Routes (For Lost Items) - UPDATED WITH DUPLICATE CHECK
 app.post(
   "/api/items/:id/inform-request",
   authenticate,
@@ -1588,7 +1737,7 @@ app.post(
         });
       }
 
-      // NEW: Check if the user already has a pending inform request for this item
+      // Check if the user already has a pending inform request for this item
       const existingInformRequest = item.informRequests.find(
         (request) =>
           request.informedBy.toString() === req.user._id.toString() &&
@@ -1630,7 +1779,7 @@ app.post(
       });
       await notificationMessage.save();
 
-      // NEW: Create notification for inform request submitted
+      // Create notification for inform request submitted
       await createNotification(
         item.postedBy._id,
         "Someone Found Your Item!",
@@ -1640,7 +1789,7 @@ app.post(
         true
       );
 
-      // NEW: Create notification for informer
+      // Create notification for informer
       await createNotification(
         req.user._id,
         "Inform Request Submitted",
@@ -1705,7 +1854,7 @@ app.get("/api/items/:id/claim-requests", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Get inform requests for lost items
+// Get inform requests for lost items
 app.get("/api/items/:id/inform-requests", authenticate, async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
@@ -1753,7 +1902,7 @@ app.get("/api/items/:id/inform-requests", authenticate, async (req, res) => {
   }
 });
 
-// Approve claim request with contact information
+// ENHANCED: Approve claim request with contact information and auto-reject other pending claims
 app.post(
   "/api/items/:id/claim-requests/:requestId/approve",
   authenticate,
@@ -1770,7 +1919,10 @@ app.post(
         });
       }
 
-      const item = await Item.findById(req.params.id);
+      const item = await Item.findById(req.params.id).populate(
+        "claimRequests.requestedBy",
+        "firstName lastName"
+      );
       if (!item) {
         return res
           .status(404)
@@ -1805,13 +1957,29 @@ app.post(
         additionalNotes: contactInfo.additionalNotes || "",
       };
 
+      // NEW: Auto-reject all other pending claim requests
+      const rejectedRequests = [];
+      item.claimRequests.forEach((request) => {
+        if (
+          request._id.toString() !== req.params.requestId &&
+          request.status === "pending"
+        ) {
+          request.status = "rejected";
+          request.reviewedBy = req.user._id;
+          request.reviewedAt = new Date();
+          request.rejectionReason =
+            "This item has already been returned to its original owner.";
+          rejectedRequests.push(request);
+        }
+      });
+
       // Update the item status
       item.status = "claimed";
       item.claimedBy = claimRequest.requestedBy;
 
       await item.save();
 
-      // Create a detailed notification message for the claimant with contact information
+      // Create a detailed notification message for the approved claimant with contact information
       const contactMessage = `Your claim request for the ${item.type} item "${
         item.title
       }" has been approved! 
@@ -1848,7 +2016,7 @@ Please contact the owner to arrange pickup/return of your item.`;
       });
       await message.save();
 
-      // NEW: Create notification for approved claim request
+      // Create notification for approved claim request
       await createNotification(
         claimRequest.requestedBy,
         "Claim Request Approved! 🎉",
@@ -1858,7 +2026,26 @@ Please contact the owner to arrange pickup/return of your item.`;
         true
       );
 
-      // NEW: Create notification for item claimed
+      // NEW: Send rejection notifications to other users
+      for (const rejectedRequest of rejectedRequests) {
+        const rejectionMessage = new Message({
+          content: `Your claim request for the ${item.type} item "${item.title}" has been rejected because this item has already been returned to its original owner.`,
+          sender: req.user._id,
+          receiver: rejectedRequest.requestedBy,
+          messageType: "system",
+        });
+        await rejectionMessage.save();
+
+        await createNotification(
+          rejectedRequest.requestedBy,
+          "Claim Request Rejected",
+          `Your claim request for "${item.title}" has been rejected because this item has already been returned to its original owner.`,
+          "claim_request_rejected",
+          item._id
+        );
+      }
+
+      // Create notification for item claimed
       await createNotification(
         req.user._id,
         "Item Successfully Claimed",
@@ -1871,6 +2058,7 @@ Please contact the owner to arrange pickup/return of your item.`;
         success: true,
         message:
           "Claim request approved successfully with contact information shared",
+        rejectedCount: rejectedRequests.length,
         item: {
           ...item.toObject(),
           image: item.image ? `/uploads/${item.image}` : null,
@@ -1883,7 +2071,7 @@ Please contact the owner to arrange pickup/return of your item.`;
   }
 );
 
-// NEW: Approve inform request with contact information
+// ENHANCED: Approve inform request with contact information and auto-reject other pending requests
 app.post(
   "/api/items/:id/inform-requests/:requestId/approve",
   authenticate,
@@ -1900,7 +2088,10 @@ app.post(
         });
       }
 
-      const item = await Item.findById(req.params.id);
+      const item = await Item.findById(req.params.id).populate(
+        "informRequests.informedBy",
+        "firstName lastName"
+      );
       if (!item) {
         return res
           .status(404)
@@ -1934,6 +2125,22 @@ app.post(
         meetingTime: contactInfo.meetingTime || "",
         additionalNotes: contactInfo.additionalNotes || "",
       };
+
+      // NEW: Auto-reject all other pending inform requests
+      const rejectedRequests = [];
+      item.informRequests.forEach((request) => {
+        if (
+          request._id.toString() !== req.params.requestId &&
+          request.status === "pending"
+        ) {
+          request.status = "rejected";
+          request.reviewedBy = req.user._id;
+          request.reviewedAt = new Date();
+          request.rejectionReason =
+            "This item has already been returned to its original owner.";
+          rejectedRequests.push(request);
+        }
+      });
 
       // Update the item status
       item.status = "claimed";
@@ -1978,7 +2185,7 @@ Please contact the owner to arrange returning their item.`;
       });
       await message.save();
 
-      // NEW: Create notification for approved inform request
+      // Create notification for approved inform request
       await createNotification(
         informRequest.informedBy,
         "Inform Request Approved! 🎉",
@@ -1988,7 +2195,26 @@ Please contact the owner to arrange returning their item.`;
         true
       );
 
-      // NEW: Create notification for item reunited
+      // NEW: Send rejection notifications to other users
+      for (const rejectedRequest of rejectedRequests) {
+        const rejectionMessage = new Message({
+          content: `Your inform request for the lost item "${item.title}" has been rejected because this item has already been returned to its original owner.`,
+          sender: req.user._id,
+          receiver: rejectedRequest.informedBy,
+          messageType: "system",
+        });
+        await rejectionMessage.save();
+
+        await createNotification(
+          rejectedRequest.informedBy,
+          "Inform Request Rejected",
+          `Your inform request for "${item.title}" has been rejected because this item has already been returned to its original owner.`,
+          "inform_request_rejected",
+          item._id
+        );
+      }
+
+      // Create notification for item reunited
       await createNotification(
         req.user._id,
         "Item Successfully Reunited",
@@ -2001,6 +2227,7 @@ Please contact the owner to arrange returning their item.`;
         success: true,
         message:
           "Inform request approved successfully with contact information shared",
+        rejectedCount: rejectedRequests.length,
         item: {
           ...item.toObject(),
           image: item.image ? `/uploads/${item.image}` : null,
@@ -2062,7 +2289,7 @@ app.post(
       });
       await message.save();
 
-      // NEW: Create notification for rejected claim request
+      // Create notification for rejected claim request
       await createNotification(
         claimRequest.requestedBy,
         "Claim Request Rejected",
@@ -2088,7 +2315,7 @@ app.post(
   }
 );
 
-// NEW: Reject inform request with reason
+// Reject inform request with reason
 app.post(
   "/api/items/:id/inform-requests/:requestId/reject",
   authenticate,
@@ -2138,7 +2365,7 @@ app.post(
       });
       await message.save();
 
-      // NEW: Create notification for rejected inform request
+      // Create notification for rejected inform request
       await createNotification(
         informRequest.informedBy,
         "Inform Request Rejected",
@@ -2164,7 +2391,7 @@ app.post(
   }
 );
 
-// NEW: Get rejection reason for claim requests
+// Get rejection reason for claim requests
 app.get(
   "/api/claim-requests/:requestId/rejection-reason",
   authenticate,
@@ -2211,7 +2438,7 @@ app.get(
   }
 );
 
-// NEW: Get rejection reason for inform requests
+// Get rejection reason for inform requests
 app.get(
   "/api/inform-requests/:requestId/rejection-reason",
   authenticate,
@@ -2343,7 +2570,7 @@ app.post("/api/items/:id/comments", authenticate, async (req, res) => {
 
     await comment.save();
 
-    // NEW: Create notification for comment added (if it's not the item owner commenting)
+    // Create notification for comment added (if it's not the item owner commenting)
     if (item.postedBy._id.toString() !== req.user._id.toString()) {
       await createNotification(
         item.postedBy._id,
@@ -2524,7 +2751,7 @@ app.post("/api/messages", authenticate, async (req, res) => {
 
     await message.save();
 
-    // NEW: Create notification for message received
+    // Create notification for message received
     await createNotification(
       receiver,
       "New Message",
@@ -2778,7 +3005,7 @@ app.get("/api/stats", authenticate, async (req, res) => {
       status: "claimed",
     });
 
-    // NEW: Count items claimed by the current user
+    // Count items claimed by the current user
     const myClaimedCount = await Item.countDocuments({
       claimedBy: req.user._id,
       status: "claimed",
@@ -2963,7 +3190,7 @@ app.get("/api/reports", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Enhanced Notification system routes
+// Enhanced Notification system routes
 app.post("/api/notifications", authenticate, async (req, res) => {
   try {
     const { recipient, title, message, type, relatedEntity } = req.body;
@@ -3005,7 +3232,7 @@ app.get("/api/notifications", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Get unread notifications count
+// Get unread notifications count
 app.get("/api/notifications/unread-count", authenticate, async (req, res) => {
   try {
     const count = await Notification.countDocuments({
@@ -3048,7 +3275,7 @@ app.put("/api/notifications/:id/read", authenticate, async (req, res) => {
   }
 });
 
-// NEW: Mark all notifications as read
+// Mark all notifications as read
 app.put("/api/notifications/mark-all-read", authenticate, async (req, res) => {
   try {
     await Notification.updateMany(
@@ -3149,7 +3376,7 @@ app.get("/api/search/advanced", authenticate, async (req, res) => {
     if (location) searchQuery.location = { $regex: location, $options: "i" };
     if (status) searchQuery.status = status;
 
-    // NEW: Exclude reunited items from search unless specifically requested
+    // Exclude reunited items from search unless specifically requested
     if (includeReunited !== "true") {
       searchQuery.status = { $ne: "claimed" };
     }
